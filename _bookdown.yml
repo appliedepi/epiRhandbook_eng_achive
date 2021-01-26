@@ -21,6 +21,8 @@ rmd_files: [
 
   "raw_pages/cat_data_management.Rmd",
   "raw_pages/cleaning.Rmd",
+  "raw_pages/character_regex.Rmd",
+  "raw_pages/deduplication.Rmd",
 
   "raw_pages/cat_data_viz.Rmd",
   "raw_pages/age_pyramid.Rmd",

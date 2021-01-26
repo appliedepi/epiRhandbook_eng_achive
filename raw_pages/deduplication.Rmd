@@ -1,32 +1,5 @@
----
-title:  |  
-  ![](../images/R Handbook Logo.png)
-author: ""
-date: "Produced `r format(Sys.time(), '%A %d %B %Y')`"
-output:
-  html_document:
-    code_folding: show
-    highlight: zenburn
-    number_sections: no
-    theme: sandstone
-    toc: yes
-    toc_collapse: no
-    toc_depth: 3
-    toc_float: yes
-params:
-    run_page_ind: TRUE
-knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = "_outputs_knitted") })
----
 
-```{r, child= '_page_setup.Rmd', eval = params$run_page_ind, include = F}
-```
-
-
-<!-- ======================================================= -->
-<!-- ======================================================= -->
-<!-- ======================================================= -->
-# De-duplication {#dedup .tabset}  
+# De-duplication {.tabset}  
 
 ```{r, out.width=c("50%"), echo=F}
 knitr::include_graphics(here::here("images", "deduplication2.png"))
@@ -596,13 +569,4 @@ Much of the information in this page is adapted from these resources and vignett
 [dplyr tidyverse reference](https://dplyr.tidyverse.org/reference/slice.html)  
 
 [cran janitor vignette](https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html#explore-records-with-duplicated-values-for-specific-combinations-of-variables-with-get_dupes)  
-
-
-
-
-
-
-
-```{r, child= '_page_closeout.Rmd', eval = params$run_page_ind == F, include = F}
-```
 

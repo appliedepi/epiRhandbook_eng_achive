@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>5 Age pyramids | R Handbook for Epidemiologists</title>
+<title>7 Age pyramids | R Handbook for Epidemiologists</title>
 <meta name="author" content="the handbook team">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.6/header-attrs.js"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet">
@@ -43,8 +43,10 @@
 <li><a class="" href="datasets-used.html"><span class="header-section-number">3</span> Datasets used</a></li>
 <li class="book-part">Data Management</li>
 <li><a class="" href="cleaning-data.html"><span class="header-section-number">4</span> Cleaning data</a></li>
+<li><a class="" href="charactersstrings.html"><span class="header-section-number">5</span> Characters/strings</a></li>
+<li><a class="" href="de-duplication.html"><span class="header-section-number">6</span> De-duplication</a></li>
 <li class="book-part">Data Vizualization</li>
-<li><a class="active" href="age-pyramids.html"><span class="header-section-number">5</span> Age pyramids</a></li>
+<li><a class="active" href="age-pyramids.html"><span class="header-section-number">7</span> Age pyramids</a></li>
 </ul>
 
         <div class="book-extra">
@@ -52,9 +54,9 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="age-pyramids" class="section level1 tabset tabset-fade" number="5">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="age-pyramids" class="section level1 tabset tabset-fade" number="7">
 <h1>
-<span class="header-section-number">5</span> Age pyramids<a class="anchor" aria-label="anchor" href="#age-pyramids"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7</span> Age pyramids<a class="anchor" aria-label="anchor" href="#age-pyramids"><i class="fas fa-link"></i></a>
 </h1>
 <p>Age pyramids can be useful to show patterns by age group. They can show gender, or the distribution of other characteristics.<br>
 These tabs demonstrate how to produce age pyramids using:</p>
@@ -67,9 +69,9 @@ These tabs demonstrate how to produce age pyramids using:</p>
 </li>
 <li>Using pyramid-style plots to show other types of data (e.g responses to Likert-style questions)</li>
 </ul>
-<!-- ======================================================= --><div id="overview-1" class="section level2 tabset tabset-fade" number="5.1">
+<!-- ======================================================= --><div id="overview-3" class="section level2 tabset tabset-fade" number="7.1">
 <h2>
-<span class="header-section-number">5.1</span> Overview<a class="anchor" aria-label="anchor" href="#overview-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.1</span> Overview<a class="anchor" aria-label="anchor" href="#overview-3"><i class="fas fa-link"></i></a>
 </h2>
 <p><img src="images/pop_pyramid_baseline.png" width="50%"><img src="images/likert.png" width="50%"></p>
 <p>Age/gender demographic pyramids in R are generally made with <code>ggplot()</code> by creating two barplots (one for each gender), converting one’s values to negative values, and flipping the x and y axes to display the barplots vertically.</p>
@@ -83,13 +85,13 @@ These tabs demonstrate how to produce age pyramids using:</p>
 </ul>
 <!-- ======================================================= -->
 </div>
-<div id="preparation-1" class="section level2 tabset tabset-fade" number="5.2">
+<div id="preparation-3" class="section level2 tabset tabset-fade" number="7.2">
 <h2>
-<span class="header-section-number">5.2</span> Preparation<a class="anchor" aria-label="anchor" href="#preparation-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.2</span> Preparation<a class="anchor" aria-label="anchor" href="#preparation-3"><i class="fas fa-link"></i></a>
 </h2>
 <h2>
 Preparation
-<a class="anchor" aria-label="anchor" href="#preparation-1"><i class="fas fa-link"></i></a>
+<a class="anchor" aria-label="anchor" href="#preparation-3"><i class="fas fa-link"></i></a>
 </h2>
 <p>For this tab we use the <code>linelist</code> dataset that is cleaned in the Cleaning tab.</p>
 <p>To make a traditional age/sex demographic pyramid, the data must first be cleaned in the following ways:</p>
@@ -100,32 +102,32 @@ Preparation
 </ul>
 <p><strong>Load packages</strong></p>
 <p>First, load the packages required for this analysis:</p>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb280"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">rio</span>,       <span class="co"># to import data</span>
                <span class="va">here</span>,      <span class="co"># to locate files</span>
                <span class="va">tidyverse</span>, <span class="co"># to clean, handle, and plot the data (includes ggplot2 package)</span>
                <span class="va">apyramid</span>,  <span class="co"># a package dedicated to creating age pyramids</span>
                <span class="va">stringr</span><span class="op">)</span>   <span class="co"># working with strings for titles, captions, etc.</span></code></pre></div>
 <p>Load the data</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb281"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">linelist</span> <span class="op">&lt;-</span> <span class="fu">rio</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rio/man/import.html">import</a></span><span class="op">(</span><span class="st">"linelist_cleaned.csv"</span><span class="op">)</span></code></pre></div>
 <p><strong>Check class of variables</strong></p>
 <p>Ensure that the age variable is class Numeric, and check the class and order of levels of <code>age_cat</code> and <code>age_cat5</code></p>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb282"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">linelist</span><span class="op">$</span><span class="va">age_years</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "numeric"</code></pre>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb284"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">linelist</span><span class="op">$</span><span class="va">age_cat</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "factor"</code></pre>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">linelist</span><span class="op">$</span><span class="va">age_cat5</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "factor"</code></pre>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">linelist</span><span class="op">$</span><span class="va">age_cat</span>, useNA <span class="op">=</span> <span class="st">"always"</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ##   0-4   5-9 10-14 15-19 20-29 30-49 50-69   70+  &lt;NA&gt; 
 ##  1054  1153   957   889  1065   658    24     0    88</code></pre>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb290"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">linelist</span><span class="op">$</span><span class="va">age_cat5</span>, useNA <span class="op">=</span> <span class="st">"always"</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ##   0-4   5-9 10-14 15-19 20-24 25-29 30-34 35-39 40-44 45-49 50-54 55-59 60-64 
@@ -134,18 +136,18 @@ Preparation
 ##     2     0     0     0     0    88</code></pre>
 <!-- ======================================================= -->
 </div>
-<div id="apyramid-package" class="section level2 tabset tabset-fade" number="5.3">
+<div id="apyramid-package" class="section level2 tabset tabset-fade" number="7.3">
 <h2>
-<span class="header-section-number">5.3</span> <strong>apyramid</strong> package<a class="anchor" aria-label="anchor" href="#apyramid-package"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3</span> <strong>apyramid</strong> package<a class="anchor" aria-label="anchor" href="#apyramid-package"><i class="fas fa-link"></i></a>
 </h2>
 <h2>
 <strong>apyramid</strong> package
 <a class="anchor" aria-label="anchor" href="#apyramid-package"><i class="fas fa-link"></i></a>
 </h2>
 <p>The package <strong>apyramid</strong> allows you to quickly make an age pyramid. For more nuanced situations, see the tab on using <code>ggplot()</code> to make age pyramids. You can read more about the <strong>apyramid</strong> package in its Help page by entering <code>?age_pyramid</code> in your R console.</p>
-<div id="linelist-data" class="section level3" number="5.3.1">
+<div id="linelist-data" class="section level3" number="7.3.1">
 <h3>
-<span class="header-section-number">5.3.1</span> Linelist data<a class="anchor" aria-label="anchor" href="#linelist-data"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.1</span> Linelist data<a class="anchor" aria-label="anchor" href="#linelist-data"><i class="fas fa-link"></i></a>
 </h3>
 <h3>
 Linelist data
@@ -159,32 +161,32 @@ Linelist data
 </li>
 <li>The <em>split_by</em> argument (bar colors) should be a binary column (in this case “gender”)</li>
 </ul>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb292"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">apyramid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/apyramid/man/age_pyramid.html">age_pyramid</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">linelist</span>,
                       age_group <span class="op">=</span> <span class="st">"age_cat5"</span>,
                       split_by <span class="op">=</span> <span class="st">"gender"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: 281 missing rows were removed (88 values from `age_cat5` and 281 values
 ## from `gender`).</code></pre>
-<p><img src="_index_files/figure-html/unnamed-chunk-90-1.png" width="672">
+<p><img src="_index_files/figure-html/unnamed-chunk-194-1.png" width="672">
 When using <strong>agepyramid</strong> package, if the <code>split_by</code> column is binary (e.g. male/female, or yes/no), then the result will appear as a pyramid. However if there are more than two values in the <code>split_by</code> column (not including <code>NA</code>), the pyramid will appears as a faceted barplot with empty bars in the background indicating the range of the un-faceted data set for the age group. Values of split_by will appear as labels at top of each facet. For example below if the <code>split_by</code> variable is “hospital”.</p>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb294"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">apyramid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/apyramid/man/age_pyramid.html">age_pyramid</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">linelist</span>,
                       age_group <span class="op">=</span> <span class="st">"age_cat5"</span>,
                       split_by <span class="op">=</span> <span class="st">"hospital"</span>,
                       na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>        <span class="co"># show a bar for patients missing age, (note: this changes the pyramid into a faceted barplot)</span></code></pre></div>
-<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-91-1.png" width="672"></div>
+<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-195-1.png" width="672"></div>
 <p><strong>Missing values</strong><br>
 Rows missing values for the <code>split_by</code> or <code>age_group</code> columns, if coded as <code>NA</code>, will not trigger the faceting shown above. By default these rows will not be shown. However you can specify that they appear, in an adjacent barplot and as a separate age group at the top, by specifying <code>na.rm = FALSE</code>.</p>
-<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">apyramid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/apyramid/man/age_pyramid.html">age_pyramid</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">linelist</span>,
                       age_group <span class="op">=</span> <span class="st">"age_cat5"</span>,
                       split_by <span class="op">=</span> <span class="st">"gender"</span>,
                       na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>         <span class="co"># show patients missing age or gender</span></code></pre></div>
-<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-92-1.png" width="672"></div>
+<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-196-1.png" width="672"></div>
 <p><strong>Proportions, colors, &amp; aesthetics</strong></p>
 <p>By default, the bars display counts (not %), a dashed mid-line for each group is shown, and the colors are green/purple. Each of these parameters can all be adjusted, as shown below:</p>
 <p>You can also add additional <code>ggplot()</code> commands to the plot using the standard <code>ggplot()</code> “+” syntax, such as aesthetic themes and label adjustments:</p>
-<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb296"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">apyramid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/apyramid/man/age_pyramid.html">age_pyramid</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">linelist</span>,
                       age_group <span class="op">=</span> <span class="st">"age_cat5"</span>,
                       split_by <span class="op">=</span> <span class="st">"gender"</span>,
@@ -211,11 +213,11 @@ Rows missing values for the <code>split_by</code> or <code>age_group</code> colu
 ## from `gender`).</code></pre>
 <pre><code>## Scale for 'fill' is already present. Adding another scale for 'fill', which
 ## will replace the existing scale.</code></pre>
-<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-93-1.png" width="672"></div>
+<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-197-1.png" width="672"></div>
 </div>
-<div id="aggregated-data" class="section level3" number="5.3.2">
+<div id="aggregated-data" class="section level3" number="7.3.2">
 <h3>
-<span class="header-section-number">5.3.2</span> Aggregated data<a class="anchor" aria-label="anchor" href="#aggregated-data"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.2</span> Aggregated data<a class="anchor" aria-label="anchor" href="#aggregated-data"><i class="fas fa-link"></i></a>
 </h3>
 <h3>
 Aggregated data
@@ -225,38 +227,38 @@ Aggregated data
 <p>Let’s say that your dataset looks like this, with columns for age category, and male counts, female counts, and missing counts.<br>
 (see the handbook page on Transforming data for tips)</p>
 <pre><code>## `summarise()` has grouped output by 'age_cat5'. You can override using the `.groups` argument.</code></pre>
-<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb300"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># View the aggregated data</span>
 <span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span><span class="op">(</span><span class="va">demo_agg</span>, rownames <span class="op">=</span> <span class="cn">FALSE</span>, filter<span class="op">=</span><span class="st">"top"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>pageLength <span class="op">=</span> <span class="fl">5</span>, scrollX<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-29bd64b1bc45eb5aed1f" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-29bd64b1bc45eb5aed1f">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"2\" data-max=\"466\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"88\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69",null],[612,648,490,422,246,179,92,39,24,13,1,null,null,null,null],[410,466,423,435,311,295,216,128,88,46,13,6,2,2,null],[32,39,44,32,13,21,7,4,1,null,null,null,null,null,88]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>f<\/th>\n      <th>m<\/th>\n      <th>missing_gender<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script><p><code>ggplot()</code> perfers data in “long” format, so first pivot the data to be “long” with the <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer()</a></code> function from <strong>dplyr</strong>.</p>
-<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
+<div id="htmlwidget-34c9c01e93ee68caf3fe" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-34c9c01e93ee68caf3fe">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"2\" data-max=\"466\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"88\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69",null],[612,648,490,422,246,179,92,39,24,13,1,null,null,null,null],[410,466,423,435,311,295,216,128,88,46,13,6,2,2,null],[32,39,44,32,13,21,7,4,1,null,null,null,null,null,88]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>f<\/th>\n      <th>m<\/th>\n      <th>missing_gender<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script><p><code>ggplot()</code> perfers data in “long” format, so first pivot the data to be “long” with the <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer()</a></code> function from <strong>dplyr</strong>.</p>
+<div class="sourceCode" id="cb301"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># pivot the aggregated data into long format</span>
 <span class="va">demo_agg_long</span> <span class="op">&lt;-</span> <span class="va">demo_agg</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">f</span>, <span class="va">m</span>, <span class="va">missing_gender</span><span class="op">)</span>,            <span class="co"># cols to elongate</span>
                names_to <span class="op">=</span> <span class="st">"gender"</span>,                <span class="co"># name for new col of categories</span>
                values_to <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span> <span class="op">%&gt;%</span>           <span class="co"># name for new col of counts</span>
   <span class="fu">mutate</span><span class="op">(</span>gender <span class="op">=</span> <span class="fu">na_if</span><span class="op">(</span><span class="va">gender</span>, <span class="st">"missing_gender"</span><span class="op">)</span><span class="op">)</span> <span class="co"># convert "missing_gender" to NA</span></code></pre></div>
-<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb302"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># View the aggregated data</span>
 <span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span><span class="op">(</span><span class="va">demo_agg_long</span>, rownames <span class="op">=</span> <span class="cn">FALSE</span>, filter<span class="op">=</span><span class="st">"top"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>pageLength <span class="op">=</span> <span class="fl">5</span>, scrollX<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-66f808eae213ea1a2468" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-66f808eae213ea1a2468">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","0-4","5-9","5-9","5-9","10-14","10-14","10-14","15-19","15-19","15-19","20-24","20-24","20-24","25-29","25-29","25-29","30-34","30-34","30-34","35-39","35-39","35-39","40-44","40-44","40-44","45-49","45-49","45-49","50-54","50-54","50-54","55-59","55-59","55-59","60-64","60-64","60-64","65-69","65-69","65-69",null,null,null],["f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null],[612,410,32,648,466,39,490,423,44,422,435,32,246,311,13,179,295,21,92,216,7,39,128,4,24,88,1,13,46,null,1,13,null,null,6,null,null,2,null,null,2,null,null,null,88]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":2}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script><p>Then use the <code>split_by</code> and <code>count</code> arguments of <code>age_pyramid()</code> to specify the respective columns:</p>
-<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<div id="htmlwidget-d1778195e8a4ecb72e04" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d1778195e8a4ecb72e04">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","0-4","5-9","5-9","5-9","10-14","10-14","10-14","15-19","15-19","15-19","20-24","20-24","20-24","25-29","25-29","25-29","30-34","30-34","30-34","35-39","35-39","35-39","40-44","40-44","40-44","45-49","45-49","45-49","50-54","50-54","50-54","55-59","55-59","55-59","60-64","60-64","60-64","65-69","65-69","65-69",null,null,null],["f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null],[612,410,32,648,466,39,490,423,44,422,435,32,246,311,13,179,295,21,92,216,7,39,128,4,24,88,1,13,46,null,1,13,null,null,6,null,null,2,null,null,2,null,null,null,88]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":2}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script><p>Then use the <code>split_by</code> and <code>count</code> arguments of <code>age_pyramid()</code> to specify the respective columns:</p>
+<div class="sourceCode" id="cb303"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">apyramid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/apyramid/man/age_pyramid.html">age_pyramid</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">demo_agg_long</span>,
                       age_group <span class="op">=</span> <span class="st">"age_cat5"</span>,
                       split_by <span class="op">=</span> <span class="st">"gender"</span>,
                       count <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span>      <span class="co"># give the column name for the aggregated counts</span></code></pre></div>
 <pre><code>## Warning: Removed 20 rows containing missing values (position_stack).</code></pre>
 <pre><code>## Warning: Removed 19 rows containing missing values.</code></pre>
-<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-98-1.png" width="672"></div>
+<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-202-1.png" width="672"></div>
 <p>Note in the above, that the factor order of “m” and “f” is different (pyramid reversed). To adjust the order you must re-define gender in the aggredated data as a Factor and order the levels as desired.</p>
 <!-- ======================================================= -->
 </div>
 </div>
-<div id="ggplot" class="section level2 tabset tabset-fade" number="5.4">
+<div id="ggplot" class="section level2 tabset tabset-fade" number="7.4">
 <h2>
-<span class="header-section-number">5.4</span> <code>ggplot()</code><a class="anchor" aria-label="anchor" href="#ggplot"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.4</span> <code>ggplot()</code><a class="anchor" aria-label="anchor" href="#ggplot"><i class="fas fa-link"></i></a>
 </h2>
 <h2>
 <code>ggplot()</code>
@@ -265,9 +267,9 @@ Aggregated data
 <p>Using <code>ggplot()</code> to build your age pyramid allows for more flexibility, but requires more effort and understanding of how <code>ggplot()</code> works. It is also easier to accidentally make mistakes.</p>
 <p><strong>apyramid</strong> uses <code>ggplot()</code> in the background (and accepts <code>ggplot()</code> commands added), but this page shows how to adjust or recreate a pyramid only using <code>ggplot()</code>, if you wish.</p>
 <!-- ======================================================= -->
-<div id="constructing-the-plot" class="section level3 tabset tabset-fade" number="5.4.1">
+<div id="constructing-the-plot" class="section level3 tabset tabset-fade" number="7.4.1">
 <h3>
-<span class="header-section-number">5.4.1</span> Constructing the plot<a class="anchor" aria-label="anchor" href="#constructing-the-plot"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.4.1</span> Constructing the plot<a class="anchor" aria-label="anchor" href="#constructing-the-plot"><i class="fas fa-link"></i></a>
 </h3>
 <h3>
 Constructing the plot
@@ -282,7 +284,7 @@ Constructing the plot
 <li><p>Lastly, the counts-axis labels must be specified so they appear as “positive” counts on both sides of the pyramid (despite the underlying values on one side being negative).</p></li>
 </ul>
 <p>A <strong>simple</strong> version of this, using <code>geom_histogram()</code>, is below:</p>
-<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb306"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="co"># begin ggplot</span>
   <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">linelist</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, fill <span class="op">=</span> <span class="va">gender</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   
@@ -304,7 +306,7 @@ Constructing the plot
   <span class="fu">scale_y_continuous</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">600</span>, <span class="fl">900</span><span class="op">)</span>,
                      breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">600</span>,<span class="fl">900</span>,<span class="fl">100</span><span class="op">)</span>,
                      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">600</span>, <span class="fl">900</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-99-1.png" width="672"></div>
+<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-203-1.png" width="672"></div>
 <p><span style="color: red;"><strong><em>DANGER:</em></strong> If the <strong>limits</strong> of your counts axis are set too low, and a counts bar exceeds them, the bar will disappear entirely or be artificially shortened! Watch for this if analyzing data which is routinely updated. Prevent it by having your count-axis limits auto-adjust to your data, as below.</span></p>
 <p>There are many things you can change/add to this simple version, including:</p>
 <ul>
@@ -312,7 +314,7 @@ Constructing the plot
 </li>
 <li>Manually specify colors and legend labels</li>
 </ul>
-<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb307"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create dataset with proportion of total</span>
 <span class="va">pyramid_data</span> <span class="op">&lt;-</span> <span class="va">linelist</span> <span class="op">%&gt;%</span>
   <span class="fu">group_by</span><span class="op">(</span><span class="va">age_cat5</span>, <span class="va">gender</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -324,7 +326,7 @@ Constructing the plot
             <span class="va">gender</span> <span class="op">==</span> <span class="st">"m"</span> <span class="op">~</span> <span class="op">-</span><span class="va">percent</span>,
             <span class="cn">TRUE</span>          <span class="op">~</span> <span class="cn">NA_real_</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by 'age_cat5'. You can override using the `.groups` argument.</code></pre>
-<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">max_per</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">pyramid_data</span><span class="op">$</span><span class="va">percent</span>, na.rm<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
 <span class="va">min_per</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">pyramid_data</span><span class="op">$</span><span class="va">percent</span>, na.rm<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
 
@@ -375,12 +377,12 @@ Constructing the plot
   
   <span class="fu">ggtitle</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Age and gender of cases"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Removed 10 rows containing missing values (position_stack).</code></pre>
-<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-100-1.png" width="672"></div>
+<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-204-1.png" width="672"></div>
 <!-- ======================================================= -->
 </div>
-<div id="compare-to-baseline" class="section level3" number="5.4.2">
+<div id="compare-to-baseline" class="section level3" number="7.4.2">
 <h3>
-<span class="header-section-number">5.4.2</span> Compare to baseline<a class="anchor" aria-label="anchor" href="#compare-to-baseline"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.4.2</span> Compare to baseline<a class="anchor" aria-label="anchor" href="#compare-to-baseline"><i class="fas fa-link"></i></a>
 </h3>
 <h3>
 Compare to baseline
@@ -388,16 +390,16 @@ Compare to baseline
 </h3>
 <p>With the flexibility of <code>ggplot()</code>, you can have a second layer of bars in the background that represent the true population pyramid. This can provide a nice visualization to compare the observed counts with the baseline.</p>
 <p>Import and view the population data</p>
-<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb311"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># import the population demographics data</span>
 <span class="va">pop</span> <span class="op">&lt;-</span> <span class="fu">rio</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rio/man/import.html">import</a></span><span class="op">(</span><span class="st">"country_demographics.csv"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb312"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># display the linelist data as a table</span>
 <span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span><span class="op">(</span><span class="va">pop</span>, rownames <span class="op">=</span> <span class="cn">FALSE</span>, filter<span class="op">=</span><span class="st">"top"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>pageLength <span class="op">=</span> <span class="fl">10</span>, scrollX<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-8ae1b67daab4b7f05324" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8ae1b67daab4b7f05324">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"40402\" data-max=\"7828087\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"64656\" data-max=\"7674675\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74","75-79","80-84","85+"],[7828087,6705882,5601230,4576430,3734111,3111651,2571215,2121247,1735468,1418749,1145345,900239,685141,500248,347093,202240,94325,40402],[7674675,6592449,5522555,4533885,3726537,3118040,2592416,2150490,1771213,1459439,1193903,956070,745682,563894,416543,258538,130479,64656]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>m<\/th>\n      <th>f<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script><p>First some data management steps:</p>
+<div id="htmlwidget-26ed5e7c9e8d45f460d7" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-26ed5e7c9e8d45f460d7">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"40402\" data-max=\"7828087\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"64656\" data-max=\"7674675\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74","75-79","80-84","85+"],[7828087,6705882,5601230,4576430,3734111,3111651,2571215,2121247,1735468,1418749,1145345,900239,685141,500248,347093,202240,94325,40402],[7674675,6592449,5522555,4533885,3726537,3118040,2592416,2150490,1771213,1459439,1193903,956070,745682,563894,416543,258538,130479,64656]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>m<\/th>\n      <th>f<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script><p>First some data management steps:</p>
 <p>Here we record the order of age categories that we want to appear. Due to some quirks the way the <code>ggplot()</code> is implemented, it is easiest to store these as a character vector and use them later in the plotting function.</p>
-<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb313"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># record correct age cat levels</span>
 <span class="va">age_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"0-4"</span>,<span class="st">"5-9"</span>, <span class="st">"10-14"</span>, <span class="st">"15-19"</span>, <span class="st">"20-24"</span>,
                 <span class="st">"25-29"</span>,<span class="st">"30-34"</span>, <span class="st">"35-39"</span>, <span class="st">"40-44"</span>, <span class="st">"45-49"</span>,
@@ -411,7 +413,7 @@ Compare to baseline
 </li>
 <li>Bind them together, one on-top of the other (<code>bind_rows()</code>)</li>
 </ul>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb314"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create/transform populaton data, with percent of total</span>
 <span class="co">########################################################</span>
 <span class="va">pop_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="va">pop</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">f</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"gender"</span>, values_to <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># pivot gender columns longer</span>
@@ -422,12 +424,12 @@ Compare to baseline
                             <span class="va">gender</span> <span class="op">==</span> <span class="st">"m"</span> <span class="op">~</span> <span class="op">-</span><span class="va">percent</span>,
                             <span class="cn">TRUE</span>          <span class="op">~</span> <span class="cn">NA_real_</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Review the changed population dataset</p>
-<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb315"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># display the linelist data as a table</span>
 <span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span><span class="op">(</span><span class="va">pop_data</span>, rownames <span class="op">=</span> <span class="cn">FALSE</span>, filter<span class="op">=</span><span class="st">"top"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>pageLength <span class="op">=</span> <span class="fl">5</span>, scrollX<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-e743c7886338f7b17a28" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e743c7886338f7b17a28">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"40402\" data-max=\"7828087\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"-9\" data-max=\"8.8\" data-scale=\"1\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","5-9","5-9","10-14","10-14","15-19","15-19","20-24","20-24","25-29","25-29","30-34","30-34","35-39","35-39","40-44","40-44","45-49","45-49","50-54","50-54","55-59","55-59","60-64","60-64","65-69","65-69","70-74","70-74","75-79","75-79","80-84","80-84","85+","85+"],["m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f"],[7828087,7674675,6705882,6592449,5601230,5522555,4576430,4533885,3734111,3726537,3111651,3118040,2571215,2592416,2121247,2150490,1735468,1771213,1418749,1459439,1145345,1193903,900239,956070,685141,745682,500248,563894,347093,416543,202240,258538,94325,130479,40402,64656],["population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population"],[-9,8.8,-7.7,7.6,-6.5,6.4,-5.3,5.2,-4.3,4.3,-3.6,3.6,-3,3,-2.4,2.5,-2,2,-1.6,1.7,-1.3,1.4,-1,1.1,-0.8,0.9,-0.6,0.6,-0.4,0.5,-0.2,0.3,-0.1,0.2,-0,0.1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n      <th>data<\/th>\n      <th>percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[2,4]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script><p>Now implement the same for the case linelist. Slightly different because it begins with case-rows, not counts.</p>
-<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<div id="htmlwidget-8714439f7f7080c936a3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8714439f7f7080c936a3">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"40402\" data-max=\"7828087\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"-9\" data-max=\"8.8\" data-scale=\"1\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","5-9","5-9","10-14","10-14","15-19","15-19","20-24","20-24","25-29","25-29","30-34","30-34","35-39","35-39","40-44","40-44","45-49","45-49","50-54","50-54","55-59","55-59","60-64","60-64","65-69","65-69","70-74","70-74","75-79","75-79","80-84","80-84","85+","85+"],["m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f"],[7828087,7674675,6705882,6592449,5601230,5522555,4576430,4533885,3734111,3726537,3111651,3118040,2571215,2592416,2121247,2150490,1735468,1771213,1418749,1459439,1145345,1193903,900239,956070,685141,745682,500248,563894,347093,416543,202240,258538,94325,130479,40402,64656],["population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population"],[-9,8.8,-7.7,7.6,-6.5,6.4,-5.3,5.2,-4.3,4.3,-3.6,3.6,-3,3,-2.4,2.5,-2,2,-1.6,1.7,-1.3,1.4,-1,1.1,-0.8,0.9,-0.6,0.6,-0.4,0.5,-0.2,0.3,-0.1,0.2,-0,0.1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n      <th>data<\/th>\n      <th>percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[2,4]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script><p>Now implement the same for the case linelist. Slightly different because it begins with case-rows, not counts.</p>
+<div class="sourceCode" id="cb316"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create case data by age/gender, with percent of total</span>
 <span class="co">#######################################################</span>
 <span class="va">case_data</span> <span class="op">&lt;-</span> <span class="va">linelist</span> <span class="op">%&gt;%</span>
@@ -442,16 +444,16 @@ Compare to baseline
             <span class="cn">TRUE</span>          <span class="op">~</span> <span class="cn">NA_real_</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by 'age_cat5'. You can override using the `.groups` argument.</code></pre>
 <p>Review the changed case dataset</p>
-<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb318"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># display the linelist data as a table</span>
 <span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span><span class="op">(</span><span class="va">case_data</span>, rownames <span class="op">=</span> <span class="cn">FALSE</span>, filter<span class="op">=</span><span class="st">"top"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>pageLength <span class="op">=</span> <span class="fl">5</span>, scrollX<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-650c87a6a438ad9555a6" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-650c87a6a438ad9555a6">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"-7.9\" data-max=\"11\" data-scale=\"1\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","0-4","5-9","5-9","5-9","10-14","10-14","10-14","15-19","15-19","15-19","20-24","20-24","20-24","25-29","25-29","25-29","30-34","30-34","30-34","35-39","35-39","35-39","40-44","40-44","40-44","45-49","45-49","50-54","50-54","55-59","60-64","65-69",null],["f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m","f","m","m","m","m",null],[612,410,32,648,466,39,490,423,44,422,435,32,246,311,13,179,295,21,92,216,7,39,128,4,24,88,1,13,46,1,13,6,2,2,88],["cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases"],[10.4,-7,null,11,-7.9,null,8.3,-7.2,null,7.2,-7.4,null,4.2,-5.3,null,3,-5,null,1.6,-3.7,null,0.7,-2.2,null,0.4,-1.5,null,0.2,-0.8,0,-0.2,-0.1,-0,-0,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n      <th>data<\/th>\n      <th>percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[2,4]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script><p>Now the two datasets are combined, one on top of the other (same column names)</p>
-<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
+<div id="htmlwidget-2128ff3667981e4bae24" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2128ff3667981e4bae24">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"-7.9\" data-max=\"11\" data-scale=\"1\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","0-4","5-9","5-9","5-9","10-14","10-14","10-14","15-19","15-19","15-19","20-24","20-24","20-24","25-29","25-29","25-29","30-34","30-34","30-34","35-39","35-39","35-39","40-44","40-44","40-44","45-49","45-49","50-54","50-54","55-59","60-64","65-69",null],["f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m","f","m","m","m","m",null],[612,410,32,648,466,39,490,423,44,422,435,32,246,311,13,179,295,21,92,216,7,39,128,4,24,88,1,13,46,1,13,6,2,2,88],["cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases"],[10.4,-7,null,11,-7.9,null,8.3,-7.2,null,7.2,-7.4,null,4.2,-5.3,null,3,-5,null,1.6,-3.7,null,0.7,-2.2,null,0.4,-1.5,null,0.2,-0.8,0,-0.2,-0.1,-0,-0,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n      <th>data<\/th>\n      <th>percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[2,4]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script><p>Now the two datasets are combined, one on top of the other (same column names)</p>
+<div class="sourceCode" id="cb319"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># combine case and population data (same column names, age_cat values, and gender values)</span>
 <span class="va">pyramid_data</span> <span class="op">&lt;-</span> <span class="fu">bind_rows</span><span class="op">(</span><span class="va">case_data</span>, <span class="va">pop_data</span><span class="op">)</span></code></pre></div>
 <p>Store the maximum and minimum percent values, used in the plotting funtion to define the extent of the plot (and not cut off any bars!)</p>
-<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb320"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Define extent of percent axis, used for plot limits</span>
 <span class="va">max_per</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">pyramid_data</span><span class="op">$</span><span class="va">percent</span>, na.rm<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
 <span class="va">min_per</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">pyramid_data</span><span class="op">$</span><span class="va">percent</span>, na.rm<span class="op">=</span><span class="cn">T</span><span class="op">)</span></code></pre></div>
@@ -460,7 +462,7 @@ Compare to baseline
 <li>One bar graph of population data (wider, more transparent bars)</li>
 <li>One bar graph of case data (small, more solid bars)</li>
 </ul>
-<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb321"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># begin ggplot</span>
 <span class="co">##############</span>
 <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span><span class="op">+</span>  <span class="co"># default x-axis is age in years;</span>
@@ -527,13 +529,13 @@ Compare to baseline
     plot.title <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>, 
     plot.caption <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>hjust<span class="op">=</span><span class="fl">0</span>, size<span class="op">=</span><span class="fl">11</span>, face <span class="op">=</span> <span class="st">"italic"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Removed 10 rows containing missing values (position_stack).</code></pre>
-<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-111-1.png" width="672"></div>
+<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-215-1.png" width="672"></div>
 <!-- ======================================================= -->
 </div>
 </div>
-<div id="likert-scale" class="section level2 tabset tabset-fade" number="5.5">
+<div id="likert-scale" class="section level2 tabset tabset-fade" number="7.5">
 <h2>
-<span class="header-section-number">5.5</span> Likert scale<a class="anchor" aria-label="anchor" href="#likert-scale"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.5</span> Likert scale<a class="anchor" aria-label="anchor" href="#likert-scale"><i class="fas fa-link"></i></a>
 </h2>
 <h2>
 Likert scale
@@ -541,15 +543,15 @@ Likert scale
 </h2>
 <p>The techniques used to make a population pyramid with <code>ggplot()</code> can also be used to make plots of Likert-scale survey data.</p>
 <p>Import the data</p>
-<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb323"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># import the likert survey response data</span>
 <span class="va">likert_data</span> <span class="op">&lt;-</span> <span class="fu">rio</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rio/man/import.html">import</a></span><span class="op">(</span><span class="st">"likert_data.csv"</span><span class="op">)</span></code></pre></div>
 <p>Start with data that looks like this, with a categorical classification of each respondent (<code>status</code>) and their answers to 8 questions on a 4-point Likert-type scale (“Very poor”, “Poor”, “Good”, “Very good”).</p>
-<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb324"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># display the linelist data as a table</span>
 <span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span><span class="op">(</span><span class="va">likert_data</span>, rownames <span class="op">=</span> <span class="cn">FALSE</span>, filter<span class="op">=</span><span class="st">"top"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>pageLength <span class="op">=</span> <span class="fl">10</span>, scrollX<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
-<div id="htmlwidget-0ab81c08114c9a20c466" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0ab81c08114c9a20c466">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["Senior","Junior","Intermediate","Intermediate","Senior","Junior","Senior","Senior","Senior","Senior","Senior","Junior","Senior","Junior","Senior","Junior","Intermediate","Intermediate","Junior","Senior","Senior","Junior","Senior","Senior","Junior","Intermediate","Junior","Senior","Intermediate","Senior","Senior","Junior","Intermediate","Senior","Intermediate","Junior","Senior","Junior"],["Very Good","Very Good","Good","Good","Very Good","Good","Very Good","Good","Good","Good","Good","Good","Good","Good","Very Good","Good","Poor","Very Good","Very Good","Not applicable","Very Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Good","Very Good","Very Good","Not applicable","Good","Very Good","Good","Good","Good","Not applicable","Good"],["Very Good","Very Good","Good","Poor","Very Poor","Very Good","Very Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Good","Poor","Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Very Good","Good","Good","Poor","Very Good","Very Good","Not applicable","Good","Very Good","Very Good","Good","Very Good","Good","Good"],["Good","Very Good","Good","Poor","Good","Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Poor","Good","Good","Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Very Good","Good","Very Good","Good","Poor","Poor","Very Good","Very Good","Not applicable","Good","Very Good","Good","Good","Good","Good","Good"],["Very Poor","Very Good","Very Good","Very Poor","Poor","Very Poor","","Very Good","Very Poor","Very Poor","Very Poor","Good","Very Poor","Very Good","Good","","Very Poor","Very Poor","Good","Poor","Very Poor","Good","Good","Very Poor","Very Poor","Good","Good","Good","Very Poor","Very Poor","Very Poor","Good","Good","Good","Good","Very Poor","Good","Good"],["Not applicable","Very Good","Not applicable","Not applicable","Poor","Not applicable","","Poor","Not applicable","Poor","Not applicable","Good","Not applicable","Poor","Good","","Not applicable","Not applicable","Very Good","Poor","Not applicable","Good","Poor","Not applicable","Not applicable","Good","Good","Poor","Not applicable","Very Poor","Not applicable","Poor","Good","Good","Poor","Not applicable","Poor","Good"],["Not applicable","Very Good","Not applicable","Not applicable","Very Poor","Not applicable","","Not applicable","Not applicable","Not applicable","Not applicable","Good","Not applicable","Poor","Good","","Not applicable","Not applicable","Good","Good","Not applicable","Good","Poor","Good","Not applicable","Very Good","Very Good","Good","Not applicable","Not applicable","Not applicable","Good","Good","Good","Good","Not applicable","Good","Not applicable"],["Very Good","Very Good","Good","Good","Good","Good","","Very Good","Not applicable","Very Good","Good","Good","Poor","Good","Good","Poor","Very Good","Good","Good","Very Good","Good","Good","Good","Good","Good","Very Good","Good","Poor","Very Good","Very Good","Not applicable","Very Good","Good","Poor","Good","Poor","Not applicable","Good"],["Very Good","Very Good","Good","Good","Good","Good","Very Good","Very Good","Good","Very Good","Good","Very Good","Good","Very Good","Good","Poor","Very Good","Good","Good","Very Good","Very Good","Good","Good","Good","Very Good","Poor","Good","Poor","Very Good","Very Good","Not applicable","Good","Good","Good","Good","Poor","Not applicable","Good"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>status<\/th>\n      <th>Q1<\/th>\n      <th>Q2<\/th>\n      <th>Q3<\/th>\n      <th>Q4<\/th>\n      <th>Q5<\/th>\n      <th>Q6<\/th>\n      <th>Q7<\/th>\n      <th>Q8<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script><p>First, some data management steps:</p>
+<div id="htmlwidget-9bf7b98bd7f80350ef36" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9bf7b98bd7f80350ef36">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["Senior","Junior","Intermediate","Intermediate","Senior","Junior","Senior","Senior","Senior","Senior","Senior","Junior","Senior","Junior","Senior","Junior","Intermediate","Intermediate","Junior","Senior","Senior","Junior","Senior","Senior","Junior","Intermediate","Junior","Senior","Intermediate","Senior","Senior","Junior","Intermediate","Senior","Intermediate","Junior","Senior","Junior"],["Very Good","Very Good","Good","Good","Very Good","Good","Very Good","Good","Good","Good","Good","Good","Good","Good","Very Good","Good","Poor","Very Good","Very Good","Not applicable","Very Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Good","Very Good","Very Good","Not applicable","Good","Very Good","Good","Good","Good","Not applicable","Good"],["Very Good","Very Good","Good","Poor","Very Poor","Very Good","Very Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Good","Poor","Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Very Good","Good","Good","Poor","Very Good","Very Good","Not applicable","Good","Very Good","Very Good","Good","Very Good","Good","Good"],["Good","Very Good","Good","Poor","Good","Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Poor","Good","Good","Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Very Good","Good","Very Good","Good","Poor","Poor","Very Good","Very Good","Not applicable","Good","Very Good","Good","Good","Good","Good","Good"],["Very Poor","Very Good","Very Good","Very Poor","Poor","Very Poor","","Very Good","Very Poor","Very Poor","Very Poor","Good","Very Poor","Very Good","Good","","Very Poor","Very Poor","Good","Poor","Very Poor","Good","Good","Very Poor","Very Poor","Good","Good","Good","Very Poor","Very Poor","Very Poor","Good","Good","Good","Good","Very Poor","Good","Good"],["Not applicable","Very Good","Not applicable","Not applicable","Poor","Not applicable","","Poor","Not applicable","Poor","Not applicable","Good","Not applicable","Poor","Good","","Not applicable","Not applicable","Very Good","Poor","Not applicable","Good","Poor","Not applicable","Not applicable","Good","Good","Poor","Not applicable","Very Poor","Not applicable","Poor","Good","Good","Poor","Not applicable","Poor","Good"],["Not applicable","Very Good","Not applicable","Not applicable","Very Poor","Not applicable","","Not applicable","Not applicable","Not applicable","Not applicable","Good","Not applicable","Poor","Good","","Not applicable","Not applicable","Good","Good","Not applicable","Good","Poor","Good","Not applicable","Very Good","Very Good","Good","Not applicable","Not applicable","Not applicable","Good","Good","Good","Good","Not applicable","Good","Not applicable"],["Very Good","Very Good","Good","Good","Good","Good","","Very Good","Not applicable","Very Good","Good","Good","Poor","Good","Good","Poor","Very Good","Good","Good","Very Good","Good","Good","Good","Good","Good","Very Good","Good","Poor","Very Good","Very Good","Not applicable","Very Good","Good","Poor","Good","Poor","Not applicable","Good"],["Very Good","Very Good","Good","Good","Good","Good","Very Good","Very Good","Good","Very Good","Good","Very Good","Good","Very Good","Good","Poor","Very Good","Good","Good","Very Good","Very Good","Good","Good","Good","Very Good","Poor","Good","Poor","Very Good","Very Good","Not applicable","Good","Good","Good","Good","Poor","Not applicable","Good"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>status<\/th>\n      <th>Q1<\/th>\n      <th>Q2<\/th>\n      <th>Q3<\/th>\n      <th>Q4<\/th>\n      <th>Q5<\/th>\n      <th>Q6<\/th>\n      <th>Q7<\/th>\n      <th>Q8<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script><p>First, some data management steps:</p>
 <ul>
 <li>Pivot the data longer<br>
 </li>
@@ -559,7 +561,7 @@ Likert scale
 </li>
 <li>Store the max count value so limits of plot are appropriate</li>
 </ul>
-<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb325"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">melted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="va">likert_data</span>, <span class="va">Q1</span><span class="op">:</span><span class="va">Q8</span>, names_to <span class="op">=</span> <span class="st">"Question"</span>, values_to <span class="op">=</span> <span class="st">"Response"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
      <span class="fu">mutate</span><span class="op">(</span>direction <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span>
                <span class="va">Response</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Poor"</span>,<span class="st">"Very Poor"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Negative"</span>,
@@ -574,10 +576,10 @@ Likert scale
    <span class="fu">group_by</span><span class="op">(</span><span class="va">status</span>, <span class="va">Question</span><span class="op">)</span> <span class="op">%&gt;%</span> 
    <span class="fu">summarize</span><span class="op">(</span>n <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by 'status'. You can override using the `.groups` argument.</code></pre>
-<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb327"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">melted_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">melted_max</span><span class="op">$</span><span class="va">n</span>, na.rm<span class="op">=</span><span class="cn">T</span><span class="op">)</span></code></pre></div>
 <p>Now make the plot:</p>
-<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb328"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># make plot</span>
 <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
      <span class="co"># bar graph of the "negative" responses </span>
@@ -637,16 +639,16 @@ Likert scale
 <pre><code>## Warning: Ignoring unknown parameters: closed
 
 ## Warning: Ignoring unknown parameters: closed</code></pre>
-<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-117-1.png" width="672"></div>
+<div class="inline-figure"><img src="_index_files/figure-html/unnamed-chunk-221-1.png" width="672"></div>
 <!-- ======================================================= -->
 </div>
-<div id="resources" class="section level2 tabset tabset-fade" number="5.6">
+<div id="resources-2" class="section level2 tabset tabset-fade" number="7.6">
 <h2>
-<span class="header-section-number">5.6</span> Resources<a class="anchor" aria-label="anchor" href="#resources"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.6</span> Resources<a class="anchor" aria-label="anchor" href="#resources-2"><i class="fas fa-link"></i></a>
 </h2>
 <h2>
 Resources
-<a class="anchor" aria-label="anchor" href="#resources"><i class="fas fa-link"></i></a>
+<a class="anchor" aria-label="anchor" href="#resources-2"><i class="fas fa-link"></i></a>
 </h2>
 <p>This tab should stay with the name “Resources”.
 Links to other online tutorials or resources.</p>
@@ -654,53 +656,53 @@ Links to other online tutorials or resources.</p>
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="cleaning-data.html"><span class="header-section-number">4</span> Cleaning data</a></div>
+<div class="prev"><a href="de-duplication.html"><span class="header-section-number">6</span> De-duplication</a></div>
 <div class="empty"></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#age-pyramids"><span class="header-section-number">5</span> Age pyramids</a></li>
-<li><a class="nav-link" href="#overview-1"><span class="header-section-number">5.1</span> Overview</a></li>
-<li><a class="nav-link" href="#preparation-1"><span class="header-section-number">5.2</span> Preparation</a></li>
-<li><a class="nav-link" href="#preparation-1">
+<li><a class="nav-link" href="#age-pyramids"><span class="header-section-number">7</span> Age pyramids</a></li>
+<li><a class="nav-link" href="#overview-3"><span class="header-section-number">7.1</span> Overview</a></li>
+<li><a class="nav-link" href="#preparation-3"><span class="header-section-number">7.2</span> Preparation</a></li>
+<li><a class="nav-link" href="#preparation-3">
 Preparation
 </a></li>
-<li><a class="nav-link" href="#apyramid-package"><span class="header-section-number">5.3</span> apyramid package</a></li>
+<li><a class="nav-link" href="#apyramid-package"><span class="header-section-number">7.3</span> apyramid package</a></li>
 <li>
 <a class="nav-link" href="#apyramid-package">
 apyramid package
 </a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#linelist-data"><span class="header-section-number">5.3.1</span> Linelist data</a></li>
+<li><a class="nav-link" href="#linelist-data"><span class="header-section-number">7.3.1</span> Linelist data</a></li>
 <li><a class="nav-link" href="#linelist-data">
 Linelist data
 </a></li>
-<li><a class="nav-link" href="#aggregated-data"><span class="header-section-number">5.3.2</span> Aggregated data</a></li>
+<li><a class="nav-link" href="#aggregated-data"><span class="header-section-number">7.3.2</span> Aggregated data</a></li>
 <li><a class="nav-link" href="#aggregated-data">
 Aggregated data
 </a></li>
 </ul>
 </li>
-<li><a class="nav-link" href="#ggplot"><span class="header-section-number">5.4</span> ggplot()</a></li>
+<li><a class="nav-link" href="#ggplot"><span class="header-section-number">7.4</span> ggplot()</a></li>
 <li>
 <a class="nav-link" href="#ggplot">
 ggplot()
 </a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#constructing-the-plot"><span class="header-section-number">5.4.1</span> Constructing the plot</a></li>
+<li><a class="nav-link" href="#constructing-the-plot"><span class="header-section-number">7.4.1</span> Constructing the plot</a></li>
 <li><a class="nav-link" href="#constructing-the-plot">
 Constructing the plot
 </a></li>
-<li><a class="nav-link" href="#compare-to-baseline"><span class="header-section-number">5.4.2</span> Compare to baseline</a></li>
+<li><a class="nav-link" href="#compare-to-baseline"><span class="header-section-number">7.4.2</span> Compare to baseline</a></li>
 <li><a class="nav-link" href="#compare-to-baseline">
 Compare to baseline
 </a></li>
 </ul>
 </li>
-<li><a class="nav-link" href="#likert-scale"><span class="header-section-number">5.5</span> Likert scale</a></li>
+<li><a class="nav-link" href="#likert-scale"><span class="header-section-number">7.5</span> Likert scale</a></li>
 <li><a class="nav-link" href="#likert-scale">
 Likert scale
 </a></li>
-<li><a class="nav-link" href="#resources"><span class="header-section-number">5.6</span> Resources</a></li>
-<li><a class="nav-link" href="#resources">
+<li><a class="nav-link" href="#resources-2"><span class="header-section-number">7.6</span> Resources</a></li>
+<li><a class="nav-link" href="#resources-2">
 Resources
 </a></li>
 </ul>
@@ -719,7 +721,7 @@ Resources
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R Handbook for Epidemiologists</strong>" was written by the handbook team. It was last built on 2021-01-25.</p>
+    <p>"<strong>R Handbook for Epidemiologists</strong>" was written by the handbook team. It was last built on 2021-01-26.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

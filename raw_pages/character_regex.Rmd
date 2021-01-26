@@ -1,30 +1,4 @@
----
-title:  |  
-  ![](../images/R Handbook Logo.png)
-author: ""
-date: "Produced `r format(Sys.time(), '%A %d %B %Y')`"
-output:
-  html_document:
-    code_folding: show
-    highlight: zenburn
-    number_sections: no
-    theme: sandstone
-    toc: yes
-    toc_collapse: no
-    toc_depth: 3
-    toc_float: yes
-params:
-    run_page_ind: TRUE
-knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = "_outputs_knitted") })
----
 
-```{r, child= '_page_setup.Rmd', eval = params$run_page_ind, include = F}
-```
-
-<!-- ======================================================= -->
-<!-- ======================================================= -->
-<!-- ======================================================= -->
 # Characters/strings {.tabset .tabset-fade}  
 
 
@@ -995,10 +969,4 @@ A reference sheet for **stringr** functions can be found [here](https://evoldyn.
 
 A vignette on **stringr** can be found [here](
 https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html)
-
-
-
-```{r, child= '_page_closeout.Rmd', eval = params$run_page_ind == F, include = F}
-```
-
 

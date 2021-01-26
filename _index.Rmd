@@ -1950,6 +1950,1556 @@ rio::export(linelist, here::here("data", "linelist_cleaned.rds"))
 
 <!--chapter:end:raw_pages/cleaning.Rmd-->
 
+
+# Characters/strings {.tabset .tabset-fade}  
+
+
+<!-- ======================================================= -->
+## Overview {.tabset .tabset-fade}
+
+
+This tab demonstrates use of the **stringr** package to evaluate and manage character (strings).  
+
+1. Evaluate and subset/extract - `str_length()`, `str_sub()`, `word()`  
+2. Combine, order, arrange - `str_c()`, `str_glue()`, `str_order()`  
+3. Modify and replace - `str_sub()`, `str_replace_all()`  
+4. Adjust length - `str_pad()`, `str_trunc()`, `str_wrap()`  
+5. Change case - `str_to_upper()`, `str_to_title()`, `str_to_lower()`, `str_to_sentence()`  
+6. Search for patterns - `str_detect()`, `str_subset()`, `str_match()`  
+
+
+For ease of display most examples are shown acting on a short defined character vector, however they can easily be applied/adapted to a column within a dataset.  
+
+Much of this page is adapted from this [online vignette](
+https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html)
+
+
+
+
+<!-- ======================================================= -->
+## Preparation {.tabset .tabset-fade}
+
+Install or load the **stringr** package.  
+
+```{r}
+# install or load the stringr package
+pacman::p_load(stringr,   # many functions for handling strings
+               tidyverse,  # for optional data manipulation
+               tools      # alternative for converting to title case
+               )
+```
+
+
+A reference sheet for **stringr** functions can be found [here](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf)
+
+
+
+
+
+<!-- ======================================================= -->
+## Evaluate and subset {.tabset .tabset-fade}
+
+
+**Evaluate the length of a string**  
+
+```{r}
+str_length("abc")
+```
+
+Alternatively, use `nchar()` from **base** R
+
+
+
+**Subset/extract string by position**  
+
+Use `str_sub()` to return only a part of a string. The function takes three main arguments:  
+
+1) the character vector(s)  
+2) start position  
+3) end position  
+
+A few notes on position numbers:  
+
+* If a position number is positive, the position is counted starting from the left end of the string.  
+* If a position number is negative, it is counted starting from the right end of the string.  
+* Position numbers are inclusive.  
+* Positions extending beyond the string will be truncated (removed).  
+
+Below are some examples applied to the string "pneumonia":  
+
+```{r}
+# third from left
+str_sub("pneumonia", 3, 3)
+
+# 0 is not present
+str_sub("pneumonia", 0, 0)
+
+# 6th from right, to the first from right
+str_sub("pneumonia", 6, -1)
+
+# fifth from right, to the first from right
+str_sub("pneumonia", -5, -1)
+
+# positions outside the string
+str_sub("pneumonia", 4, 15)
+```
+
+**Subset string by word position**
+
+To extract the nth 'word', use `word()`, also from **stringr**. Provide the string(s), then the first word position to extract, and the last word position to extract.  
+
+By default, the separator between 'words' is assumed to be a space, unless otherwise indicated with `sep = ` (e.g. `sep = "_"` when words are separated by underscores.  
+
+
+```{r}
+# strings to evaluate
+chief_complaints <- c("I just got out of the hospital 2 days ago, but still can barely breathe.",
+                      "My stomach hurts",
+                      "Severe ear pain")
+
+# extract 1st-3rd words of each string
+word(chief_complaints, start = 1, end = 3, sep = " ")
+```
+
+
+
+<!-- ======================================================= -->
+## Combine, order, and arrange {.tabset .tabset-fade}
+
+
+This section covers using `str_c()`, `str_glue()`, `str_order()`, to combine, arrange, and paste together strings.  
+
+
+<!-- ======================================================= -->
+### Combine strings
+
+It is common to see **base** R functions `paste()` and `paste0()`, which concatenate vectors after converting all parts to character. The act similarly to `str_c()` but the syntax differs - the parts (either text or code/pre-defined objects) are separated by commas, for example: `paste("Regional hospital needs", n_beds, "beds and", n_masks, "masks.")`.  The `sep` and `collapse` arguments can be adjusted. By default `sep` is a space, unless using `paste0()` where there is no space between parts.  
+
+To combine multiple strings into one string, you can use `str_c()`, which is the **stringr** version of `c()` (concatenate). 
+
+```{r}
+str_c("String1", "String2", "String3")
+```
+
+The argument `sep = ` inserts characters between each input vectors (e.g. a comma or newline `"\n"`)  
+
+```{r}
+str_c("String1", "String2", "String3", sep = ", ")
+```
+
+The argument `collapse = ` is relevant if producing multiple elements. The example below shows the combination of first and last names. The `sep` value goes between each first and last name, while the `collapse` value goes between the people.  
+
+```{r}
+first_names <- c("abdul", "fahruk", "janice") 
+last_names  <- c("hussein", "akinleye", "musa")
+
+# sep is between the respective strings, while collapse is between the elements produced
+str_c(first_names, last_names, sep = " ", collapse = ";  ")
+
+# For newlines to print correctly, the phrase may need to be wrapped in cat()
+cat(str_c(first_names, last_names, sep = " ", collapse = ";\n"))
+```
+
+
+<!-- ======================================================= -->
+### Glueing strings and other values
+
+**str_glue()**  
+
+You can also combine strings and other pre-defined values and characters with `str_glue()`. This is a very useful function for creating dynamic plot captions, as demonstrated below.  
+
+* All content goes between quotation marks ("").  
+* Any dynamic code or calls to pre-defined objects must be within curly brackets `{}`. There can be many curly brackets.  
+* Within the outer quotation marks, use single quotes if necessary (e.g. when providing date format)  
+* You can provide newlines (`\n`), use `format()` to display dates, use `Sys.Date()` to display the current date.  
+* If using the `%>%` pipe operator, ensure the **tidyverse** package is loaded.  
+
+A simple example:  
+
+```{r}
+str_glue("The linelist is current to {format(Sys.Date(), '%d %b %Y')} and includes {nrow(linelist)} cases.")
+```
+
+An alternative format is to use placeholders within the brackets and define the code in separate arguments at the end of the `str_glue()` function, as below. This can improve code readability if the codes are long.
+
+```{r}
+str_glue("Data source is the confirmed case linelist as of {current_date}.\nThe last case was reported hospitalized on {last_hospital}.\n{n_missing_onset} cases are missing date of onset and not shown",
+         current_date = format(Sys.Date(), '%d %b %Y'),
+         last_hospital = format(as.Date(max(linelist$date_hospitalisation, na.rm=T)), '%d %b %Y'),
+         n_missing_onset = nrow(linelist %>% filter(is.na(date_onset)))
+         )
+
+```
+
+Sometimes, it is useful to pull data from dataframe and have it pasted together in sequence. Below is an example using this dataset to make a summary output of jurisdictions and the new and total cases:  
+
+```{r, echo=F}
+case_table <- data.frame(zone      = c("Zone 1", "Zone 2", "Zone 3", "Zone 4", "Zone 5"),
+                         new_cases = c(3, 0, 7, 0, 15),
+                         total_cases = c(40, 4, 25, 10, 103))
+```
+
+```{r}
+DT::datatable(case_table, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+Use `str_c()` with the dataframe and column names (as in the example above with first & last names). Provide `sep` and `collapse` arguments.  
+
+```{r}
+str_c(case_table$zone, case_table$new_cases, sep = " = ", collapse = ";  ")
+```
+
+We add the text "New Cases: " to the beginning of the summary by using wrapping with a separate `str_c()`. If "New Cases" was added within the original `str_c()`, it would appear multiple times.  
+
+```{r}
+str_c("New Cases: ", str_c(case_table$zone, case_table$new_cases, sep = " = ", collapse = ";  "))
+```
+
+You can achieve a similar result with `str_glue()`, with newlines added automatically:  
+
+```{r}
+str_glue("{case_table$zone}: {case_table$new_cases} new cases ({case_table$total_cases} total cases)")
+```
+
+To use str_glue() but have more control (e.g. to use double newlines), wrap it within `str_c()` and adjust the `collapse` value. You may need to print using `cat()` to correctly print the newlines.  
+
+```{r}
+case_summary <- str_c(str_glue("{case_table$zone}: {case_table$new_cases} new cases ({case_table$total_cases} total cases)"), collapse = "\n\n")
+
+cat(case_summary) # print
+```
+
+
+
+
+<!-- ======================================================= -->
+### Sorting
+
+Several strings can be sorted by alphabetical order. `str_order()` returns the order, while `str_sort()` returns the strings in that order.  
+
+```{r}
+# strings
+health_zones <- c("Alba", "Takota", "Delta")
+
+# return the alphabetical order
+str_order(health_zones)
+
+# return the strings in alphabetical order
+str_sort(health_zones)
+```
+
+To use a different alphabet, add the argument `locale = `. See the full list of locales by entering `stringi::stri_locale_list()` in the R console.  
+
+
+
+<!-- ======================================================= -->
+### base R functions
+
+It is common to see **base** R functions `paste()` and `paste0()`, which concatenate vectors after converting all parts to character. The act similarly to `str_c()` but the syntax differs - the parts (either text or code/pre-defined objects) are separated by commas, for example: `paste("Regional hospital needs", n_beds, "beds and", n_masks, "masks.")`.  The `sep` and `collapse` arguments can be adjusted. By default `sep` is a space, unless using `paste0()` where there is no space between parts.  
+
+
+
+<!-- ======================================================= -->
+## Modify and replace {.tabset .tabset-fade}
+
+
+**Replace specific character positions**  
+
+`str_sub()` paired with the assignment operator (`<-`) can be used to modify a part of a string: 
+
+```{r}
+word <- "pneumonia"
+
+# convert the third and fourth characters to X 
+str_sub(word, 3, 4) <- "XX"
+
+word
+```
+
+An example applied to multiple strings (e.g. a column). Note the expansion in length of "HIV".  
+
+```{r}
+words <- c("pneumonia", "tubercolosis", "HIV")
+
+# convert the third and fourth characters to X 
+str_sub(words, 3, 4) <- "XX"
+
+words
+```
+
+**Replace patterns**  
+
+Use `str_replace_all()` as a "find and replace" tool. First, provide the strings to be evaluated, then the pattern to be replaced, and then the replacement value. The example below replaces all instances of "dead" with "deceased". Note, this IS case sensitive.  
+
+```{r}
+outcome <- c("Karl: dead",
+            "Samantha: dead",
+            "Marco: not dead")
+
+str_replace_all(outcome, "dead", "deceased")
+```
+
+To replace a pattern with `NA`, use `str_replace_na()`.  The function `str_replace()` replaces only the first instance of the pattern within each evaluated string.  
+
+
+
+<!-- ======================================================= -->
+## Adjust length {.tabset .tabset-fade}
+
+
+**Increase minimum length (pad)**  
+
+Use `str_pad()` to add characters to a string, to a minimum length.  
+
+By default spaces are added, but you can also pad with other characters using the `pad = ` argument.  
+
+
+```{r}
+# ICD codes of differing length
+ICD_codes <- c("R10.13",
+               "R10.819",
+               "R17")
+
+# ICD codes padded to 7 characters on the right side
+str_pad(ICD_codes, 7, "right")
+
+# Pad with periods instead of spaces
+str_pad(ICD_codes, 7, "right", pad = ".")
+```
+
+For example, to pad numbers with leading zeros (such as for hours or minutes), you can pad the number to minimum length of 2 with `pad = "0"`.
+
+```{r}
+# Add leading zeros to two digits (e.g. for times minutes/hours)
+str_pad("4", 2, pad = "0") 
+
+# example using a numeric column named "hours"
+# hours <- str_pad(hours, 2, pad = "0")
+```
+
+
+**Truncate/shorten**  
+
+`str_trunc()` sets a maximum length for each string. If a string exceeds this length, it is truncated (shortened) and an ellipsis (...) is included to indicate that the string was previously longer. Note that the ellipsis *is* counted in the length. The ellipsis characters can be changed with the argument `ellipsis = `.  The optional `side = ` argument specifies which where the ellipsis will appear within the truncated string ("left", "right", or "center").  
+
+```{r}
+original <- "Symptom onset on 4/3/2020 with vomiting"
+str_trunc(original, 10, "center")
+```
+
+**To ensure each value is the same length**  
+
+Use `str_trunc()` to set a maximum length, and then use `str_pad()` to expand the very short strings to that truncated length. In the example below, 6 is set as the maximum length (one value is truncated), and then a very short value is padded to achieve length of 6.    
+
+```{r}
+# ICD codes of differing length
+ICD_codes   <- c("R10.13",
+                 "R10.819",
+                 "R17")
+
+# truncate to maximum length of 6
+ICD_codes_2 <- str_trunc(ICD_codes, 6)
+ICD_codes_2
+
+# expand to minimum length of 6
+ICD_codes_3 <- str_pad(ICD_codes_2, 6, "right")
+ICD_codes_3
+```
+
+
+**Remove leading/trailing whitespace**  
+
+Use `str_trim()` to remove spaces, newlines (`\n`) or tabs (`\t`) on sides of a string input.  
+Add `"right"` `"left"`, or `"both"` to the command to specify which side to trim (e.g. `str_trim(x, "right")`. 
+
+```{r}
+# ID numbers with excess spaces on right
+IDs <- c("provA_1852  ", # two excess spaces
+         "provA_2345",   # zero excess spaces
+         "provA_9460 ")  # one excess space
+
+# IDs trimmed to remove excess spaces on right side only
+str_trim(IDs)
+```
+
+
+**Remove repeated whitespace *within* strings**  
+
+Use `str_squish()` to remove repeated spaces that appear *inside* a string. For example, to convert double spaces into single spaces. It also removes spaces, newlines, or tabs on the outside of the string like `str_trim()`.  
+
+
+```{r}
+# original contains excess spaces within string
+str_squish("  Pt requires   IV saline\n") 
+```
+
+Enter `?str_trim`, `?str_pad` in your R console to see further details.  
+
+
+**Wrap lines into paragraphs**  
+
+Use `str_wrap()` to wrap a long unstructured text into a structured paragraph with fixed line length. Provide the ideal character length for each line, and it applies an algorithm to insert newlines (`\n`) within the paragraph, as seen in the example below.   
+
+```{r}
+pt_course <- "Symptom onset 1/4/2020 vomiting chills fever. Pt saw traditional healer in home village on 2/4/2020. On 5/4/2020 pt symptoms worsened and was admitted to Lumta clinic. Sample was taken and pt was transported to regional hospital on 6/4/2020. Pt died at regional hospital on 7/4/2020."
+
+str_wrap(pt_course, 40)
+```
+
+The **base** function `cat()` can be wrapped around the above command in order to print the output, displaying the new lines added.  
+
+```{r}
+cat(str_wrap(pt_course, 40))
+```
+
+
+
+
+
+<!-- ======================================================= -->
+## Change case {.tabset .tabset-fade}
+
+Often one must alter the case/capitalization of a string value, for example names of jursidictions. Use `str_to_upper()`, `str_to_upper()`, and `str_to_title()`, as shown below:  
+
+```{r}
+str_to_upper("California")
+
+str_to_lower("California")
+```
+
+Using *base** R, the above can also be achieved with `toupper()`, `tolower()`.  
+
+
+**Title case**
+Transforming the string so each word is capitalized can be achieved with `str_to_title()`:  
+
+```{r}
+str_to_title("go to the US state of california ")
+```
+
+Use `toTitleCase()` from the **tools** package to achieve more nuanced capitalization (words like "to", "the", and "of" are not capitalized).  
+
+```{r}
+tools::toTitleCase("This is the US state of california")
+```
+
+You can also use `str_to_sentence()`, which capitalizes only the first letter of the string.
+
+```{r}
+str_to_sentence("the patient must be transported")
+```
+
+
+ 
+
+
+<!-- ======================================================= -->
+## Patterns {.tabset .tabset-fade}
+
+Many **stringr** functions work to detect, locate, extract, match, replace, and split based on a specified *pattern*.  
+
+
+
+<!-- ======================================================= -->
+### Detect presence/absence of a pattern
+
+Use `str_detect()` as below. Note that by default the search *is case sensitive*!
+
+```{r}
+str_detect("primary school teacher", "teach")
+```
+
+The argument `negate = ` can be included and set to `TRUE` if you want to know if the pattern is NOT present.  
+ 
+```{r}
+str_detect("primary school teacher", "teach", negate = TRUE)
+```
+
+To ignore case/capitalization, wrap the pattern within `regex()` and *within* `regex()` add the argument `ignore_case = T`.  
+
+```{r}
+str_detect("Teacher", regex("teach", ignore_case = T))
+```
+
+When `str_detect()` is applied to a character vector/column, it will return a TRUE/FALSE for each of the values in the vector. 
+
+```{r}
+# a vector/column of occupations 
+occupations <- c("field laborer",
+                 "university professor",
+                 "primary school teacher & tutor",
+                 "tutor",
+                 "nurse at regional hospital",
+                 "lineworker at Amberdeen Fish Factory",
+                 "physican",
+                 "cardiologist",
+                 "office worker",
+                 "food service")
+
+# Detect presence of pattern "teach" in each string - output is vector of TRUE/FALSE
+str_detect(occupations, "teach")
+```
+
+If you need to count these, apply `sum()` to the output. This counts the number TRUE.  
+
+```{r}
+sum(str_detect(occupations, "teach"))
+```
+
+To search inclusive of multiple terms, include them separated by OR bars (|) within the pattern, as shown below:  
+```{r}
+sum(str_detect(occupations, "teach|professor|tutor"))
+```
+
+If you need to make a long list of search terms, you can combine them using `str_c()` and `sep = |`, define this is a character object, and reference it later more succinctly. The example below includes possible occupation search terms for frontline medical providers.     
+
+```{r}
+# search terms
+occupation_med_frontline <- str_c("medical", "medicine", "hcw", "healthcare", "home care", "home health",
+                                "surgeon", "doctor", "doc", "physician", "surgery", "peds", "pediatrician",
+                               "intensivist", "cardiologist", "coroner", "nurse", "nursing", "rn", "lpn",
+                               "cna", "pa", "physician assistant", "mental health",
+                               "emergency department technician", "resp therapist", "respiratory",
+                                "phlebotomist", "pharmacy", "pharmacist", "hospital", "snf", "rehabilitation",
+                               "rehab", "activity", "elderly", "subacute", "sub acute",
+                                "clinic", "post acute", "therapist", "extended care",
+                                "dental", "dential", "dentist", sep = "|")
+
+occupation_med_frontline
+```
+
+This command returns the number of occupations which contain any one of the search terms for front-line medical providers (`occupation_med_frontline`):  
+
+```{r}
+sum(str_detect(occupations, occupation_med_frontline))
+```
+
+**Base R string search functions**  
+
+The **base** function `grepl()` works similarly to `str_detect()`, in that it searches for matches to a pattern and returns a logical vector. The basic syntax is `grepl(pattern, strings_to_search, ignore.case = FALSE, ...)`. One advantage is that the `ignore.case` argument is easier to write (there is no need to involve `regex()` function).  
+
+Likewise, the **base** functions `sub()` and `gsub()` act similarly to `str_replace()`. Their basic syntax is: `gsub(pattern, replacement, strings_to_search, ignore.case = FALSE)`. `sub()` will replace the first instance of the pattern, whereas `gsub()` will replace all instances of the pattern.  
+
+
+
+<!-- ======================================================= -->
+### Detects patterns in conditional logic
+
+**Within `case_when()`**  
+
+`str_detect()` is often used within `case_when()` (from **dplyr**). Let's say the occupations are a column in the linelist called `occupations`. The `mutate()` below creates a new column called `is_educator` by using conditional logic via `case_when()`. See the page on data cleaning to learn more about `case_when()`.  
+
+
+```{r, eval=F}
+df <- df %>% 
+  mutate(is_educator = case_when(
+    # term search within occupation, not case sensitive
+    str_detect(occupations,
+               regex("teach|prof|tutor|university",
+                     ignore_case = TRUE))              ~ "Educator",
+    # all others
+    TRUE                                               ~ "Not an educator"))
+```
+
+As a reminder, it may be important to add exclusion criteria to the conditional logic (`negate = F`):  
+
+```{r, eval=F}
+df <- df %>% 
+  # value in new column is_educator is based on conditional logic
+  mutate(is_educator = case_when(
+    
+    # occupation column must meet 2 criteria to be assigned "Educator":
+    # it must have a search term AND NOT any exclusion term
+    
+    # Must have a search term AND
+    str_detect(occupations,
+               regex("teach|prof|tutor|university", ignore_case = T)) &              
+    # Must NOT have an exclusion term
+    str_detect(occupations,
+               regex("admin", ignore_case = T),
+               negate = T)                          ~ "Educator"
+    
+    # All rows not meeting above criteria
+    TRUE                                            ~ "Not an educator"))
+```
+
+
+<!-- ======================================================= -->
+### Locate pattern position  
+
+To locate the *first* position of a pattern, use `str_locate()`. It outputs a start and end position.   
+
+```{r}
+str_locate("I wish", "sh")
+```
+
+Like other `str` functions, there is an "_all" version (`str_locate_all()`) which will return the positions of *all* instances of the pattern within each string. This outputs as a `list`.  
+
+```{r}
+phrases <- c("I wish", "I hope", "he hopes", "He hopes")
+
+str_locate(phrases, "h" )     # position of *first* instance of the pattern
+str_locate_all(phrases, "h" ) # position of *every* instance of the pattern
+```
+
+
+<!-- ======================================================= -->
+### Extract a match  
+
+`str_extract_all()` returns the matching patterns themselves, which is most useful when you have offered several patterns via "OR" conditions. For example, looking in the string vector of occupations (see previous tab) for *either* "teach", "prof", or "tutor".
+
+`str_extract_all()` returns a `list` which contains *all matches* for each evaluated string. See below how occupation 3 has two pattern matches within it.  
+
+```{r}
+str_extract_all(occupations, "teach|prof|tutor")
+```
+
+
+`str_extract()` extracts *only the first match* in each evaluated string, producing a character vector with one element for each evaluated string. It returns `NA` where there was no match. The `NA`s can be removed by wrapping the returned vector with `na.exclude()`. Note how the second of occupation 3's matches is not shown.  
+
+```{r}
+str_extract(occupations, "teach|prof|tutor")
+```
+
+<!-- ======================================================= -->
+### Subset and Count  
+
+**Subset, Count**  
+
+Aligned functions include `str_subset()` and `str_count()`.  
+
+`str_subset()` returns the actual values which contained the pattern: 
+
+```{r}
+str_subset(occupations, "teach|prof|tutor")
+```
+
+`str_count() returns a vector of numbers: the **number of times** a search term appears in each evaluated value.  
+
+```{r}
+str_count(occupations, regex("teach|prof|tutor", ignore_case = TRUE))
+```
+
+
+<!-- ======================================================= -->
+### Splitting  
+
+To split a string based on a pattern, use `str_split()`. It evaluates the strings and returns a list of character vectors consisting of the newly-split values.
+
+The simple example below evaluates one string, and produces a list with one element - a character vector with three values:
+
+```{r}
+str_split("jaundice, fever, chills", ",", simplify = T)
+```
+
+You can assign this as a named object, and access the nth symptom:  
+
+```{r}
+pt1_symptoms <- str_split("jaundice, fever, chills", ",", simplify = T)
+
+pt1_symptoms[2]
+```
+
+If multiple strings are evaluated, there will be more than one element in the returned list.  
+
+```{r}
+symptoms <- c("jaundice, fever, chills",     # patient 1
+              "chills, aches, pains",        # patient 2 
+              "fever",                       # patient 3
+              "vomiting, diarrhoea",         # patient 4
+              "bleeding from gums, fever",   # patient 5
+              "rapid pulse, headache")       # patient 6
+
+str_split(symptoms, ",")                     # split each patient's symptoms
+```
+
+To access a specific symptom you can use syntax like this: `the_split_return_object[[2]][1]`, which would access the first symptom from the second evaluated string ("chills"). See the R basics page for more detail on accessing elements.  
+
+
+To return a "character matrix" instead, which may be useful if creating dataframe columns, set the argument `simplify = TRUE` as shown below:  
+
+```{r}
+str_split(symptoms, ",", simplify = T)
+```
+
+You can also adjust the number of splits to create with the `n = ` argument. For example, this restricts the number of splits (from the left side) to 2 splits. The further commas remain within the second split. 
+
+```{r}
+str_split(symptoms, ",", simplify = T, n = 2)
+```
+
+*Note - the same outputs can be achieved with `str_split_fixed()`, in which you do *not* give the `simplify` argument, but must instead designate the number of columns (`n`).* 
+
+```{r, eval=F}
+str_split_fixed(symptoms, ",", n = 2)
+```
+
+
+**Splitting a column within a dataframe**  
+
+Within a dataframe, to split one character column into other columns use use `separate()` from **dplyr**.  
+
+If we have a simple dataframe `df` consisting of a case ID column, one character column with symptoms, and one outcome column:  
+
+```{r, echo=F}
+df <- data.frame(case_ID = c(1:6),
+                 symptoms  = 
+                   c("jaundice, fever, chills",     # patient 1
+                     "chills, aches, pains",        # patient 2 
+                     "fever",                       # patient 3
+                     "vomiting, diarrhoea",         # patient 4
+                     "bleeding from gums, fever",   # patient 5
+                     "rapid pulse, headache"),      # patient 6
+                 outcome = c("Success", "Failure", 
+                             "Failure", "Success",
+                             "Success", "Success"))
+```
+
+```{r, echo=F}
+DT::datatable(df, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+
+First provide the column to be separated, then provide a vector (`c()`) of new columns names to the argument `into = `, as shown below. The argument `sep = ` can be a character, or a number (interpreted as the character position to split at). 
+
+Optional arguments include `remove = ` (FALSE by default, removes the input column) and `convert = ` (FALSE by default, will cause string "NA"s to become `NA`).  
+
+`extra = ` will control what happens if there are more many values created by the separation than new columns named. Setting `extra` equal to `"warn"` means R will return a warning but proceed and drop the values (the default). `"drop"` means the values will be dropped with no warning.  
+
+**Setting `extra = "merge"` will only split to the number of new columns listed in `into` - *this setting will preserve all your data*.**  
+
+```{r}
+# third symptoms combined into second new column
+df %>% 
+  separate(symptoms, into = c("sym_1", "sym_2"), sep=",", extra = "merge")
+```
+
+```{r}
+# third symptoms are lost
+df %>% 
+  separate(symptoms, into = c("sym_1", "sym_2", "sym_3"), sep=",")
+```
+```{r}
+# third symptoms given their own column
+separated <- df %>% 
+  separate(symptoms, into = c("sym_1", "sym_2", "sym_3"), sep=",")
+
+separated
+```
+
+<span style="color: orange;">**_CAUTION:_** If you do not provide enough `into` values for the new columns, your data may be truncated.</span>  
+
+One solution to automatically make as many columns as needed could be:  
+
+
+
+
+
+**`unite()`**  
+
+Within a dataframe, bringing together multiple columns (the opposite of `separate()`) can be achieved with `unite()` from **tidyr**.  
+
+Provide the name of the new united column. Then provide the names of the columns you wish to unite. By default the separator used in the united column is "_", but this can be changed with the `sep` argument. Other optional arguments include `remove = ` (TRUE by default, removes the input columns from the data frame), and `na.rm = ` (FALSE by default, it removes missing values while uniting).  
+
+Below, we re-unite the dataframe that was separated above.  
+
+```{r}
+separated %>% 
+  unite(
+    col = "all_symptoms",         # name of the new united column
+    c("sym_1", "sym_2", "sym_3"), # columns to unite
+    sep = ", ",                   # separator to use in united column
+    remove = TRUE,                # if TRUE, removes input cols from the data frame
+    na.rm = TRUE                  # if TRUE, missing values are removed before uniting
+  )
+```
+
+
+
+<!-- ======================================================= -->
+### Regex groups
+
+
+**Groups within strings**  
+
+`str_match()`   TBD
+
+
+<!-- ======================================================= -->
+## Regex and special characters {.tabset .tabset-fade} 
+
+Regular expressions, or "regex", is a concise language for describing patterns in strings.
+
+*Much of this tab is adapted from [this tutorial](https://towardsdatascience.com/a-gentle-introduction-to-regular-expressions-with-r-df5e897ca432) and [this cheatsheet](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf)*  
+
+
+
+<!-- ======================================================= -->
+### Special characters
+
+**Backslash `\` as escape**  
+
+The backslash `\` is used to "escape" the meaning of the next character. This way, a backslash can be used to have a quote mark display *within* other quote marks (`\"`) - the middle quote mark will not "break" the surrounding quote marks.  
+
+Note - thus, if you want to *display* a backslash, you must escape it's meaning with *another backslash. So you must write two backslashes `\\` to display one.  
+
+**Special characters**  
+
+Special character | Represents  
+----------------- | --------------------------------------------------------------    
+`"\\"` | backslash  
+`"\n"` | a new line (newline)   
+`"\""` | double-quote *within* double quotes  
+`'\''` | single-quote *within* single quotes  
+`"\`"` | grave accent  
+`"\r"` | carriage return  
+`"\t"` | tab  
+`"\v"` | vertical tab 
+`"\b"` | backspace  
+
+
+Run `?"'"` in the R Console to display a complete list of these special characters (it will appear in the RStudio Help pane). 
+
+
+
+<!-- ======================================================= -->
+### Regular expressions (regex)
+
+ If you are not familiar with it, a regular expression can look like an alien language:  
+
+```{r, eval=F}
+
+```
+
+A regular expression is applied to extract specific patterns from unstructured text - for example medical notes, chief complaint, matient history, or other free text columns in a dataset.  
+
+There are four basic tools one can use to create a basic regular expression:  
+
+1) Character sets  
+2) Meta characters  
+3) Quantifiers  
+4) Groups  
+
+
+**Character sets**  
+
+Character sets, are a way of expressing listing options for a character match, within brackets. So any a match will be triggered if any of the characters within the brackets are found in the string. For example, to look for vowels one could use this character set: "[aeiou]". Some other common character sets are:  
+
+Character set | Matches for  
+----------------- | --------------------------------------------------------------    
+`"[A-Z]"` | any single capital letter  
+`"[a-z]"` | any single lowercase letter  
+`"[0-9]"` | any digit  
+`[:alnum:]` | any alphanumeric character  
+`[:digit:]` | any numeric digit  
+`[:alpha:]` | any letter (upper or lowercase)  
+`[:upper:]` | any uppercase letter  
+`[:lower:]` | any lowercase letter  
+
+
+Character sets can be combined within one bracket (no spaces!), such as `"[A-Za-z]"` (any upper or lowercase letter), or another example `"[t-z0-5]"` (lowercase t through z OR number 0 through 5).  
+
+
+
+**Meta characters**  
+
+Meta characters are shorthand for character sets. Some of the important ones are listed below:  
+
+Meta character | Represents  
+----------------- | --------------------------------------------------------------    
+`"\\s"` | a single space  
+`"\\w"` | any single alphanumeric character (A-Z, a-z, or 0-9)  
+`"\\d"` | any single numeric digit (0-9)  
+
+
+**Quantifiers**  
+
+Typically you do not want to search for a match on only one character. Quantifiers allow you to designate the length of letters/numbers to allow for the match.  
+
+Quantifiers are numbers written within curly brackets `{ }` *after* the character they are quantifying, for example,  
+
+* `"A{2}"` will return instances of **two** capital A letters.  
+* `"A{2,4}"` will return instances of **between two and four** capital A letters *(do not put spaces!)*.  
+* `"A{2,}"` will return instances of **two or more** capital A letters.  
+* `"A+"` will return instances of **one or more** capital A letters (group extended until a different character is encountered).  
+* Precede with an `*` asterisk to return **zero or more** matches (useful if you are not sure the pattern is present)  
+
+
+Using the `+` plus symbol as a quantifier, the match will occur until a different character is encountered. For example, this expression will return all *words* (alpha characters: `"[A-Za-z]+"`  
+
+
+```{r}
+# test string for quantifiers
+test <- "A-AA-AAA-AAAA"
+```
+
+When a quantifier of {2} is used, only pairs of consecutive A's are returned. Two pairs are identified within `AAAA`.  
+
+```{r}
+str_extract_all(test, "A{2}")
+```
+
+When a quantifier of {2,4} is used, groups of consecutive A's that are two to four in length are returned.  
+
+```{r}
+str_extract_all(test, "A{2,4}")
+```
+
+With the quantifier `+`, groups of **one or more** are returned:  
+
+```{r}
+str_extract_all(test, "A+")
+```
+
+**Relative position**  
+
+These express requirements for what precedes or follows a pattern. For example, to extract sentences, "two numbers that are followed by a period" (`""`).  (?<=\\.)\\s(?=[A-Z]) 
+
+```{r}
+str_extract_all(test, "")
+```
+
+Position statement | Matches to  
+----------------- | --------------------------------------------------------------    
+`"(?<=b)a"` | "a" that **is preceded** by a "b"  
+`"(?<!b)a"` | "a" that **is NOT preceded** by a "b"  
+`"a(?=b)"` | "a" that **is followed** by a "b"  
+`"a(?!b)"` | "a" that **is NOT followed** by a "b"  
+
+
+
+
+
+**Groups**  
+
+Capturing groups in your regular expression is a way to have a more organized output upon extraction.  
+
+
+
+
+**Regex examples**  
+
+Below is a free text for the examples. We will try to extract useful information from it using a regular expression search term.  
+
+```{r}
+pt_note <- "Patient arrived at Broward Hospital emergency ward at 18:00 on 6/12/2005. Patient presented with radiating abdominal pain from LR quadrant. Patient skin was pale, cool, and clammy. Patient temperature was 99.8 degrees farinheit. Patient pulse rate was 100 bpm and thready. Respiratory rate was 29 per minute."
+```
+
+This expression matches to all words (any character until hitting non-character such as a space):  
+
+```{r}
+str_extract_all(pt_note, "[A-Za-z]+")
+```
+
+The expression `"[0-9]{1,2}"` matches to consecutive numbers that are 1 or 2 digits in length. It could also be written `"\\d{1,2}"`, or `"[:digit:]{1,2}"`.  
+
+```{r}
+str_extract_all(pt_note, "[0-9]{1,2}")
+```
+
+```{r}
+str_split(pt_note, ".")
+```
+
+This expression will extract all sentences (assuming first letter is capitalized, and the sentence ends with a period). The pattern reads in English as: "A capital letter followed by some lowercase letters, a space, some letters, a space,    
+
+```{r}
+str_extract_all(pt_note, "[A-Z][a-z]+\\s\\w+\\s\\d{1,2}\\s\\w+\\s*\\w*")
+```
+
+
+You can view a useful list of regex expressions and tips on page 2 of [this cheatsheet](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf)  
+
+Also see this [tutorial](https://towardsdatascience.com/a-gentle-introduction-to-regular-expressions-with-r-df5e897ca432).  
+
+
+
+
+<!-- ======================================================= -->
+## Resources {.tabset .tabset-fade}
+
+A reference sheet for **stringr** functions can be found [here](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf)
+
+
+A vignette on **stringr** can be found [here](
+https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html)
+
+
+<!--chapter:end:raw_pages/character_regex.Rmd-->
+
+
+# De-duplication {.tabset}  
+
+```{r, out.width=c("50%"), echo=F}
+knitr::include_graphics(here::here("images", "deduplication2.png"))
+```
+
+<!-- ======================================================= -->
+## Overview {.tabset }
+
+This page covers the following subjects:  
+
+1. Identifying and removing duplicate rows  
+2. "Slicing" and keeping only certain rows (min, max, random...), also from each group  
+3. "Rolling-up", or combining values from multiple rows into one  
+
+
+<!-- ======================================================= -->
+## Preparation {.tabset }
+
+
+**Load packages**  
+
+```{r}
+pacman::p_load(tidyverse,   # deduplication, grouping, and slicing functions
+               janitor,     # function for reviewing duplicates
+               stringr      # for string searches, can be used in "rolling-up" values
+               )     
+```
+
+
+**Example dataset**  
+
+For demonstration, we will use the fake dataset below. It is a record of COVID-19 phone encounters, including with contacts and with cases.  
+
+* The first two records are 100% complete duplicates including duplicate `recordID` (computer glitch)  
+* The second two rows are duplicates, in all columns *except for `recordID`*  
+* Several people had multiple phone encounters, at various dates/times and as contacts or cases  
+* At each encounter, the person was asked if they had **ever** had symptoms, and some of this information is missing.  
+
+
+```{r, echo=F}
+obs <- data.frame(
+  recordID  = c(1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),
+  personID  = c(1,1,2,2,3,2,4,5,6,7,2,1,3,3,4,5,5,7,8),
+  name      = c("adam", "adam", "amrish", "amrish", "mariah", "amrish", "nikhil", "brian", "smita", "raquel", "amrish",
+                "adam", "mariah", "mariah", "nikhil", "brian", "brian", "raquel", "natalie"),
+  date      = c("1/1/2020", "1/1/2020", "2/1/2020", "2/1/2020", "5/1/2020", "5/1/2020", "5/1/2020", "5/1/2020", "5/1/2020","5/1/2020", "2/1/2020",
+                "5/1/2020", "6/1/2020", "6/1/2020", "6/1/2020", "6/1/2020", "7/1/2020", "7/1/2020", "7/1/2020"),
+  time      = c("09:00", "09:00", "14:20", "14:20", "12:00", "16:10", "13:01", "15:20", "14:20", "12:30", "10:24",
+                "09:40", "07:25", "08:32", "15:36", "15:31", "07:59", "11:13", "17:12"),
+  encounter = c(1,1,1,1,1,3,1,1,1,1,2,
+                2,2,3,2,2,3,2,1),
+  purpose   = c("contact", "contact", "contact", "contact", "case", "case", "contact", "contact", "contact", "contact", "contact",
+                "case", "contact", "contact", "contact", "contact", "case", "contact", "case"),
+  symptoms_ever = c(NA, NA, "No", "No", "No", "Yes", "Yes", "No", "Yes", NA, "Yes",
+                    "No", "No", "No", "Yes", "Yes", "No","No", "No"))
+  #age       = c(19, 19, 6, 55, 19, 44, 50, 51, 70, 19, 6, 55, 55, 44, 50, 50, 70, 32)
+   
+  #mutate(date = format(as.Date(date, "%d/%m/%Y"), "%d %b")) %>% 
+  #mutate(time = lubridate::hm(time)) %>% 
+  #arrange(date)
+```
+
+
+```{r message=FALSE, echo=F}
+DT::datatable(obs, rownames = FALSE, options = list(pageLength = nrow(obs), scrollX=T) )
+```
+
+
+<!-- ======================================================= -->
+## Deduplication {.tabset }
+
+
+This tab uses the dataset from the Preparation tab to describe how to review and remove duplicate rows in a dataframe. It also show how to handle duplicate elements in a vector.  
+
+
+<!-- ======================================================= -->
+### Examine duplicate rows  
+
+
+To quickly review rows that have duplicates, you can use `get_dupes()` from the **janitor** package. *By default*, all columns are considered when duplicates are evaluated - rows returned are 100% duplicates considering the values in *all* columns.  
+
+In the `obs` dataframe, the first two rows that are *100% duplicates* - they have the same value in every column (including the `recordID` column, which is *supposed* to be unique - it must be some computer glitch). The returned dataframe automatically includes a new column `dupe_count`, showing the number of rows with that combination of duplicate values. 
+
+```{r, eval=F}
+# 100% duplicates across all columns
+obs %>% 
+  janitor::get_dupes()
+```
+
+```{r message=FALSE, echo=F}
+obs %>% 
+  janitor::get_dupes() %>% 
+  DT::datatable(rownames = FALSE, options = list(pageLength = nrow(obs), scrollX=T) )
+```
+
+However, if we choose to ignore `recordID`, the 3rd and 4th rows rows are also duplicates. That is, they have the same values in all columns *except* for `recordID`. You can specify specific columns to be ignored in the function using a `-` minus symbol.  
+
+```{r, eval=F}
+# Duplicates when column recordID is not considered
+obs %>% 
+  janitor::get_dupes(-recordID)         # if multiple columns, wrap them in c()
+```
+
+```{r message=FALSE, echo=F}
+obs %>% 
+  janitor::get_dupes(-recordID) %>% 
+  DT::datatable(rownames = FALSE, options = list(pageLength = nrow(obs), scrollX=T) )
+```
+
+You can also positively specify the columns to consider. Below, only rows that have the same values in the `name` and `purpose` columns are returned. Notice how "amrish" now has `dupe_count` equal to 3 to reflect his three "contact" encounters.  
+
+*Scroll left for more rows**  
+
+```{r, eval=F}
+# duplicates based on name and purpose columns ONLY
+obs %>% 
+  janitor::get_dupes(name, purpose)
+```
+
+```{r message=FALSE, echo=F}
+obs %>% 
+  janitor::get_dupes(name, purpose) %>% 
+  DT::datatable(rownames = FALSE, options = list(pageLength = 7, scrollX=T) )
+```
+
+See `?get_dupes` for more details, or see this [online reference](https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html#explore-records-with-duplicated-values-for-specific-combinations-of-variables-with-get_dupes)  
+
+
+
+
+
+
+<!-- ======================================================= -->
+### Keep only unique rows  
+
+
+To keep only unique rows of a dataframe, use `distinct()` from **dplyr**. Rows that are duplicates are removed such that only the first of such rows is kept. By default, "first" means the highest `rownumber` (order of rows top-to-bottom). Only unique rows are kept. In the example below, **one duplicate row (the first row, for "adam") has been removed** (n is now `r nrow(obs)-1`, not `r nrow(obs)` rows).  
+
+*Scroll to the left to see the entire dataframe*  
+
+
+```{r, eval=F}
+# added to a chain of pipes (e.g. data cleaning)
+obs %>% 
+  distinct(across(-recordID), # reduces dataframe to only unique rows (keeps first one of any duplicates)
+           .keep_all = TRUE) 
+
+# if outside pipes, include the data as first argument 
+# distinct(obs)
+```
+
+```{r message=FALSE, echo=F}
+obs %>% 
+  distinct(across(-recordID), # reduces dataframe to only unique rows (keeps first one of any duplicates)
+           .keep_all = TRUE) %>% 
+  DT::datatable(rownames = FALSE, options = list(pageLength = 6, scrollX=T) )
+```
+
+<span style="color: orange;">**_CAUTION:_** If using `distinct()` on grouped data, the function will apply to each group.</span>
+
+
+**Deduplicate based on specific columns**  
+
+You can also specify columns to be the basis for de-duplication. In this way, the de-duplication only applies to rows that are duplicates within the specified columns. Unless specified with `.keep_all = TRUE`, all columns not mentioned will be dropped.  
+
+In the example below, the de-duplication only applies to rows that have identical values for `name` and `purpose` columns. Thus, "brian" has only 2 rows instead of 3 - his *first* "contact" encounter and his only "case" encounter. To adjust so that brian's *latest* encounter of each purpose is kept, see the tab on Slicing within groups.  
+
+*Scroll to the left to see the entire dataframe*  
+
+```{r, eval=F}
+# added to a chain of pipes (e.g. data cleaning)
+obs %>% 
+  distinct(name, purpose, .keep_all = TRUE) %>%  # keep rows unique by name and purpose, retain all columns
+  arrange(name)                                  # arrange for easier viewing
+```
+
+```{r message=FALSE, echo=F}
+obs %>% 
+  distinct(name, purpose, .keep_all = TRUE) %>%  # keep rows unique by name and purpose, retain all columns
+  arrange(name) %>% 
+  DT::datatable(rownames = FALSE, options = list(pageLength = 6, scrollX=T) )
+```
+<!-- ======================================================= -->
+### Duplicate elements in a vector  
+
+
+The function `duplicated()` from **base** R will evaluate a vector (column) and return a logical vector of the same length (TRUE/FALSE). The first time a value appears, it will return FALSE (not a duplicate), and subsequent times that value appears it will return TRUE. Note how `NA` is treated the same as any other value.    
+
+```{r}
+x <- c(1, 1, 2, NA, NA, 4, 5, 4, 4, 1, 2)
+duplicated(x)
+```
+
+To return only the duplicated elements, you can use brackets to subset the original vector: 
+
+```{r}
+x[duplicated(x)]
+```
+
+To return only the unique elements, use `unique()` from **base** R. To remove `NA`s from the output, nest `na.omit()` within `unique()`.  
+
+```{r}
+unique(x)           # alternatively, use x[!duplicated(x)]
+unique(na.omit(x))  # remove NAs 
+```
+
+
+<!-- ======================================================= -->
+### with **base** R 
+
+**To return duplicate rows**  
+
+In **base** R, you can also see which rows are 100% duplicates in a dataframe `df` with the command `duplicated(df)` (returns a logical vector of the rows).  
+
+Thus, you can also use the base subset `[ ]` on the dataframe to see the *duplicated* rows with `df[duplicated(df),]` (don't forget the comma, meaning that you want to see all columns!). 
+
+**To return unique rows**  
+
+See the notes above. To see the *unique* rows you add the logical negator `!` in front of the `duplicated()` function:  
+`df[!duplicated(df),]`  
+
+
+**To return rows that are duplicates of only certain columns**  
+
+Subset the `df` that is *within the `duplicated()` parentheses*, so this function will operate on only certain columns of the `df`.  
+
+To specify the columns, provide column numbers or names after a comma (remember, all this is *within* the `duplicated()` function).  
+
+Be sure to keep the comma `,` *outside* after the `duplicated()` function as well! 
+
+For example, to evaluate only columns 2 through 5 for duplicates:  `df[!duplicated(df[, 2:5]),]`  
+To evaluate only columns `name` and `purpose` for duplicates: `df[!duplicated(df[, c("name", "purpose)]),]`  
+
+
+
+
+
+<!-- ======================================================= -->
+## Slicing {.tabset }
+
+
+To "slice" a dataframe is useful in de-duplication if you have multiple rows per functional group (e.g. per "person") and you only want to analyze one or some of them. Think of slicing a filter on the rows, by row number/position. 
+
+**The basic `slice()` function** accepts a number `n`. If positive, only the *nth* row is returned. If negative, all rows *except the nth* are returned.   
+
+**Variations** include:    
+
+* `slice_min()` and `slice_max()`  - to keep only the row with the minimium or maximum value of the specified column. Also worked with ordered factors.    
+* `slice_head()` and `slice_tail` - to keep only the *first* or *last* row  
+* `slice_sample()`  - to keep only a random sample of the rows  
+
+Use arguments `n = ` or `prop = ` to specify the number or proportion of rows to keep. If not using the function in a pipe chain, provide the data argument first (e.g. `slice(df, n = 2)`). See `?slice` for more information.  
+
+Other arguments:  
+
+`.order_by = ` - used in `slice_min()` and `slice_max()` this is a column to order by before slicing.  
+`with_ties = ` - TRUE by default, meaning ties are kept.  
+`.preserve = ` - FALSE by default. If TRUE then the grouping structure is re-calculated after slicing.  
+`weight_by = ` - Optional, numeric column to weight by (bigger number more likely to get sampled).  Also `replace = ` for whether sampling is done with/without replacement.  
+
+<span style="color: darkgreen;">**_TIP:_** When using `slice_max()` and `slice_min()`, be sure to specify/write the `n = `  (e.g. `n = 2`, not just `2`). Otherwise you may get an error `Error: `...` is not empty.` </span>
+
+<span style="color: black;">**_NOTE:_** You may encounter the function [`top_n()`](https://dplyr.tidyverse.org/reference/top_n.html), which has been superseded by the `slice` functions.</span>
+
+Here, the basic `slice()` function is used to keep only the 4th row:  
+
+```{r, eval=F}
+obs %>% 
+  slice(4)  # keeps the 4th row only
+```
+
+```{r message=FALSE, echo=F}
+obs %>% 
+  slice(4) %>%   # keeps the 4th row only
+  DT::datatable(rownames = FALSE, options = list(pageLength = 1, scrollX=T) )
+```
+
+
+<!-- ======================================================= -->
+### Slice with groups  
+
+The `slice_*()` functions can be very useful if applied to a grouped dataframe, as the slice operation is performed on each group separately. Use the **function** `group_by()` in conjunction with `slice()` to group the data and then take a slice from each group.   
+This is helpful for de-duplication if you have multiple rows per person but only want to keep one of them. You first use `group_by()` with key columns that are the same, and then use a slice function on a column that will differ among the grouped rows.  
+
+In the example below, to keep only the *latest* encounter *per person*, we group the rows by `name` and then use `slice_max()` with `n = 1` on the `date` column. Be aware! To apply a function like `slice_max()` on dates, the date column must be class Date.   
+
+By default, "ties" (e.g. same date in this scenario) are kept, and we would still get multiple rows for some people (e.g. adam). To avoid this we set `with_ties = FALSE`. We get back only one row per person.  
+
+<span style="color: orange;">**_CAUTION:_** If using `arrange()`, specify `.by_group = TRUE` to have the data arranged within each group.</span>
+
+<span style="color: red;">**_DANGER:_** If `with_ties = FALSE`, the first row of a tie is kept. This may be deceptive. See how for Mariah, she has two encounters on her latest date (6 Jan) and the first (earliest) one was kept. Likely, we want to keep her later encounter on that day. See how to "break" these ties in the next example. </span>  
+
+
+
+
+```{r, eval=F}
+obs %>% 
+  group_by(name) %>%       # group the rows by 'name'
+  slice_max(date,          # keep row per group with maximum date value 
+            n = 1,         # keep only the single highest row 
+            with_ties = F) # if there's a tie (of date), take the first row
+```
+
+```{r message=FALSE, echo=F}
+obs %>% 
+  group_by(name) %>%       # group the rows by 'name'
+  slice_max(date,          # keep row per group with maximum date value 
+            n = 1,         # keep only the single highest row 
+            with_ties = F) %>%  # if there's a tie (of date), take the first row
+  DT::datatable(rownames = FALSE, options = list(pageLength = 8, scrollX=T) )
+```
+
+**Breaking "ties"**  
+
+Multiple slice statements can be run to "break ties". In this case, if a person has multiple encounters on their latest *date*, the encounter with the latest *time* is kept (`lubridate::hm()` is used to convert the character times to a sortable time class).  
+Note how now, the one row kept for "Mariah" on 6 Jan is encounter 3 from 08:32, not encounter 2 at 07:25.  
+
+```{r, eval=F}
+# Example of multiple slice statements to "break ties"
+obs %>%
+  group_by(name) %>%
+  
+  # FIRST - slice by latest date
+  slice_max(date, n = 1, with_ties = TRUE) %>% 
+  
+  # SECOND - if there is a tie, select row with latest time; ties prohibited
+  slice_max(lubridate::hm(time), n = 1, with_ties = FALSE)
+```
+```{r message=FALSE, echo=F}
+# Example of multiple slice statements to "break ties"
+obs %>%
+  group_by(name) %>%
+  
+  # FIRST - slice by latest date
+  slice_max(date, n = 1, with_ties = TRUE) %>% 
+  
+  # SECOND - if there is a tie, select row with latest time; ties prohibited
+  slice_max(lubridate::hm(time), n = 1, with_ties = FALSE) %>% 
+  
+  DT::datatable(rownames = FALSE, options = list(pageLength = 8, scrollX=T) )
+```
+
+*In the example above, it would also have been possible to slice by `encounter` number, but we showed the slice on `date` and `time` for example purposes.*  
+
+<span style="color: darkgreen;">**_TIP:_** To use `slice_max()` or `slice_min()` on a "character" column, mutate it to an *ordered* factor class!</span>
+
+
+
+<!-- ======================================================= -->
+### Keep all but mark them  
+
+If you want to keep all records but mark only some for analysis, consider a two-step approach utilizing a unique recordID/encounter number:  
+
+1) Reduce/slice the orginal dataframe to only the rows for analysis. Save/retain this reduced dataframe.  
+2) In the original dataframe, mark rows as appropriate with `case_when()`, based on whether their record unique identifier (recordID in this example) is present in the reduced dataframe.  
+
+
+```{r, eval=F}
+# 1. Define dataframe of rows to keep for analysis
+obs_keep <- obs %>%
+  group_by(name) %>%
+  slice_max(encounter, n = 1, with_ties = FALSE) # keep only latest encounter per person
+
+
+# 2. Mark original dataframe
+obs_marked <- obs %>%
+
+  # make new dup_record column
+  mutate(dup_record = case_when(
+    
+    # if record is in obs_keep dataframe
+    recordID %in% obs_keep$recordID ~ "For analysis", 
+    
+    # all else marked as "Ignore" for analysis purposes
+    TRUE                            ~ "Ignore"))
+
+# print
+obs_marked
+```
+
+<!-- ======================================================= -->
+### Calculate row completeness  
+
+Create a column that contains a metric for the row's completeness (non-missingness). This could be helpful when deciding which rows to prioritize over others when de-duplicating/slicing.  
+
+In this example, "key" columns over which you want to measure completeness are saved in a vector of column names.  
+
+Then the new column `key_completeness` is created with `mutate()`. The new value in each row is defined as a calculated fraction: the number of non-missing values in that row among the key columns, divided by the number of key columns.  
+
+This involves the function `rowSums()` from **base** R. Also used is `.`, which within piping refers to the dataframe at that point in the pipe (in this case, it is being subset with brackets `[]`).  
+
+*Scroll to the right to see more rows**  
+
+```{r, eval=F}
+# create a "key variable completeness" column
+# this is a *proportion* of the columns designated as "key_vars" that have non-missing values
+
+key_cols = c("personID", "name", "symptoms_ever")
+
+obs %>% 
+  mutate(key_completeness = rowSums(!is.na(.[,key_cols]))/length(key_cols)) 
+```
+
+```{r message=FALSE, echo=F}
+key_cols = c("personID", "name", "symptoms_ever")
+
+obs %>% 
+  mutate(key_completeness = rowSums(!is.na(.[,key_cols]))/length(key_cols)) %>% 
+  DT::datatable(rownames = FALSE, options = list(pageLength = 5, scrollX=T) )
+```
+
+
+
+
+
+<!-- ======================================================= -->
+## Roll-up values {.tabset }
+
+
+This tab describes:  
+
+1) How to "roll-up" values from multiple rows into just one row, with some variations  
+2) Once you have "rolled-up" values, how to overwrite/prioritize the values in each cell  
+
+This tab uses the example dataset from the Preparation tab.  
+
+
+
+<!-- ======================================================= -->
+### Roll-up values into one row  
+
+The code example below uses `group_by()` and `summarise()` to group rows by person, and then paste together all unique values within the grouped rows. Thus, you get one summary row per person. A few notes:  
+
+* A suffix is appended to all new columns ("_roll" in this example)  
+* If you want to show only unique values per cell, then wrap the `na.omit()` with `unique()`  
+* `na.omit()` removes `NA` values, but if this is not desired it can be removed `paste0(.x)`...  
+
+*Scroll to the left to see more rows*  
+
+```{r, eval=F}
+# "Roll-up" values into one row per group (per "personID") 
+cases_rolled <- obs %>% 
+  
+  # create groups by name
+  group_by(personID) %>% 
+  
+  # order the rows within each group (e.g. by date)
+  arrange(date, .by_group = TRUE) %>% 
+  
+  # For each column, paste together all values within the grouped rows, separated by ";"
+  summarise(
+    across(everything(),                           # apply to all columns
+           ~paste0(na.omit(.x), collapse = "; "))) # function is defined which combines non-NA values
+```
+
+The result is one row per group (`ID`), with entries arranged by date and pasted together.  
+
+```{r message=FALSE, echo=F}
+# "Roll-up" values into one row per group (per "personID") 
+obs %>% 
+  
+  # create groups by name
+  group_by(personID) %>% 
+  
+  # order the rows within each group (e.g. by date)
+  arrange(date, .by_group = TRUE) %>% 
+  
+  # For each column, paste together all values within the grouped rows, separated by ";"
+  summarise(
+    across(everything(),                                # apply to all columns
+           ~paste0(na.omit(.x), collapse = "; "))) %>%  # function is defined which combines non-NA values
+
+  DT::datatable(rownames = FALSE, options = list(pageLength = 5, scrollX=T))
+```
+
+**This variation shows unique values only:**  
+
+```{r}
+# Variation - show unique values only 
+cases_rolled <- obs %>% 
+  group_by(personID) %>% 
+  arrange(date, .by_group = TRUE) %>% 
+  summarise(
+    across(everything(),                                   # apply to all columns
+           ~paste0(unique(na.omit(.x)), collapse = "; "))) # function is defined which combines unique non-NA values
+```
+
+```{r message=FALSE, echo=F}
+# Variation - show unique values only 
+obs %>% 
+  group_by(personID) %>% 
+  arrange(date, .by_group = TRUE) %>% 
+  summarise(
+    across(everything(),                                   # apply to all columns
+           ~paste0(unique(na.omit(.x)), collapse = "; "))) %>%  # function is defined which combines unique non-NA values
+
+  DT::datatable(rownames = FALSE, options = list(pageLength = 5, scrollX=T) )
+```
+
+
+**This variation appends a suffix to each column.**  
+In this case "_roll" to signify that it has been rolled:  
+
+```{r, eval=F}
+# Variation - suffix added to column names 
+cases_rolled <- obs %>% 
+  group_by(personID) %>% 
+  arrange(date, .by_group = TRUE) %>% 
+  summarise(
+    across(everything(),                
+           list(roll = ~paste0(na.omit(.x), collapse = "; ")))) # _roll is appended to column names
+```
+
+```{r message=FALSE, echo=F}
+# display the linelist data as a table
+# Variation - suffix added to column names 
+obs %>% 
+  group_by(personID) %>% 
+  arrange(date, .by_group = TRUE) %>% 
+  summarise(
+    across(everything(),                
+           list(roll = ~paste0(na.omit(.x), collapse = "; ")))) %>%  # _roll is appended to column names
+  DT::datatable(rownames = FALSE, options = list(pageLength = 5, scrollX=T) )
+```
+
+
+<!-- ======================================================= -->
+### Overwrite values/hierarchy  
+
+
+If you then want to evaluate all of the rolled values, and keep only a specific value (e.g. "best" or "maximum" value), you can use `mutate()` across the desired columns, to implement `case_when()`, which uses `str_detect()` from the **stringr** package to sequentially look for string patterns and overwrite the cell content.  
+
+```{r}
+# CLEAN CASES
+#############
+cases_clean <- cases_rolled %>% 
+    
+    # clean Yes-No-Unknown vars: replace text with "highest" value present in the string
+    mutate(across(c(contains("symptoms_ever")),                     # operates on specified columns (Y/N/U)
+             list(mod = ~case_when(                                 # adds suffix "_mod" to new cols; implements case_when()
+               
+               str_detect(.x, "Yes")       ~ "Yes",                 # if "Yes" is detected, then cell value converts to yes
+               str_detect(.x, "No")        ~ "No",                  # then, if "No" is detected, then cell value converts to no
+               str_detect(.x, "Unknown")   ~ "Unknown",             # then, if "Unknown" is detected, then cell value converts to Unknown
+               TRUE                        ~ as.character(.x)))),   # then, if anything else if it kept as is
+      .keep = "unused")                                             # old columns removed, leaving only _mod columns
+```
+
+
+Now you can see in the column `symptoms_ever` that if the person EVER said "Yes" to symptoms, then only "Yes" is displayed.  
+
+```{r message=FALSE, echo=F}
+# display the linelist data as a table
+DT::datatable(cases_clean, rownames = FALSE, options = list(pageLength = 10, scrollX=T))
+```
+
+
+
+
+<!-- ======================================================= -->
+## Resources {.tabset }
+
+Much of the information in this page is adapted from these resources and vignettes online:  
+
+[datanovia](https://www.datanovia.com/en/lessons/identify-and-remove-duplicate-data-in-r/)
+
+[dplyr tidyverse reference](https://dplyr.tidyverse.org/reference/slice.html)  
+
+[cran janitor vignette](https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html#explore-records-with-duplicated-values-for-specific-combinations-of-variables-with-get_dupes)  
+
+
+<!--chapter:end:raw_pages/deduplication.Rmd-->
+
 # (PART) Data Vizualization {-}
 
 <!--chapter:end:raw_pages/cat_data_viz.Rmd-->
