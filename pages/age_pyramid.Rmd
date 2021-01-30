@@ -1,6 +1,8 @@
+
+# Age pyramids {#age_pramid .tabset .tabset-fade}  
+
 ---
-title:  |  
-  ![](../images/R Handbook Logo.png)
+title:
 author: ""
 date: "Produced `r format(Sys.time(), '%A %d %B %Y')`"
 output:
@@ -19,14 +21,7 @@ knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = "_outputs_knitted") })
 ---
 
-```{r, child= '_page_setup.Rmd', eval = params$run_page_ind, include = F, echo=F}
-```
 
-
-<!-- ======================================================= -->
-<!-- ======================================================= -->
-<!-- ======================================================= -->
-# Age pyramids {#age_pyramid .tabset .tabset-fade}  
 
 Age pyramids can be useful to show patterns by age group. They can show gender, or the distribution of other characteristics.  
 These tabs demonstrate how to produce age pyramids using:  

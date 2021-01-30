@@ -1,15 +1,18 @@
 
-
-bookdown::render_book("index.Rmd", "bookdown::bs4_book")
-
-
-bookdown::render_book(input = "index.Rmd", output_format = "bookdown::bs4_book", ..., clean = TRUE, 
-            envir = parent.frame(), clean_envir = !interactive(), 
-            output_dir = NULL, new_session = NA, preview = FALSE, 
-            config_file = "_bookdown.yml")
+# to render the whole handbook, in TABBED SELF-CONTAINED HTML FILE 
+rmarkdown::render_site(
+     output_format = 'bookdown::html_document2',
+     encoding = 'UTF-8')
 
 
-bookdown::render_book("index.Rmd", "bookdown::gitbook")
+# to render the whole handbook in "bs4 book" style (for online viewing only, not a self-contained file)  
+rmarkdown::render_site(
+     output_format = 'bookdown::bs4_book',
+     encoding = 'UTF-8')
 
+# to knit your 
+rmarkdown::render(
+     input = "pages/diagrams.Rmd",
+     output_dir = "_single_pages",
+     output_yaml = "_page_alone.yml")
 
-bookdown::render_book("index.Rmd", "bookdown::html_document2")

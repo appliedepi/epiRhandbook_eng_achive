@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>2 Age pyramids | _index.utf8</title>
+
+  
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script>
+  <script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script>
+    <script src="libs/header-attrs-2.6/header-attrs.js"></script>
+    <script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet" />
+    <script src="libs/bootstrap-4.5.3/bootstrap.bundle.min.js"></script>
+    <script src="libs/bs3compat-0.2.3.9000/tabs.js"></script>
+    <script src="libs/bs3compat-0.2.3.9000/bs3compat.js"></script>
+    <link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet" />
+    <script src="libs/bs4_book-1.0.0/bs4_book.js"></script>
+    <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+    <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+    <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="libs/datatables-binding-0.15/datatables.js"></script>
+    <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+    <link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+    <script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+    <link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+    <script src="libs/selectize-0.12.0/selectize.min.js"></script>
+    <link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script>
+
+  <!-- CSS -->
+    <link rel="stylesheet" href="style_bs4.css" />
+    
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title=""></a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+      </form>
+
+      <nav aria-label="Table of contents">
+        <h2>Table of contents</h2>
+        <div id="book-toc"></div>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="#">View book source <i class="fab fa-github"></i></a></li></p>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="col-sm-12 col-md-9 col-lg-7" id="content">
+<div id="age_pramid" class="section level1 tabset tabset-fade" number="2">
+<h1><span class="header-section-number">2</span> Age pyramids</h1>
+<p>Age pyramids can be useful to show patterns by age group. They can show gender, or the distribution of other characteristics.<br />
+These tabs demonstrate how to produce age pyramids using:</p>
+<ul>
+<li>Fast &amp; easy: Using the <strong>apyramid</strong> package<br />
+</li>
+<li>More flexible: Using <code>ggplot()</code><br />
+</li>
+<li>Having baseline demographics displayed in the background of the pyramid<br />
+</li>
+<li>Using pyramid-style plots to show other types of data (e.g responses to Likert-style questions)</li>
+</ul>
+<!-- ======================================================= -->
+<div id="overview" class="section level2 tabset tabset-fade" number="2.1">
+<h2><span class="header-section-number">2.1</span> Overview</h2>
+<p><img src="images/pop_pyramid_baseline.png" width="50%" /><img src="images/likert.png" width="50%" /></p>
+<p>Age/gender demographic pyramids in R are generally made with <code>ggplot()</code> by creating two barplots (one for each gender), converting one’s values to negative values, and flipping the x and y axes to display the barplots vertically.</p>
+<p>Here we offer a quick approach through the <strong>apyramid</strong> package:</p>
+<ul>
+<li>More customizable code using the raw <code>ggplot()</code> commands<br />
+</li>
+<li>How to combine case demographic data and compare with that of a baseline population (as shown above)<br />
+</li>
+<li>Application of these methods to show other types of data (e.g. responses to Likert-style survey questions)</li>
+</ul>
+<!-- ======================================================= -->
+</div>
+<div id="preparation" class="section level2 tabset tabset-fade" number="2.2">
+<h2><span class="header-section-number">2.2</span> Preparation</h2>
+<h2>
+Preparation
+</h2>
+<p>For this tab we use the <code>linelist</code> dataset that is cleaned in the Cleaning tab.</p>
+<p>To make a traditional age/sex demographic pyramid, the data must first be cleaned in the following ways:</p>
+<ul>
+<li>The gender column must be cleaned.<br />
+</li>
+<li>Age should be in an age category column, and should be an of class Factor (with correctly ordered levels)</li>
+</ul>
+<p><strong>Load packages</strong></p>
+<p>First, load the packages required for this analysis:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="age-pramid.html#cb1-1"></a>pacman<span class="op">::</span><span class="kw">p_load</span>(rio,       <span class="co"># to import data</span></span>
+<span id="cb1-2"><a href="age-pramid.html#cb1-2"></a>               here,      <span class="co"># to locate files</span></span>
+<span id="cb1-3"><a href="age-pramid.html#cb1-3"></a>               tidyverse, <span class="co"># to clean, handle, and plot the data (includes ggplot2 package)</span></span>
+<span id="cb1-4"><a href="age-pramid.html#cb1-4"></a>               apyramid,  <span class="co"># a package dedicated to creating age pyramids</span></span>
+<span id="cb1-5"><a href="age-pramid.html#cb1-5"></a>               stringr)   <span class="co"># working with strings for titles, captions, etc.</span></span></code></pre></div>
+<p>Load the data</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="age-pramid.html#cb2-1"></a>linelist &lt;-<span class="st"> </span>rio<span class="op">::</span><span class="kw">import</span>(<span class="st">&quot;linelist_cleaned.csv&quot;</span>)</span></code></pre></div>
+<p><strong>Check class of variables</strong></p>
+<p>Ensure that the age variable is class Numeric, and check the class and order of levels of <code>age_cat</code> and <code>age_cat5</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="age-pramid.html#cb3-1"></a><span class="kw">class</span>(linelist<span class="op">$</span>age_years)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="age-pramid.html#cb5-1"></a><span class="kw">class</span>(linelist<span class="op">$</span>age_cat)</span></code></pre></div>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="age-pramid.html#cb7-1"></a><span class="kw">class</span>(linelist<span class="op">$</span>age_cat5)</span></code></pre></div>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="age-pramid.html#cb9-1"></a><span class="kw">table</span>(linelist<span class="op">$</span>age_cat, <span class="dt">useNA =</span> <span class="st">&quot;always&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##   0-4   5-9 10-14 15-19 20-29 30-49 50-69   70+  &lt;NA&gt; 
+##  1054  1153   957   889  1065   658    24     0    88</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="age-pramid.html#cb11-1"></a><span class="kw">table</span>(linelist<span class="op">$</span>age_cat5, <span class="dt">useNA =</span> <span class="st">&quot;always&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##   0-4   5-9 10-14 15-19 20-24 25-29 30-34 35-39 40-44 45-49 50-54 55-59 60-64 65-69 70-74 75-79 80-84   85+  &lt;NA&gt; 
+##  1054  1153   957   889   570   495   315   171   113    59    14     6     2     2     0     0     0     0    88</code></pre>
+<!-- ======================================================= -->
+</div>
+<div id="apyramid-package" class="section level2 tabset tabset-fade" number="2.3">
+<h2><span class="header-section-number">2.3</span> <strong>apyramid</strong> package</h2>
+<h2>
+<strong>apyramid</strong> package
+</h2>
+<p>The package <strong>apyramid</strong> allows you to quickly make an age pyramid. For more nuanced situations, see the tab on using <code>ggplot()</code> to make age pyramids. You can read more about the <strong>apyramid</strong> package in its Help page by entering <code>?age_pyramid</code> in your R console.</p>
+<div id="linelist-data" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Linelist data</h3>
+<h3>
+Linelist data
+</h3>
+<p>Using the cleaned linelist dataset, we can create an age pyramid with just one simple command. If you need help cleaning your data, see the handbook page on Cleaning data (LINK). In this command:</p>
+<ul>
+<li>The <em>data</em> argument is set as the <code>linelist</code> dataframe<br />
+</li>
+<li>The <em>age_group</em> argument is set to the name (in quotes) of the numeric category variable (in this case <code>age_cat5</code>)<br />
+</li>
+<li>The <em>split_by</em> argument (bar colors) should be a binary column (in this case “gender”)</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="age-pramid.html#cb13-1"></a>apyramid<span class="op">::</span><span class="kw">age_pyramid</span>(<span class="dt">data =</span> linelist,</span>
+<span id="cb13-2"><a href="age-pramid.html#cb13-2"></a>                      <span class="dt">age_group =</span> <span class="st">&quot;age_cat5&quot;</span>,</span>
+<span id="cb13-3"><a href="age-pramid.html#cb13-3"></a>                      <span class="dt">split_by =</span> <span class="st">&quot;gender&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: 281 missing rows were removed (88 values from `age_cat5` and 281 values from `gender`).</code></pre>
+<p><img src="_index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+When using <strong>agepyramid</strong> package, if the <code>split_by</code> column is binary (e.g. male/female, or yes/no), then the result will appear as a pyramid. However if there are more than two values in the <code>split_by</code> column (not including <code>NA</code>), the pyramid will appears as a faceted barplot with empty bars in the background indicating the range of the un-faceted data set for the age group. Values of split_by will appear as labels at top of each facet. For example below if the <code>split_by</code> variable is “hospital”.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="age-pramid.html#cb15-1"></a>apyramid<span class="op">::</span><span class="kw">age_pyramid</span>(<span class="dt">data =</span> linelist,</span>
+<span id="cb15-2"><a href="age-pramid.html#cb15-2"></a>                      <span class="dt">age_group =</span> <span class="st">&quot;age_cat5&quot;</span>,</span>
+<span id="cb15-3"><a href="age-pramid.html#cb15-3"></a>                      <span class="dt">split_by =</span> <span class="st">&quot;hospital&quot;</span>,</span>
+<span id="cb15-4"><a href="age-pramid.html#cb15-4"></a>                      <span class="dt">na.rm =</span> <span class="ot">FALSE</span>)        <span class="co"># show a bar for patients missing age, (note: this changes the pyramid into a faceted barplot)</span></span></code></pre></div>
+<p><img src="_index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><strong>Missing values</strong><br />
+Rows missing values for the <code>split_by</code> or <code>age_group</code> columns, if coded as <code>NA</code>, will not trigger the faceting shown above. By default these rows will not be shown. However you can specify that they appear, in an adjacent barplot and as a separate age group at the top, by specifying <code>na.rm = FALSE</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="age-pramid.html#cb16-1"></a>apyramid<span class="op">::</span><span class="kw">age_pyramid</span>(<span class="dt">data =</span> linelist,</span>
+<span id="cb16-2"><a href="age-pramid.html#cb16-2"></a>                      <span class="dt">age_group =</span> <span class="st">&quot;age_cat5&quot;</span>,</span>
+<span id="cb16-3"><a href="age-pramid.html#cb16-3"></a>                      <span class="dt">split_by =</span> <span class="st">&quot;gender&quot;</span>,</span>
+<span id="cb16-4"><a href="age-pramid.html#cb16-4"></a>                      <span class="dt">na.rm =</span> <span class="ot">FALSE</span>)         <span class="co"># show patients missing age or gender</span></span></code></pre></div>
+<p><img src="_index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><strong>Proportions, colors, &amp; aesthetics</strong></p>
+<p>By default, the bars display counts (not %), a dashed mid-line for each group is shown, and the colors are green/purple. Each of these parameters can all be adjusted, as shown below:</p>
+<p>You can also add additional <code>ggplot()</code> commands to the plot using the standard <code>ggplot()</code> “+” syntax, such as aesthetic themes and label adjustments:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="age-pramid.html#cb17-1"></a>apyramid<span class="op">::</span><span class="kw">age_pyramid</span>(<span class="dt">data =</span> linelist,</span>
+<span id="cb17-2"><a href="age-pramid.html#cb17-2"></a>                      <span class="dt">age_group =</span> <span class="st">&quot;age_cat5&quot;</span>,</span>
+<span id="cb17-3"><a href="age-pramid.html#cb17-3"></a>                      <span class="dt">split_by =</span> <span class="st">&quot;gender&quot;</span>,</span>
+<span id="cb17-4"><a href="age-pramid.html#cb17-4"></a>                      <span class="dt">proportional =</span> <span class="ot">TRUE</span>,                  <span class="co"># show percents, not counts</span></span>
+<span id="cb17-5"><a href="age-pramid.html#cb17-5"></a>                      <span class="dt">show_midpoint =</span> <span class="ot">FALSE</span>,                <span class="co"># remove bar mid-point line</span></span>
+<span id="cb17-6"><a href="age-pramid.html#cb17-6"></a>                      <span class="co">#pal = c(&quot;orange&quot;, &quot;purple&quot;)          # can specify alt. colors here (but not labels, see below)</span></span>
+<span id="cb17-7"><a href="age-pramid.html#cb17-7"></a>                      )<span class="op">+</span><span class="st">                 </span></span>
+<span id="cb17-8"><a href="age-pramid.html#cb17-8"></a><span class="st">  </span></span>
+<span id="cb17-9"><a href="age-pramid.html#cb17-9"></a><span class="st">  </span><span class="co"># additional ggplot commands</span></span>
+<span id="cb17-10"><a href="age-pramid.html#cb17-10"></a><span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span><span class="st">                                          </span><span class="co"># simplify the background</span></span>
+<span id="cb17-11"><a href="age-pramid.html#cb17-11"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;purple&quot;</span>),         <span class="co"># to specify colors AND labels</span></span>
+<span id="cb17-12"><a href="age-pramid.html#cb17-12"></a>                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))<span class="op">+</span></span>
+<span id="cb17-13"><a href="age-pramid.html#cb17-13"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Percent of all cases&quot;</span>,                          <span class="co"># note that x and y labels are switched (see ggplot tab)</span></span>
+<span id="cb17-14"><a href="age-pramid.html#cb17-14"></a>       <span class="dt">x =</span> <span class="st">&quot;Age categories&quot;</span>,                          </span>
+<span id="cb17-15"><a href="age-pramid.html#cb17-15"></a>       <span class="dt">fill =</span> <span class="st">&quot;Gender&quot;</span>, </span>
+<span id="cb17-16"><a href="age-pramid.html#cb17-16"></a>       <span class="dt">caption =</span> <span class="st">&quot;My data source and caption here&quot;</span>,</span>
+<span id="cb17-17"><a href="age-pramid.html#cb17-17"></a>       <span class="dt">title =</span> <span class="st">&quot;Title of my plot&quot;</span>,</span>
+<span id="cb17-18"><a href="age-pramid.html#cb17-18"></a>       <span class="dt">subtitle =</span> <span class="st">&quot;Subtitle with </span><span class="ch">\n</span><span class="st"> a second line...&quot;</span>)<span class="op">+</span></span>
+<span id="cb17-19"><a href="age-pramid.html#cb17-19"></a><span class="st">  </span><span class="kw">theme</span>(</span>
+<span id="cb17-20"><a href="age-pramid.html#cb17-20"></a>    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,                             <span class="co"># move legend to bottom</span></span>
+<span id="cb17-21"><a href="age-pramid.html#cb17-21"></a>    <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">10</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>),     <span class="co"># fonts/sizes, see ggplot tips page</span></span>
+<span id="cb17-22"><a href="age-pramid.html#cb17-22"></a>    <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">12</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>))</span></code></pre></div>
+<pre><code>## Warning: 281 missing rows were removed (88 values from `age_cat5` and 281 values from `gender`).</code></pre>
+<pre><code>## Scale for &#39;fill&#39; is already present. Adding another scale for &#39;fill&#39;, which will replace the existing scale.</code></pre>
+<p><img src="_index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="aggregated-data" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Aggregated data</h3>
+<h3>
+Aggregated data
+</h3>
+<p>The examples above assume your data are in a linelist-like format, with one row per observation. If your data are already aggregated into counts by age category, you can still use the <strong>apyramid</strong> package, as shown below.</p>
+<p>Let’s say that your dataset looks like this, with columns for age category, and male counts, female counts, and missing counts.<br />
+(see the handbook page on Transforming data for tips)</p>
+<pre><code>## `summarise()` has grouped output by &#39;age_cat5&#39;. You can override using the `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="age-pramid.html#cb21-1"></a><span class="co"># View the aggregated data</span></span>
+<span id="cb21-2"><a href="age-pramid.html#cb21-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(demo_agg, <span class="dt">rownames =</span> <span class="ot">FALSE</span>, <span class="dt">filter=</span><span class="st">&quot;top&quot;</span>, <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">pageLength =</span> <span class="dv">5</span>, <span class="dt">scrollX=</span>T) )</span></code></pre></div>
+<div id="htmlwidget-e744b327614fabfe81b3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e744b327614fabfe81b3">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"2\" data-max=\"466\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"88\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69",null],[612,648,490,422,246,179,92,39,24,13,1,null,null,null,null],[410,466,423,435,311,295,216,128,88,46,13,6,2,2,null],[32,39,44,32,13,21,7,4,1,null,null,null,null,null,88]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>f<\/th>\n      <th>m<\/th>\n      <th>missing_gender<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<p><code>ggplot()</code> perfers data in “long” format, so first pivot the data to be “long” with the <code>pivot_longer()</code> function from <strong>dplyr</strong>.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="age-pramid.html#cb22-1"></a><span class="co"># pivot the aggregated data into long format</span></span>
+<span id="cb22-2"><a href="age-pramid.html#cb22-2"></a>demo_agg_long &lt;-<span class="st"> </span>demo_agg <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-3"><a href="age-pramid.html#cb22-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">c</span>(f, m, missing_gender),            <span class="co"># cols to elongate</span></span>
+<span id="cb22-4"><a href="age-pramid.html#cb22-4"></a>               <span class="dt">names_to =</span> <span class="st">&quot;gender&quot;</span>,                <span class="co"># name for new col of categories</span></span>
+<span id="cb22-5"><a href="age-pramid.html#cb22-5"></a>               <span class="dt">values_to =</span> <span class="st">&quot;counts&quot;</span>) <span class="op">%&gt;%</span><span class="st">           </span><span class="co"># name for new col of counts</span></span>
+<span id="cb22-6"><a href="age-pramid.html#cb22-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">gender =</span> <span class="kw">na_if</span>(gender, <span class="st">&quot;missing_gender&quot;</span>)) <span class="co"># convert &quot;missing_gender&quot; to NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="age-pramid.html#cb23-1"></a><span class="co"># View the aggregated data</span></span>
+<span id="cb23-2"><a href="age-pramid.html#cb23-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(demo_agg_long, <span class="dt">rownames =</span> <span class="ot">FALSE</span>, <span class="dt">filter=</span><span class="st">&quot;top&quot;</span>, <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">pageLength =</span> <span class="dv">5</span>, <span class="dt">scrollX=</span>T) )</span></code></pre></div>
+<div id="htmlwidget-39260a8533f3105fa3e8" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-39260a8533f3105fa3e8">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","0-4","5-9","5-9","5-9","10-14","10-14","10-14","15-19","15-19","15-19","20-24","20-24","20-24","25-29","25-29","25-29","30-34","30-34","30-34","35-39","35-39","35-39","40-44","40-44","40-44","45-49","45-49","45-49","50-54","50-54","50-54","55-59","55-59","55-59","60-64","60-64","60-64","65-69","65-69","65-69",null,null,null],["f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null],[612,410,32,648,466,39,490,423,44,422,435,32,246,311,13,179,295,21,92,216,7,39,128,4,24,88,1,13,46,null,1,13,null,null,6,null,null,2,null,null,2,null,null,null,88]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":2}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<p>Then use the <code>split_by</code> and <code>count</code> arguments of <code>age_pyramid()</code> to specify the respective columns:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="age-pramid.html#cb24-1"></a>apyramid<span class="op">::</span><span class="kw">age_pyramid</span>(<span class="dt">data =</span> demo_agg_long,</span>
+<span id="cb24-2"><a href="age-pramid.html#cb24-2"></a>                      <span class="dt">age_group =</span> <span class="st">&quot;age_cat5&quot;</span>,</span>
+<span id="cb24-3"><a href="age-pramid.html#cb24-3"></a>                      <span class="dt">split_by =</span> <span class="st">&quot;gender&quot;</span>,</span>
+<span id="cb24-4"><a href="age-pramid.html#cb24-4"></a>                      <span class="dt">count =</span> <span class="st">&quot;counts&quot;</span>)      <span class="co"># give the column name for the aggregated counts</span></span></code></pre></div>
+<pre><code>## Warning: Removed 20 rows containing missing values (position_stack).</code></pre>
+<pre><code>## Warning: Removed 19 rows containing missing values.</code></pre>
+<p><img src="_index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Note in the above, that the factor order of “m” and “f” is different (pyramid reversed). To adjust the order you must re-define gender in the aggredated data as a Factor and order the levels as desired.</p>
+<!-- ======================================================= -->
+</div>
+</div>
+<div id="ggplot" class="section level2 tabset tabset-fade" number="2.4">
+<h2><span class="header-section-number">2.4</span> <code>ggplot()</code></h2>
+<h2>
+<code>ggplot()</code>
+</h2>
+<p>Using <code>ggplot()</code> to build your age pyramid allows for more flexibility, but requires more effort and understanding of how <code>ggplot()</code> works. It is also easier to accidentally make mistakes.</p>
+<p><strong>apyramid</strong> uses <code>ggplot()</code> in the background (and accepts <code>ggplot()</code> commands added), but this page shows how to adjust or recreate a pyramid only using <code>ggplot()</code>, if you wish.</p>
+<!-- ======================================================= -->
+<div id="constructing-the-plot" class="section level3 tabset tabset-fade" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Constructing the plot</h3>
+<h3>
+Constructing the plot
+</h3>
+<p>First, understand that to make such a pyramid using <code>ggplot()</code> the approach is to:</p>
+<ul>
+<li><p>Within the <code>ggplot()</code>, create <strong>two</strong> graphs by age category. Create one for each of the two grouping values (in this case gender). See filters applied to the <code>data</code> arguments in each <code>geom_histogram()</code> commands below.</p></li>
+<li><p>If using <code>geom_histogram()</code>, the graphs operate off the numeric column (e.g. <code>age_years</code>), whereas if using <code>geom_barplot()</code> the graphs operate from an ordered Factor (e.g. <code>age_cat5</code>).</p></li>
+<li><p>One graph will have positive count values, while the other will have its counts converted to negative values - this allows both graphs to be seen and compared against each other in the same plot.</p></li>
+<li><p>The command <code>coord_flip()</code> switches the X and Y axes, resulting in the graphs turning vertical and creating the pyramid.</p></li>
+<li><p>Lastly, the counts-axis labels must be specified so they appear as “positive” counts on both sides of the pyramid (despite the underlying values on one side being negative).</p></li>
+</ul>
+<p>A <strong>simple</strong> version of this, using <code>geom_histogram()</code>, is below:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="age-pramid.html#cb27-1"></a>  <span class="co"># begin ggplot</span></span>
+<span id="cb27-2"><a href="age-pramid.html#cb27-2"></a>  <span class="kw">ggplot</span>(<span class="dt">data =</span> linelist, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">fill =</span> gender)) <span class="op">+</span></span>
+<span id="cb27-3"><a href="age-pramid.html#cb27-3"></a><span class="st">  </span></span>
+<span id="cb27-4"><a href="age-pramid.html#cb27-4"></a><span class="st">  </span><span class="co"># female histogram</span></span>
+<span id="cb27-5"><a href="age-pramid.html#cb27-5"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">data =</span> <span class="kw">filter</span>(linelist, gender <span class="op">==</span><span class="st"> &quot;f&quot;</span>),</span>
+<span id="cb27-6"><a href="age-pramid.html#cb27-6"></a>                 <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">85</span>,<span class="dv">5</span>),</span>
+<span id="cb27-7"><a href="age-pramid.html#cb27-7"></a>                 <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></span>
+<span id="cb27-8"><a href="age-pramid.html#cb27-8"></a><span class="st">  </span></span>
+<span id="cb27-9"><a href="age-pramid.html#cb27-9"></a><span class="st">  </span><span class="co"># male histogram (values converted to negative)</span></span>
+<span id="cb27-10"><a href="age-pramid.html#cb27-10"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">data =</span> <span class="kw">filter</span>(linelist, gender <span class="op">==</span><span class="st"> &quot;m&quot;</span>),</span>
+<span id="cb27-11"><a href="age-pramid.html#cb27-11"></a>                 <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">85</span>,<span class="dv">5</span>),</span>
+<span id="cb27-12"><a href="age-pramid.html#cb27-12"></a>                 <span class="kw">aes</span>(<span class="dt">y=</span>..count..<span class="op">*</span>(<span class="op">-</span><span class="dv">1</span>)),</span>
+<span id="cb27-13"><a href="age-pramid.html#cb27-13"></a>                 <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span></span>
+<span id="cb27-14"><a href="age-pramid.html#cb27-14"></a><span class="st">  </span></span>
+<span id="cb27-15"><a href="age-pramid.html#cb27-15"></a><span class="st">  </span><span class="co"># flip the X and Y axes</span></span>
+<span id="cb27-16"><a href="age-pramid.html#cb27-16"></a><span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span></span>
+<span id="cb27-17"><a href="age-pramid.html#cb27-17"></a><span class="st">  </span></span>
+<span id="cb27-18"><a href="age-pramid.html#cb27-18"></a><span class="st">  </span><span class="co"># adjust counts-axis scale</span></span>
+<span id="cb27-19"><a href="age-pramid.html#cb27-19"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">600</span>, <span class="dv">900</span>),</span>
+<span id="cb27-20"><a href="age-pramid.html#cb27-20"></a>                     <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">600</span>,<span class="dv">900</span>,<span class="dv">100</span>),</span>
+<span id="cb27-21"><a href="age-pramid.html#cb27-21"></a>                     <span class="dt">labels =</span> <span class="kw">abs</span>(<span class="kw">seq</span>(<span class="op">-</span><span class="dv">600</span>, <span class="dv">900</span>, <span class="dv">100</span>)))</span></code></pre></div>
+<p><img src="_index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><span style="color: red;"><strong><em>DANGER:</em></strong> If the <strong>limits</strong> of your counts axis are set too low, and a counts bar exceeds them, the bar will disappear entirely or be artificially shortened! Watch for this if analyzing data which is routinely updated. Prevent it by having your count-axis limits auto-adjust to your data, as below.</span></p>
+<p>There are many things you can change/add to this simple version, including:</p>
+<ul>
+<li>Auto adjust counts-axis count scale to your data (avoid errors discussed in warning below)<br />
+</li>
+<li>Manually specify colors and legend labels</li>
+</ul>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="age-pramid.html#cb28-1"></a><span class="co"># create dataset with proportion of total</span></span>
+<span id="cb28-2"><a href="age-pramid.html#cb28-2"></a>pyramid_data &lt;-<span class="st"> </span>linelist <span class="op">%&gt;%</span></span>
+<span id="cb28-3"><a href="age-pramid.html#cb28-3"></a><span class="st">  </span><span class="kw">group_by</span>(age_cat5, gender) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb28-4"><a href="age-pramid.html#cb28-4"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">counts =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb28-5"><a href="age-pramid.html#cb28-5"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb28-6"><a href="age-pramid.html#cb28-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">percent =</span> <span class="kw">round</span>(<span class="dv">100</span><span class="op">*</span>(counts <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(counts, <span class="dt">na.rm=</span>T)),<span class="dv">1</span>), </span>
+<span id="cb28-7"><a href="age-pramid.html#cb28-7"></a>         <span class="dt">percent =</span> <span class="kw">case_when</span>(</span>
+<span id="cb28-8"><a href="age-pramid.html#cb28-8"></a>            gender <span class="op">==</span><span class="st"> &quot;f&quot;</span> <span class="op">~</span><span class="st"> </span>percent,</span>
+<span id="cb28-9"><a href="age-pramid.html#cb28-9"></a>            gender <span class="op">==</span><span class="st"> &quot;m&quot;</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span>percent,</span>
+<span id="cb28-10"><a href="age-pramid.html#cb28-10"></a>            <span class="ot">TRUE</span>          <span class="op">~</span><span class="st"> </span><span class="ot">NA_real_</span>))</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;age_cat5&#39;. You can override using the `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="age-pramid.html#cb30-1"></a>max_per &lt;-<span class="st"> </span><span class="kw">max</span>(pyramid_data<span class="op">$</span>percent, <span class="dt">na.rm=</span>T)</span>
+<span id="cb30-2"><a href="age-pramid.html#cb30-2"></a>min_per &lt;-<span class="st"> </span><span class="kw">min</span>(pyramid_data<span class="op">$</span>percent, <span class="dt">na.rm=</span>T)</span>
+<span id="cb30-3"><a href="age-pramid.html#cb30-3"></a></span>
+<span id="cb30-4"><a href="age-pramid.html#cb30-4"></a></span>
+<span id="cb30-5"><a href="age-pramid.html#cb30-5"></a><span class="co"># begin ggplot</span></span>
+<span id="cb30-6"><a href="age-pramid.html#cb30-6"></a>  <span class="kw">ggplot</span>()<span class="op">+</span><span class="st">  </span><span class="co"># default x-axis is age in years;</span></span>
+<span id="cb30-7"><a href="age-pramid.html#cb30-7"></a></span>
+<span id="cb30-8"><a href="age-pramid.html#cb30-8"></a><span class="st">  </span><span class="co"># case data graph</span></span>
+<span id="cb30-9"><a href="age-pramid.html#cb30-9"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">data =</span> pyramid_data,</span>
+<span id="cb30-10"><a href="age-pramid.html#cb30-10"></a>           <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb30-11"><a href="age-pramid.html#cb30-11"></a>           <span class="kw">aes</span>(<span class="dt">x =</span> age_cat5,</span>
+<span id="cb30-12"><a href="age-pramid.html#cb30-12"></a>               <span class="dt">y =</span> percent,</span>
+<span id="cb30-13"><a href="age-pramid.html#cb30-13"></a>               <span class="dt">fill =</span> gender),        <span class="co"># </span></span>
+<span id="cb30-14"><a href="age-pramid.html#cb30-14"></a>           <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>)<span class="op">+</span><span class="st">         </span><span class="co"># white around each bar</span></span>
+<span id="cb30-15"><a href="age-pramid.html#cb30-15"></a><span class="st">  </span></span>
+<span id="cb30-16"><a href="age-pramid.html#cb30-16"></a><span class="st">  </span><span class="co"># flip the X and Y axes to make pyramid vertical</span></span>
+<span id="cb30-17"><a href="age-pramid.html#cb30-17"></a><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></span>
+<span id="cb30-18"><a href="age-pramid.html#cb30-18"></a><span class="st">  </span></span>
+<span id="cb30-19"><a href="age-pramid.html#cb30-19"></a></span>
+<span id="cb30-20"><a href="age-pramid.html#cb30-20"></a><span class="st">  </span><span class="co"># adjust the axes scales (remember they are flipped now!)</span></span>
+<span id="cb30-21"><a href="age-pramid.html#cb30-21"></a><span class="st">  </span><span class="co">#scale_x_continuous(breaks = seq(0,100,5), labels = seq(0,100,5)) +</span></span>
+<span id="cb30-22"><a href="age-pramid.html#cb30-22"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(min_per, max_per),</span>
+<span id="cb30-23"><a href="age-pramid.html#cb30-23"></a>                     <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="kw">floor</span>(min_per), <span class="kw">ceiling</span>(max_per), <span class="dv">2</span>),</span>
+<span id="cb30-24"><a href="age-pramid.html#cb30-24"></a>                     <span class="dt">labels =</span> <span class="kw">paste0</span>(<span class="kw">abs</span>(<span class="kw">seq</span>(<span class="kw">floor</span>(min_per), <span class="kw">ceiling</span>(max_per), <span class="dv">2</span>)), <span class="st">&quot;%&quot;</span>))<span class="op">+</span></span>
+<span id="cb30-25"><a href="age-pramid.html#cb30-25"></a></span>
+<span id="cb30-26"><a href="age-pramid.html#cb30-26"></a><span class="st">  </span><span class="co"># designate colors and legend labels manually</span></span>
+<span id="cb30-27"><a href="age-pramid.html#cb30-27"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(</span>
+<span id="cb30-28"><a href="age-pramid.html#cb30-28"></a>    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;f&quot;</span> =<span class="st"> &quot;orange&quot;</span>,</span>
+<span id="cb30-29"><a href="age-pramid.html#cb30-29"></a>               <span class="st">&quot;m&quot;</span> =<span class="st"> &quot;darkgreen&quot;</span>),</span>
+<span id="cb30-30"><a href="age-pramid.html#cb30-30"></a>    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>),</span>
+<span id="cb30-31"><a href="age-pramid.html#cb30-31"></a>  ) <span class="op">+</span></span>
+<span id="cb30-32"><a href="age-pramid.html#cb30-32"></a><span class="st">  </span></span>
+<span id="cb30-33"><a href="age-pramid.html#cb30-33"></a><span class="st">  </span><span class="co"># label values (remember X and Y flipped now)</span></span>
+<span id="cb30-34"><a href="age-pramid.html#cb30-34"></a><span class="st">  </span><span class="kw">labs</span>(</span>
+<span id="cb30-35"><a href="age-pramid.html#cb30-35"></a>    <span class="dt">x =</span> <span class="st">&quot;Age group&quot;</span>,</span>
+<span id="cb30-36"><a href="age-pramid.html#cb30-36"></a>    <span class="dt">y =</span> <span class="st">&quot;Percent of total&quot;</span>,</span>
+<span id="cb30-37"><a href="age-pramid.html#cb30-37"></a>    <span class="dt">fill =</span> <span class="ot">NULL</span>,</span>
+<span id="cb30-38"><a href="age-pramid.html#cb30-38"></a>    <span class="dt">caption =</span> stringr<span class="op">::</span><span class="kw">str_glue</span>(<span class="st">&quot;Data are from linelist </span><span class="ch">\n</span><span class="st">n = {nrow(linelist)} (age or sex missing for {sum(is.na(linelist$gender) | is.na(linelist$age_years))} cases) </span><span class="ch">\n</span><span class="st">Data as of: {format(Sys.Date(), &#39;%d %b %Y&#39;)}&quot;</span>)) <span class="op">+</span></span>
+<span id="cb30-39"><a href="age-pramid.html#cb30-39"></a><span class="st">  </span></span>
+<span id="cb30-40"><a href="age-pramid.html#cb30-40"></a><span class="st">  </span><span class="co"># optional aesthetic themes</span></span>
+<span id="cb30-41"><a href="age-pramid.html#cb30-41"></a><span class="st">  </span><span class="kw">theme</span>(</span>
+<span id="cb30-42"><a href="age-pramid.html#cb30-42"></a>    <span class="dt">panel.grid.major =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb30-43"><a href="age-pramid.html#cb30-43"></a>    <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb30-44"><a href="age-pramid.html#cb30-44"></a>    <span class="dt">panel.background =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb30-45"><a href="age-pramid.html#cb30-45"></a>    <span class="dt">axis.line =</span> <span class="kw">element_line</span>(<span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb30-46"><a href="age-pramid.html#cb30-46"></a>    <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb30-47"><a href="age-pramid.html#cb30-47"></a>    <span class="dt">plot.caption =</span> <span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="dv">0</span>, <span class="dt">size=</span><span class="dv">11</span>, <span class="dt">face =</span> <span class="st">&quot;italic&quot;</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb30-48"><a href="age-pramid.html#cb30-48"></a><span class="st">  </span></span>
+<span id="cb30-49"><a href="age-pramid.html#cb30-49"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste0</span>(<span class="st">&quot;Age and gender of cases&quot;</span>))</span></code></pre></div>
+<pre><code>## Warning: Removed 10 rows containing missing values (position_stack).</code></pre>
+<p><img src="_index_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<!-- ======================================================= -->
+</div>
+<div id="compare-to-baseline" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Compare to baseline</h3>
+<h3>
+Compare to baseline
+</h3>
+<p>With the flexibility of <code>ggplot()</code>, you can have a second layer of bars in the background that represent the true population pyramid. This can provide a nice visualization to compare the observed counts with the baseline.</p>
+<p>Import and view the population data</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="age-pramid.html#cb32-1"></a><span class="co"># import the population demographics data</span></span>
+<span id="cb32-2"><a href="age-pramid.html#cb32-2"></a>pop &lt;-<span class="st"> </span>rio<span class="op">::</span><span class="kw">import</span>(<span class="st">&quot;country_demographics.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="age-pramid.html#cb33-1"></a><span class="co"># display the linelist data as a table</span></span>
+<span id="cb33-2"><a href="age-pramid.html#cb33-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(pop, <span class="dt">rownames =</span> <span class="ot">FALSE</span>, <span class="dt">filter=</span><span class="st">&quot;top&quot;</span>, <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">pageLength =</span> <span class="dv">10</span>, <span class="dt">scrollX=</span>T) )</span></code></pre></div>
+<div id="htmlwidget-095f2e719025bd8af16b" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-095f2e719025bd8af16b">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"40402\" data-max=\"7828087\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"64656\" data-max=\"7674675\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74","75-79","80-84","85+"],[7828087,6705882,5601230,4576430,3734111,3111651,2571215,2121247,1735468,1418749,1145345,900239,685141,500248,347093,202240,94325,40402],[7674675,6592449,5522555,4533885,3726537,3118040,2592416,2150490,1771213,1459439,1193903,956070,745682,563894,416543,258538,130479,64656]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>m<\/th>\n      <th>f<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+<p>First some data management steps:</p>
+<p>Here we record the order of age categories that we want to appear. Due to some quirks the way the <code>ggplot()</code> is implemented, it is easiest to store these as a character vector and use them later in the plotting function.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="age-pramid.html#cb34-1"></a><span class="co"># record correct age cat levels</span></span>
+<span id="cb34-2"><a href="age-pramid.html#cb34-2"></a>age_levels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;0-4&quot;</span>,<span class="st">&quot;5-9&quot;</span>, <span class="st">&quot;10-14&quot;</span>, <span class="st">&quot;15-19&quot;</span>, <span class="st">&quot;20-24&quot;</span>,</span>
+<span id="cb34-3"><a href="age-pramid.html#cb34-3"></a>                <span class="st">&quot;25-29&quot;</span>,<span class="st">&quot;30-34&quot;</span>, <span class="st">&quot;35-39&quot;</span>, <span class="st">&quot;40-44&quot;</span>, <span class="st">&quot;45-49&quot;</span>,</span>
+<span id="cb34-4"><a href="age-pramid.html#cb34-4"></a>                <span class="st">&quot;50-54&quot;</span>, <span class="st">&quot;55-59&quot;</span>, <span class="st">&quot;60-64&quot;</span>, <span class="st">&quot;65-69&quot;</span>, <span class="st">&quot;70-74&quot;</span>,</span>
+<span id="cb34-5"><a href="age-pramid.html#cb34-5"></a>                <span class="st">&quot;75-79&quot;</span>, <span class="st">&quot;80-84&quot;</span>, <span class="st">&quot;85+&quot;</span>)</span></code></pre></div>
+<p>Combine the population and case data through the <strong>dplyr</strong> function <code>bind_rows()</code>:</p>
+<ul>
+<li>First, ensure they have the <em>exact same</em> column names, age categories values, and gender values<br />
+</li>
+<li>Make them have the same data structure: columns of age category, gender, counts, and percent of total<br />
+</li>
+<li>Bind them together, one on-top of the other (<code>bind_rows()</code>)</li>
+</ul>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="age-pramid.html#cb35-1"></a><span class="co"># create/transform populaton data, with percent of total</span></span>
+<span id="cb35-2"><a href="age-pramid.html#cb35-2"></a><span class="co">########################################################</span></span>
+<span id="cb35-3"><a href="age-pramid.html#cb35-3"></a>pop_data &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(pop, <span class="kw">c</span>(m, f), <span class="dt">names_to =</span> <span class="st">&quot;gender&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;counts&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># pivot gender columns longer</span></span>
+<span id="cb35-4"><a href="age-pramid.html#cb35-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="st">&quot;population&quot;</span>,                                                         <span class="co"># add column designating data source</span></span>
+<span id="cb35-5"><a href="age-pramid.html#cb35-5"></a>         <span class="dt">percent  =</span> <span class="kw">round</span>(<span class="dv">100</span><span class="op">*</span>(counts <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(counts, <span class="dt">na.rm=</span>T)),<span class="dv">1</span>),                     <span class="co"># calculate % of total</span></span>
+<span id="cb35-6"><a href="age-pramid.html#cb35-6"></a>         <span class="dt">percent  =</span> <span class="kw">case_when</span>(                                                        <span class="co"># if male, convert % to negative</span></span>
+<span id="cb35-7"><a href="age-pramid.html#cb35-7"></a>                            gender <span class="op">==</span><span class="st"> &quot;f&quot;</span> <span class="op">~</span><span class="st"> </span>percent,</span>
+<span id="cb35-8"><a href="age-pramid.html#cb35-8"></a>                            gender <span class="op">==</span><span class="st"> &quot;m&quot;</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span>percent,</span>
+<span id="cb35-9"><a href="age-pramid.html#cb35-9"></a>                            <span class="ot">TRUE</span>          <span class="op">~</span><span class="st"> </span><span class="ot">NA_real_</span>))</span></code></pre></div>
+<p>Review the changed population dataset</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="age-pramid.html#cb36-1"></a><span class="co"># display the linelist data as a table</span></span>
+<span id="cb36-2"><a href="age-pramid.html#cb36-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(pop_data, <span class="dt">rownames =</span> <span class="ot">FALSE</span>, <span class="dt">filter=</span><span class="st">&quot;top&quot;</span>, <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">pageLength =</span> <span class="dv">5</span>, <span class="dt">scrollX=</span>T) )</span></code></pre></div>
+<div id="htmlwidget-d63c1139874ad02e2763" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d63c1139874ad02e2763">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"40402\" data-max=\"7828087\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"-9\" data-max=\"8.8\" data-scale=\"1\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","5-9","5-9","10-14","10-14","15-19","15-19","20-24","20-24","25-29","25-29","30-34","30-34","35-39","35-39","40-44","40-44","45-49","45-49","50-54","50-54","55-59","55-59","60-64","60-64","65-69","65-69","70-74","70-74","75-79","75-79","80-84","80-84","85+","85+"],["m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f","m","f"],[7828087,7674675,6705882,6592449,5601230,5522555,4576430,4533885,3734111,3726537,3111651,3118040,2571215,2592416,2121247,2150490,1735468,1771213,1418749,1459439,1145345,1193903,900239,956070,685141,745682,500248,563894,347093,416543,202240,258538,94325,130479,40402,64656],["population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population","population"],[-9,8.8,-7.7,7.6,-6.5,6.4,-5.3,5.2,-4.3,4.3,-3.6,3.6,-3,3,-2.4,2.5,-2,2,-1.6,1.7,-1.3,1.4,-1,1.1,-0.8,0.9,-0.6,0.6,-0.4,0.5,-0.2,0.3,-0.1,0.2,-0,0.1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n      <th>data<\/th>\n      <th>percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[2,4]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<p>Now implement the same for the case linelist. Slightly different because it begins with case-rows, not counts.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="age-pramid.html#cb37-1"></a><span class="co"># create case data by age/gender, with percent of total</span></span>
+<span id="cb37-2"><a href="age-pramid.html#cb37-2"></a><span class="co">#######################################################</span></span>
+<span id="cb37-3"><a href="age-pramid.html#cb37-3"></a>case_data &lt;-<span class="st"> </span>linelist <span class="op">%&gt;%</span></span>
+<span id="cb37-4"><a href="age-pramid.html#cb37-4"></a><span class="st">  </span><span class="kw">group_by</span>(age_cat5, gender) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># aggregate linelist cases into age-gender groups</span></span>
+<span id="cb37-5"><a href="age-pramid.html#cb37-5"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">counts =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># calculate counts per age-gender group</span></span>
+<span id="cb37-6"><a href="age-pramid.html#cb37-6"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb37-7"><a href="age-pramid.html#cb37-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">data =</span> <span class="st">&quot;cases&quot;</span>,                                          <span class="co"># add column designating data source</span></span>
+<span id="cb37-8"><a href="age-pramid.html#cb37-8"></a>         <span class="dt">percent =</span> <span class="kw">round</span>(<span class="dv">100</span><span class="op">*</span>(counts <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(counts, <span class="dt">na.rm=</span>T)),<span class="dv">1</span>),  <span class="co"># calculate % of total for age-gender groups</span></span>
+<span id="cb37-9"><a href="age-pramid.html#cb37-9"></a>         <span class="dt">percent =</span> <span class="kw">case_when</span>(                                     <span class="co"># convert % to negative if male</span></span>
+<span id="cb37-10"><a href="age-pramid.html#cb37-10"></a>            gender <span class="op">==</span><span class="st"> &quot;f&quot;</span> <span class="op">~</span><span class="st"> </span>percent,</span>
+<span id="cb37-11"><a href="age-pramid.html#cb37-11"></a>            gender <span class="op">==</span><span class="st"> &quot;m&quot;</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span>percent,</span>
+<span id="cb37-12"><a href="age-pramid.html#cb37-12"></a>            <span class="ot">TRUE</span>          <span class="op">~</span><span class="st"> </span><span class="ot">NA_real_</span>))</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;age_cat5&#39;. You can override using the `.groups` argument.</code></pre>
+<p>Review the changed case dataset</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="age-pramid.html#cb39-1"></a><span class="co"># display the linelist data as a table</span></span>
+<span id="cb39-2"><a href="age-pramid.html#cb39-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(case_data, <span class="dt">rownames =</span> <span class="ot">FALSE</span>, <span class="dt">filter=</span><span class="st">&quot;top&quot;</span>, <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">pageLength =</span> <span class="dv">5</span>, <span class="dt">scrollX=</span>T) )</span></code></pre></div>
+<div id="htmlwidget-58d347b36bf9b5c32961" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-58d347b36bf9b5c32961">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;0-4&quot;,&quot;5-9&quot;,&quot;10-14&quot;,&quot;15-19&quot;,&quot;20-24&quot;,&quot;25-29&quot;,&quot;30-34&quot;,&quot;35-39&quot;,&quot;40-44&quot;,&quot;45-49&quot;,&quot;50-54&quot;,&quot;55-59&quot;,&quot;60-64&quot;,&quot;65-69&quot;,&quot;70-74&quot;,&quot;75-79&quot;,&quot;80-84&quot;,&quot;85+&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1\" data-max=\"648\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"-7.9\" data-max=\"11\" data-scale=\"1\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["0-4","0-4","0-4","5-9","5-9","5-9","10-14","10-14","10-14","15-19","15-19","15-19","20-24","20-24","20-24","25-29","25-29","25-29","30-34","30-34","30-34","35-39","35-39","35-39","40-44","40-44","40-44","45-49","45-49","50-54","50-54","55-59","60-64","65-69",null],["f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m",null,"f","m","f","m","m","m","m",null],[612,410,32,648,466,39,490,423,44,422,435,32,246,311,13,179,295,21,92,216,7,39,128,4,24,88,1,13,46,1,13,6,2,2,88],["cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases","cases"],[10.4,-7,null,11,-7.9,null,8.3,-7.2,null,7.2,-7.4,null,4.2,-5.3,null,3,-5,null,1.6,-3.7,null,0.7,-2.2,null,0.4,-1.5,null,0.2,-0.8,0,-0.2,-0.1,-0,-0,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>age_cat5<\/th>\n      <th>gender<\/th>\n      <th>counts<\/th>\n      <th>data<\/th>\n      <th>percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[2,4]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<p>Now the two datasets are combined, one on top of the other (same column names)</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="age-pramid.html#cb40-1"></a><span class="co"># combine case and population data (same column names, age_cat values, and gender values)</span></span>
+<span id="cb40-2"><a href="age-pramid.html#cb40-2"></a>pyramid_data &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(case_data, pop_data)</span></code></pre></div>
+<p>Store the maximum and minimum percent values, used in the plotting funtion to define the extent of the plot (and not cut off any bars!)</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="age-pramid.html#cb41-1"></a><span class="co"># Define extent of percent axis, used for plot limits</span></span>
+<span id="cb41-2"><a href="age-pramid.html#cb41-2"></a>max_per &lt;-<span class="st"> </span><span class="kw">max</span>(pyramid_data<span class="op">$</span>percent, <span class="dt">na.rm=</span>T)</span>
+<span id="cb41-3"><a href="age-pramid.html#cb41-3"></a>min_per &lt;-<span class="st"> </span><span class="kw">min</span>(pyramid_data<span class="op">$</span>percent, <span class="dt">na.rm=</span>T)</span></code></pre></div>
+<p>Now the plot is made with <code>ggplot()</code>:</p>
+<ul>
+<li>One bar graph of population data (wider, more transparent bars)</li>
+<li>One bar graph of case data (small, more solid bars)</li>
+</ul>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="age-pramid.html#cb42-1"></a><span class="co"># begin ggplot</span></span>
+<span id="cb42-2"><a href="age-pramid.html#cb42-2"></a><span class="co">##############</span></span>
+<span id="cb42-3"><a href="age-pramid.html#cb42-3"></a><span class="kw">ggplot</span>()<span class="op">+</span><span class="st">  </span><span class="co"># default x-axis is age in years;</span></span>
+<span id="cb42-4"><a href="age-pramid.html#cb42-4"></a></span>
+<span id="cb42-5"><a href="age-pramid.html#cb42-5"></a><span class="st">  </span><span class="co"># population data graph</span></span>
+<span id="cb42-6"><a href="age-pramid.html#cb42-6"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">data =</span> <span class="kw">filter</span>(pyramid_data, data <span class="op">==</span><span class="st"> &quot;population&quot;</span>),</span>
+<span id="cb42-7"><a href="age-pramid.html#cb42-7"></a>           <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb42-8"><a href="age-pramid.html#cb42-8"></a>           <span class="kw">aes</span>(<span class="dt">x =</span> age_cat5,</span>
+<span id="cb42-9"><a href="age-pramid.html#cb42-9"></a>               <span class="dt">y =</span> percent,</span>
+<span id="cb42-10"><a href="age-pramid.html#cb42-10"></a>               <span class="dt">fill =</span> gender),        </span>
+<span id="cb42-11"><a href="age-pramid.html#cb42-11"></a>           <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>,                               <span class="co"># black color around bars</span></span>
+<span id="cb42-12"><a href="age-pramid.html#cb42-12"></a>           <span class="dt">alpha =</span> <span class="fl">0.2</span>,                                    <span class="co"># more transparent</span></span>
+<span id="cb42-13"><a href="age-pramid.html#cb42-13"></a>           <span class="dt">width =</span> <span class="dv">1</span>)<span class="op">+</span><span class="st">                                     </span><span class="co"># full width</span></span>
+<span id="cb42-14"><a href="age-pramid.html#cb42-14"></a><span class="st">  </span></span>
+<span id="cb42-15"><a href="age-pramid.html#cb42-15"></a><span class="st">  </span><span class="co"># case data graph</span></span>
+<span id="cb42-16"><a href="age-pramid.html#cb42-16"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">data =</span> <span class="kw">filter</span>(pyramid_data, data <span class="op">==</span><span class="st"> &quot;cases&quot;</span>), </span>
+<span id="cb42-17"><a href="age-pramid.html#cb42-17"></a>           <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>,                              <span class="co"># use % as given in data, not counting rows</span></span>
+<span id="cb42-18"><a href="age-pramid.html#cb42-18"></a>           <span class="kw">aes</span>(<span class="dt">x =</span> age_cat5,                               <span class="co"># age categories as original X axis</span></span>
+<span id="cb42-19"><a href="age-pramid.html#cb42-19"></a>               <span class="dt">y =</span> percent,                                <span class="co"># % as original Y-axis</span></span>
+<span id="cb42-20"><a href="age-pramid.html#cb42-20"></a>               <span class="dt">fill =</span> gender),                             <span class="co"># fill of bars by gender</span></span>
+<span id="cb42-21"><a href="age-pramid.html#cb42-21"></a>           <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>,                               <span class="co"># black color around bars</span></span>
+<span id="cb42-22"><a href="age-pramid.html#cb42-22"></a>           <span class="dt">alpha =</span> <span class="dv">1</span>,                                      <span class="co"># not transparent </span></span>
+<span id="cb42-23"><a href="age-pramid.html#cb42-23"></a>           <span class="dt">width =</span> <span class="fl">0.3</span>)<span class="op">+</span><span class="st">                                   </span><span class="co"># half width</span></span>
+<span id="cb42-24"><a href="age-pramid.html#cb42-24"></a><span class="st">  </span></span>
+<span id="cb42-25"><a href="age-pramid.html#cb42-25"></a><span class="st">  </span><span class="co"># flip the X and Y axes to make pyramid vertical</span></span>
+<span id="cb42-26"><a href="age-pramid.html#cb42-26"></a><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></span>
+<span id="cb42-27"><a href="age-pramid.html#cb42-27"></a><span class="st">  </span></span>
+<span id="cb42-28"><a href="age-pramid.html#cb42-28"></a><span class="st">  </span><span class="co"># adjust axes order, scale, and labels (remember X and Y axes are flipped now)</span></span>
+<span id="cb42-29"><a href="age-pramid.html#cb42-29"></a><span class="st">  </span><span class="co"># manually ensure that age-axis is ordered correctly</span></span>
+<span id="cb42-30"><a href="age-pramid.html#cb42-30"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">limits =</span> age_levels)<span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-31"><a href="age-pramid.html#cb42-31"></a><span class="st">  </span></span>
+<span id="cb42-32"><a href="age-pramid.html#cb42-32"></a><span class="st">  </span><span class="co"># set percent-axis </span></span>
+<span id="cb42-33"><a href="age-pramid.html#cb42-33"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(min_per, max_per),                                          <span class="co"># min and max defined above</span></span>
+<span id="cb42-34"><a href="age-pramid.html#cb42-34"></a>                     <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="kw">floor</span>(min_per), <span class="kw">ceiling</span>(max_per), <span class="dt">by =</span> <span class="dv">2</span>),                <span class="co"># from min% to max% by 2 </span></span>
+<span id="cb42-35"><a href="age-pramid.html#cb42-35"></a>                     <span class="dt">labels =</span> <span class="kw">paste0</span>(                                                       <span class="co"># for the labels, paste together... </span></span>
+<span id="cb42-36"><a href="age-pramid.html#cb42-36"></a>                       <span class="kw">abs</span>(<span class="kw">seq</span>(<span class="kw">floor</span>(min_per), <span class="kw">ceiling</span>(max_per), <span class="dt">by =</span> <span class="dv">2</span>)),                  <span class="co"># ...rounded absolute values of breaks... </span></span>
+<span id="cb42-37"><a href="age-pramid.html#cb42-37"></a>                       <span class="st">&quot;%&quot;</span>))<span class="op">+</span><span class="st">                                                               </span><span class="co"># ... with &quot;%&quot;</span></span>
+<span id="cb42-38"><a href="age-pramid.html#cb42-38"></a><span class="st">                                                                                            </span><span class="co"># floor(), ceiling() round down and up </span></span>
+<span id="cb42-39"><a href="age-pramid.html#cb42-39"></a></span>
+<span id="cb42-40"><a href="age-pramid.html#cb42-40"></a><span class="st">  </span><span class="co"># designate colors and legend labels manually</span></span>
+<span id="cb42-41"><a href="age-pramid.html#cb42-41"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(</span>
+<span id="cb42-42"><a href="age-pramid.html#cb42-42"></a>    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;f&quot;</span> =<span class="st"> &quot;orange&quot;</span>,         <span class="co"># assign colors to values in the data</span></span>
+<span id="cb42-43"><a href="age-pramid.html#cb42-43"></a>               <span class="st">&quot;m&quot;</span> =<span class="st"> &quot;darkgreen&quot;</span>),</span>
+<span id="cb42-44"><a href="age-pramid.html#cb42-44"></a>    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;f&quot;</span> =<span class="st"> &quot;Female&quot;</span>,</span>
+<span id="cb42-45"><a href="age-pramid.html#cb42-45"></a>               <span class="st">&quot;m&quot;</span>=<span class="st"> &quot;Male&quot;</span>),      <span class="co"># change labels that appear in legend, note order</span></span>
+<span id="cb42-46"><a href="age-pramid.html#cb42-46"></a>  ) <span class="op">+</span></span>
+<span id="cb42-47"><a href="age-pramid.html#cb42-47"></a></span>
+<span id="cb42-48"><a href="age-pramid.html#cb42-48"></a><span class="st">  </span><span class="co"># plot labels, titles, caption    </span></span>
+<span id="cb42-49"><a href="age-pramid.html#cb42-49"></a><span class="st">  </span><span class="kw">labs</span>(</span>
+<span id="cb42-50"><a href="age-pramid.html#cb42-50"></a>    <span class="dt">title =</span> <span class="st">&quot;Case age and gender distribution,</span><span class="ch">\n</span><span class="st">as compared to baseline population&quot;</span>,</span>
+<span id="cb42-51"><a href="age-pramid.html#cb42-51"></a>    <span class="dt">subtitle =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb42-52"><a href="age-pramid.html#cb42-52"></a>    <span class="dt">x =</span> <span class="st">&quot;Age category&quot;</span>,</span>
+<span id="cb42-53"><a href="age-pramid.html#cb42-53"></a>    <span class="dt">y =</span> <span class="st">&quot;Percent of total&quot;</span>,</span>
+<span id="cb42-54"><a href="age-pramid.html#cb42-54"></a>    <span class="dt">fill =</span> <span class="ot">NULL</span>,</span>
+<span id="cb42-55"><a href="age-pramid.html#cb42-55"></a>    <span class="dt">caption =</span> stringr<span class="op">::</span><span class="kw">str_glue</span>(<span class="st">&quot;Cases shown on top of country demographic baseline</span><span class="ch">\n</span><span class="st">Case data are from linelist, n = {nrow(linelist)}</span><span class="ch">\n</span><span class="st">Age or gender missing for {sum(is.na(linelist$gender) | is.na(linelist$age_years))} cases</span><span class="ch">\n</span><span class="st">Case data as of: {format(max(linelist$date_onset, na.rm=T), &#39;%d %b %Y&#39;)}&quot;</span>)) <span class="op">+</span></span>
+<span id="cb42-56"><a href="age-pramid.html#cb42-56"></a><span class="st">  </span></span>
+<span id="cb42-57"><a href="age-pramid.html#cb42-57"></a><span class="st">  </span><span class="co"># optional aesthetic themes</span></span>
+<span id="cb42-58"><a href="age-pramid.html#cb42-58"></a><span class="st">  </span><span class="kw">theme</span>(</span>
+<span id="cb42-59"><a href="age-pramid.html#cb42-59"></a>    <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,                             <span class="co"># move legend to bottom</span></span>
+<span id="cb42-60"><a href="age-pramid.html#cb42-60"></a>    <span class="dt">panel.grid.major =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb42-61"><a href="age-pramid.html#cb42-61"></a>    <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb42-62"><a href="age-pramid.html#cb42-62"></a>    <span class="dt">panel.background =</span> <span class="kw">element_blank</span>(),</span>
+<span id="cb42-63"><a href="age-pramid.html#cb42-63"></a>    <span class="dt">axis.line =</span> <span class="kw">element_line</span>(<span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb42-64"><a href="age-pramid.html#cb42-64"></a>    <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="dv">0</span>), </span>
+<span id="cb42-65"><a href="age-pramid.html#cb42-65"></a>    <span class="dt">plot.caption =</span> <span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="dv">0</span>, <span class="dt">size=</span><span class="dv">11</span>, <span class="dt">face =</span> <span class="st">&quot;italic&quot;</span>))</span></code></pre></div>
+<pre><code>## Warning: Removed 10 rows containing missing values (position_stack).</code></pre>
+<p><img src="_index_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<!-- ======================================================= -->
+</div>
+</div>
+<div id="likert-scale" class="section level2 tabset tabset-fade" number="2.5">
+<h2><span class="header-section-number">2.5</span> Likert scale</h2>
+<h2>
+Likert scale
+</h2>
+<p>The techniques used to make a population pyramid with <code>ggplot()</code> can also be used to make plots of Likert-scale survey data.</p>
+<p>Import the data</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="age-pramid.html#cb44-1"></a><span class="co"># import the likert survey response data</span></span>
+<span id="cb44-2"><a href="age-pramid.html#cb44-2"></a>likert_data &lt;-<span class="st"> </span>rio<span class="op">::</span><span class="kw">import</span>(<span class="st">&quot;likert_data.csv&quot;</span>)</span></code></pre></div>
+<p>Start with data that looks like this, with a categorical classification of each respondent (<code>status</code>) and their answers to 8 questions on a 4-point Likert-type scale (“Very poor”, “Poor”, “Good”, “Very good”).</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="age-pramid.html#cb45-1"></a><span class="co"># display the linelist data as a table</span></span>
+<span id="cb45-2"><a href="age-pramid.html#cb45-2"></a>DT<span class="op">::</span><span class="kw">datatable</span>(likert_data, <span class="dt">rownames =</span> <span class="ot">FALSE</span>, <span class="dt">filter=</span><span class="st">&quot;top&quot;</span>, <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">pageLength =</span> <span class="dv">10</span>, <span class="dt">scrollX=</span>T) )</span></code></pre></div>
+<div id="htmlwidget-d1a5a7d670d5f372d86f" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d1a5a7d670d5f372d86f">{"x":{"filter":"top","filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["Senior","Junior","Intermediate","Intermediate","Senior","Junior","Senior","Senior","Senior","Senior","Senior","Junior","Senior","Junior","Senior","Junior","Intermediate","Intermediate","Junior","Senior","Senior","Junior","Senior","Senior","Junior","Intermediate","Junior","Senior","Intermediate","Senior","Senior","Junior","Intermediate","Senior","Intermediate","Junior","Senior","Junior"],["Very Good","Very Good","Good","Good","Very Good","Good","Very Good","Good","Good","Good","Good","Good","Good","Good","Very Good","Good","Poor","Very Good","Very Good","Not applicable","Very Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Good","Very Good","Very Good","Not applicable","Good","Very Good","Good","Good","Good","Not applicable","Good"],["Very Good","Very Good","Good","Poor","Very Poor","Very Good","Very Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Good","Poor","Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Very Good","Good","Good","Poor","Very Good","Very Good","Not applicable","Good","Very Good","Very Good","Good","Very Good","Good","Good"],["Good","Very Good","Good","Poor","Good","Good","Very Good","Very Good","Very Good","Good","Very Good","Very Good","Poor","Good","Good","Good","Good","Very Good","Very Good","Very Good","Very Good","Good","Very Good","Good","Very Good","Good","Poor","Poor","Very Good","Very Good","Not applicable","Good","Very Good","Good","Good","Good","Good","Good"],["Very Poor","Very Good","Very Good","Very Poor","Poor","Very Poor","","Very Good","Very Poor","Very Poor","Very Poor","Good","Very Poor","Very Good","Good","","Very Poor","Very Poor","Good","Poor","Very Poor","Good","Good","Very Poor","Very Poor","Good","Good","Good","Very Poor","Very Poor","Very Poor","Good","Good","Good","Good","Very Poor","Good","Good"],["Not applicable","Very Good","Not applicable","Not applicable","Poor","Not applicable","","Poor","Not applicable","Poor","Not applicable","Good","Not applicable","Poor","Good","","Not applicable","Not applicable","Very Good","Poor","Not applicable","Good","Poor","Not applicable","Not applicable","Good","Good","Poor","Not applicable","Very Poor","Not applicable","Poor","Good","Good","Poor","Not applicable","Poor","Good"],["Not applicable","Very Good","Not applicable","Not applicable","Very Poor","Not applicable","","Not applicable","Not applicable","Not applicable","Not applicable","Good","Not applicable","Poor","Good","","Not applicable","Not applicable","Good","Good","Not applicable","Good","Poor","Good","Not applicable","Very Good","Very Good","Good","Not applicable","Not applicable","Not applicable","Good","Good","Good","Good","Not applicable","Good","Not applicable"],["Very Good","Very Good","Good","Good","Good","Good","","Very Good","Not applicable","Very Good","Good","Good","Poor","Good","Good","Poor","Very Good","Good","Good","Very Good","Good","Good","Good","Good","Good","Very Good","Good","Poor","Very Good","Very Good","Not applicable","Very Good","Good","Poor","Good","Poor","Not applicable","Good"],["Very Good","Very Good","Good","Good","Good","Good","Very Good","Very Good","Good","Very Good","Good","Very Good","Good","Very Good","Good","Poor","Very Good","Good","Good","Very Good","Very Good","Good","Good","Good","Very Good","Poor","Good","Poor","Very Good","Very Good","Not applicable","Good","Good","Good","Good","Poor","Not applicable","Good"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>status<\/th>\n      <th>Q1<\/th>\n      <th>Q2<\/th>\n      <th>Q3<\/th>\n      <th>Q4<\/th>\n      <th>Q5<\/th>\n      <th>Q6<\/th>\n      <th>Q7<\/th>\n      <th>Q8<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+<p>First, some data management steps:</p>
+<ul>
+<li>Pivot the data longer<br />
+</li>
+<li>Create new column <code>direction</code> depending on whether response was generally “positive” or “negative”<br />
+</li>
+<li>Set the Factor level order for the <code>status</code> column and the <code>Response</code> column<br />
+</li>
+<li>Store the max count value so limits of plot are appropriate</li>
+</ul>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="age-pramid.html#cb46-1"></a>melted &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(likert_data, Q1<span class="op">:</span>Q8, <span class="dt">names_to =</span> <span class="st">&quot;Question&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;Response&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb46-2"><a href="age-pramid.html#cb46-2"></a><span class="st">     </span><span class="kw">mutate</span>(<span class="dt">direction =</span> <span class="kw">case_when</span>(</span>
+<span id="cb46-3"><a href="age-pramid.html#cb46-3"></a>               Response <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Poor&quot;</span>,<span class="st">&quot;Very Poor&quot;</span>) <span class="op">~</span><span class="st"> &quot;Negative&quot;</span>,</span>
+<span id="cb46-4"><a href="age-pramid.html#cb46-4"></a>               Response <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Good&quot;</span>, <span class="st">&quot;Very Good&quot;</span>) <span class="op">~</span><span class="st"> &quot;Positive&quot;</span>,</span>
+<span id="cb46-5"><a href="age-pramid.html#cb46-5"></a>               <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Unknown&quot;</span>),</span>
+<span id="cb46-6"><a href="age-pramid.html#cb46-6"></a>            <span class="dt">status =</span> <span class="kw">factor</span>(status, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">c</span>(</span>
+<span id="cb46-7"><a href="age-pramid.html#cb46-7"></a>                 <span class="st">&quot;Senior&quot;</span>, <span class="st">&quot;Intermediate&quot;</span>, <span class="st">&quot;Junior&quot;</span>))),</span>
+<span id="cb46-8"><a href="age-pramid.html#cb46-8"></a>            <span class="dt">Response =</span> <span class="kw">factor</span>(Response, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Very Good&quot;</span>, <span class="st">&quot;Good&quot;</span>,</span>
+<span id="cb46-9"><a href="age-pramid.html#cb46-9"></a>                                             <span class="st">&quot;Very Poor&quot;</span>, <span class="st">&quot;Poor&quot;</span>))) <span class="co"># must reverse Very Poor and Poor for ordering to work</span></span>
+<span id="cb46-10"><a href="age-pramid.html#cb46-10"></a></span>
+<span id="cb46-11"><a href="age-pramid.html#cb46-11"></a>melted_max &lt;-<span class="st"> </span>melted <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb46-12"><a href="age-pramid.html#cb46-12"></a><span class="st">   </span><span class="kw">group_by</span>(status, Question) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb46-13"><a href="age-pramid.html#cb46-13"></a><span class="st">   </span><span class="kw">summarize</span>(<span class="dt">n =</span> <span class="kw">n</span>())</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;status&#39;. You can override using the `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="age-pramid.html#cb48-1"></a>melted_max &lt;-<span class="st"> </span><span class="kw">max</span>(melted_max<span class="op">$</span>n, <span class="dt">na.rm=</span>T)</span></code></pre></div>
+<p>Now make the plot:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="age-pramid.html#cb49-1"></a><span class="co"># make plot</span></span>
+<span id="cb49-2"><a href="age-pramid.html#cb49-2"></a><span class="kw">ggplot</span>()<span class="op">+</span></span>
+<span id="cb49-3"><a href="age-pramid.html#cb49-3"></a><span class="st">     </span><span class="co"># bar graph of the &quot;negative&quot; responses </span></span>
+<span id="cb49-4"><a href="age-pramid.html#cb49-4"></a><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">data =</span> <span class="kw">filter</span>(melted,</span>
+<span id="cb49-5"><a href="age-pramid.html#cb49-5"></a>                            direction <span class="op">==</span><span class="st"> &quot;Negative&quot;</span>), </span>
+<span id="cb49-6"><a href="age-pramid.html#cb49-6"></a>              <span class="kw">aes</span>(<span class="dt">x =</span> status,</span>
+<span id="cb49-7"><a href="age-pramid.html#cb49-7"></a>                        <span class="dt">y=</span>..count..<span class="op">*</span>(<span class="op">-</span><span class="dv">1</span>),    <span class="co"># counts inverted to negative</span></span>
+<span id="cb49-8"><a href="age-pramid.html#cb49-8"></a>                        <span class="dt">fill =</span> Response),</span>
+<span id="cb49-9"><a href="age-pramid.html#cb49-9"></a>                    <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb49-10"><a href="age-pramid.html#cb49-10"></a>                    <span class="dt">closed =</span> <span class="st">&quot;left&quot;</span>, </span>
+<span id="cb49-11"><a href="age-pramid.html#cb49-11"></a>                    <span class="dt">position =</span> <span class="st">&quot;stack&quot;</span>)<span class="op">+</span></span>
+<span id="cb49-12"><a href="age-pramid.html#cb49-12"></a><span class="st">     </span></span>
+<span id="cb49-13"><a href="age-pramid.html#cb49-13"></a><span class="st">     </span><span class="co"># bar graph of the &quot;positive responses</span></span>
+<span id="cb49-14"><a href="age-pramid.html#cb49-14"></a><span class="st">     </span><span class="kw">geom_bar</span>(<span class="dt">data =</span> <span class="kw">filter</span>(melted, direction <span class="op">==</span><span class="st"> &quot;Positive&quot;</span>),</span>
+<span id="cb49-15"><a href="age-pramid.html#cb49-15"></a>              <span class="kw">aes</span>(<span class="dt">x =</span> status, <span class="dt">fill =</span> Response),</span>
+<span id="cb49-16"><a href="age-pramid.html#cb49-16"></a>              <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb49-17"><a href="age-pramid.html#cb49-17"></a>              <span class="dt">closed =</span> <span class="st">&quot;left&quot;</span>,</span>
+<span id="cb49-18"><a href="age-pramid.html#cb49-18"></a>              <span class="dt">position =</span> <span class="st">&quot;stack&quot;</span>)<span class="op">+</span></span>
+<span id="cb49-19"><a href="age-pramid.html#cb49-19"></a><span class="st">     </span></span>
+<span id="cb49-20"><a href="age-pramid.html#cb49-20"></a><span class="st">     </span><span class="co"># flip the X and Y axes</span></span>
+<span id="cb49-21"><a href="age-pramid.html#cb49-21"></a><span class="st">     </span><span class="kw">coord_flip</span>()<span class="op">+</span></span>
+<span id="cb49-22"><a href="age-pramid.html#cb49-22"></a><span class="st">  </span></span>
+<span id="cb49-23"><a href="age-pramid.html#cb49-23"></a><span class="st">     </span><span class="co"># Black vertical line at 0</span></span>
+<span id="cb49-24"><a href="age-pramid.html#cb49-24"></a><span class="st">     </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size=</span><span class="dv">1</span>)<span class="op">+</span></span>
+<span id="cb49-25"><a href="age-pramid.html#cb49-25"></a><span class="st">     </span></span>
+<span id="cb49-26"><a href="age-pramid.html#cb49-26"></a><span class="st">    </span><span class="co"># convert labels to all positive numbers</span></span>
+<span id="cb49-27"><a href="age-pramid.html#cb49-27"></a><span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="kw">ceiling</span>(melted_max<span class="op">/</span><span class="dv">10</span>)<span class="op">*</span><span class="dv">11</span>, <span class="kw">ceiling</span>(melted_max<span class="op">/</span><span class="dv">10</span>)<span class="op">*</span><span class="dv">10</span>),   <span class="co"># seq from neg to pos by 10, edges rounded outward to nearest 5</span></span>
+<span id="cb49-28"><a href="age-pramid.html#cb49-28"></a>                       <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="kw">ceiling</span>(melted_max<span class="op">/</span><span class="dv">10</span>)<span class="op">*</span><span class="dv">10</span>, <span class="kw">ceiling</span>(melted_max<span class="op">/</span><span class="dv">10</span>)<span class="op">*</span><span class="dv">10</span>, <span class="dv">10</span>),</span>
+<span id="cb49-29"><a href="age-pramid.html#cb49-29"></a>                       <span class="dt">labels =</span> <span class="kw">abs</span>(<span class="kw">unique</span>(<span class="kw">c</span>(<span class="kw">seq</span>(<span class="op">-</span><span class="kw">ceiling</span>(melted_max<span class="op">/</span><span class="dv">10</span>)<span class="op">*</span><span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">10</span>),</span>
+<span id="cb49-30"><a href="age-pramid.html#cb49-30"></a>                                            <span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">ceiling</span>(melted_max<span class="op">/</span><span class="dv">10</span>)<span class="op">*</span><span class="dv">10</span>, <span class="dv">10</span>))))) <span class="op">+</span></span>
+<span id="cb49-31"><a href="age-pramid.html#cb49-31"></a><span class="st">     </span></span>
+<span id="cb49-32"><a href="age-pramid.html#cb49-32"></a><span class="st">    </span><span class="co"># color scales manually assigned </span></span>
+<span id="cb49-33"><a href="age-pramid.html#cb49-33"></a><span class="st">    </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Very Good&quot;</span>  =<span class="st"> &quot;green4&quot;</span>, <span class="co"># assigns colors</span></span>
+<span id="cb49-34"><a href="age-pramid.html#cb49-34"></a>                                  <span class="st">&quot;Good&quot;</span>      =<span class="st"> &quot;green3&quot;</span>,</span>
+<span id="cb49-35"><a href="age-pramid.html#cb49-35"></a>                                  <span class="st">&quot;Poor&quot;</span>      =<span class="st"> &quot;yellow&quot;</span>,</span>
+<span id="cb49-36"><a href="age-pramid.html#cb49-36"></a>                                  <span class="st">&quot;Very Poor&quot;</span> =<span class="st"> &quot;red3&quot;</span>),</span>
+<span id="cb49-37"><a href="age-pramid.html#cb49-37"></a>                       <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;Very Good&quot;</span>, <span class="st">&quot;Good&quot;</span>, <span class="st">&quot;Poor&quot;</span>, <span class="st">&quot;Very Poor&quot;</span>))<span class="op">+</span><span class="st"> </span><span class="co"># orders the legend</span></span>
+<span id="cb49-38"><a href="age-pramid.html#cb49-38"></a><span class="st">     </span></span>
+<span id="cb49-39"><a href="age-pramid.html#cb49-39"></a><span class="st">    </span></span>
+<span id="cb49-40"><a href="age-pramid.html#cb49-40"></a><span class="st">     </span></span>
+<span id="cb49-41"><a href="age-pramid.html#cb49-41"></a><span class="st">    </span><span class="co"># facet the entire plot so each question is a sub-plot</span></span>
+<span id="cb49-42"><a href="age-pramid.html#cb49-42"></a><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Question, <span class="dt">ncol =</span> <span class="dv">3</span>)<span class="op">+</span></span>
+<span id="cb49-43"><a href="age-pramid.html#cb49-43"></a><span class="st">     </span></span>
+<span id="cb49-44"><a href="age-pramid.html#cb49-44"></a><span class="st">    </span><span class="co"># labels, titles, caption</span></span>
+<span id="cb49-45"><a href="age-pramid.html#cb49-45"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Respondent status&quot;</span>,</span>
+<span id="cb49-46"><a href="age-pramid.html#cb49-46"></a>          <span class="dt">y =</span> <span class="st">&quot;Number of responses&quot;</span>,</span>
+<span id="cb49-47"><a href="age-pramid.html#cb49-47"></a>          <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>)<span class="op">+</span></span>
+<span id="cb49-48"><a href="age-pramid.html#cb49-48"></a><span class="st">     </span><span class="kw">ggtitle</span>(<span class="kw">str_glue</span>(<span class="st">&quot;Likert-style responses</span><span class="ch">\n</span><span class="st">n = {nrow(likert_data)}&quot;</span>))<span class="op">+</span></span>
+<span id="cb49-49"><a href="age-pramid.html#cb49-49"></a></span>
+<span id="cb49-50"><a href="age-pramid.html#cb49-50"></a><span class="st">     </span><span class="co"># aesthetic settings</span></span>
+<span id="cb49-51"><a href="age-pramid.html#cb49-51"></a><span class="st">     </span><span class="kw">theme_minimal</span>()<span class="op">+</span></span>
+<span id="cb49-52"><a href="age-pramid.html#cb49-52"></a><span class="st">     </span><span class="kw">theme</span>(<span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">12</span>),</span>
+<span id="cb49-53"><a href="age-pramid.html#cb49-53"></a>           <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">14</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb49-54"><a href="age-pramid.html#cb49-54"></a>           <span class="dt">strip.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">14</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>),  <span class="co"># facet sub-titles</span></span>
+<span id="cb49-55"><a href="age-pramid.html#cb49-55"></a>           <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">20</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb49-56"><a href="age-pramid.html#cb49-56"></a>           <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="co"># black box around each facet</span></span></code></pre></div>
+<pre><code>## Warning: Ignoring unknown parameters: closed
+
+## Warning: Ignoring unknown parameters: closed</code></pre>
+<p><img src="_index_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<!-- ======================================================= -->
+</div>
+<div id="resources" class="section level2 tabset tabset-fade" number="2.6">
+<h2><span class="header-section-number">2.6</span> Resources</h2>
+<h2>
+Resources
+</h2>
+<p>This tab should stay with the name “Resources”.
+Links to other online tutorials or resources.</p>
+
+</div>
+</div>
+  </main>
+
+  <div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page">
+      <h2>On this page</h2>
+      <div id="book-on-this-page"></div>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          <li><a id="book-source" href="#">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="#">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5">
+  <div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong></strong>" was written by . It was last built on Produced Tuesday 26 January 2021.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+
+
+</body>
+
+</html>

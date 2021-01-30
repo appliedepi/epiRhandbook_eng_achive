@@ -1,29 +1,3 @@
----
-title:  |  
-  ![](../images/R Handbook Logo.png)
-author: ""
-date: "Produced `r format(Sys.time(), '%A %d %B %Y')`"
-output:
-  html_document:
-    code_folding: show
-    highlight: zenburn
-    number_sections: no
-    theme: sandstone
-    toc: yes
-    toc_collapse: no
-    toc_depth: 3
-    toc_float: yes
-params:
-    run_page_ind: TRUE
-knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = "_outputs_knitted") })
----
-
-```{r, child = '_page_setup.Rmd', eval = params$run_page_ind, include = F}
-# THIS CHUNK RUNS IF PAGE IS KNITTED INDEPENDENTLY OF THE HANDBOOK
-# IT SOURCES RMD "_page_setup.Rmd" AS A CHILD, TO GET SETTINGS, PACKAGES, AND DATASETS
-# IF WORKING ON THIS PAGE, RUN ALL CHUNKS OF "_page_setup.Rmd" FIRST TO GET THESE OBJECTS
-```
 
 
 <!-- ======================================================= -->
@@ -1820,8 +1794,4 @@ linelist <- linelist %>%
 # EXPORT CLEANED LINELIST FILE TO "DATA" FOLDER
 rio::export(linelist, here::here("data", "linelist_cleaned.xlsx"))
 rio::export(linelist, here::here("data", "linelist_cleaned.rds"))
-```
-
-
-```{r, child= '_page_closeout.Rmd', eval = params$run_page_ind == F, include = F}
 ```

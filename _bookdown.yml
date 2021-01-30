@@ -2,16 +2,8 @@ book_filename: "_index"
 language:
   ui:
     chapter_name: ""
-
 output_dir: "docs"
-fontsize: 6pt   # this is for pdf only
-
 delete_merged_file: FALSE
-#view: https://github.com/nsbatra/Epi_R_Handbook/blob/master/%s
-#new_session: yes
-
-#rmd_subdir: "raw_pages"
-
 rmd_files: [
   "index.Rmd",
   
@@ -26,8 +18,15 @@ rmd_files: [
 
   "raw_pages/cat_data_viz.Rmd",
   "raw_pages/age_pyramid.Rmd",
-
+  #"pages/age_pyramid.Rmd",
 
 ]
+
+
+#view: https://github.com/nsbatra/Epi_R_Handbook/blob/master/%s
+#new_session: yes
+
+
+
 
 #before_chapter_script: "_common.R"
