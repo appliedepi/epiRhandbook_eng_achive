@@ -1,8 +1,8 @@
 ---
 knit: "bookdown::render_book"
 title: "R Handbook for Epidemiologists"
-author: "the handbook team"
-description: "Description here......................"
+author: "The handbook team"
+description: "A field reference guide for epidemiologists and public health professionals using R"
 date: "`r Sys.Date()`"
 #url: 'https://github.com/nsbatra/Epi_R_handbook'
 #github-repo: nsbatra/Epi_R_handbook

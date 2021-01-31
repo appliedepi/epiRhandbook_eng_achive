@@ -6,10 +6,11 @@ rmarkdown::render_site(
         output_format = 'bookdown::bs4_book')
 
 
-bookdown::preview_chapter()
+#bookdown::preview_chapter()   # doesn't work yet
 
 
 # to render the whole handbook, in TABBED SELF-CONTAINED HTML FILE 
+# it is saved as "_main.html" in the root folder of the project
 rmarkdown::render_site(
      output_format = 'bookdown::html_document2')
 
@@ -19,11 +20,15 @@ rmarkdown::render_site(
 #############################################
 # Press "knit" button (this works despite the Rmd not having a YAML header)
 
-# to knit your 
-rmarkdown::render(
-     input = c("raw_pages/index.Rmd", "raw_pages/deduplication.Rmd"),
-     output_dir = "_single_pages",
-     output_yaml = "_page_alone.yml")
+
+
+# 
+# 
+# # to knit your 
+# rmarkdown::render(
+#      input = c("raw_pages/index.Rmd", "raw_pages/deduplication.Rmd"),
+#      output_dir = "_single_pages",
+#      output_yaml = "_page_alone.yml")
 
 
 
