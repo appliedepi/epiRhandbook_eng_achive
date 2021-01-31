@@ -1,10 +1,10 @@
-#rmd_subdir: "pages"
-#output_dir: "pages/_outputs_knitted"
-title:  |  
+# #rmd_subdir: "pages"
+# #output_dir: "pages/_outputs_knitted"
+title:  |
   ![](../images/R Handbook Logo.png)
 author: "Version 1.0.0"
 date: "Produced `r format(Sys.time(), '%A %d %B %Y')`"
-output:
+output:s
   html_document:
     code_folding: show
     highlight: zenburn
@@ -17,3 +17,15 @@ output:
 params:
   run_page_ind: TRUE
 
+
+book_filename: "chapter"
+language:
+  ui:
+    chapter_name: ""
+output_dir: "docs"
+delete_merged_file: FALSE
+rmd_files: [
+  "index.Rmd",
+  "raw_pages/deduplication.Rmd",
+
+]

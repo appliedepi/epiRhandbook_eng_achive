@@ -1,22 +1,23 @@
-book_filename: "_index"
+output_dir: "docs"
+#book_filename: "hbk_files"   # name of folder in output_dir
 language:
   ui:
     chapter_name: ""
-output_dir: "docs"
-delete_merged_file: FALSE
-rmd_files: [
-  "index.Rmd",
-  
-  "raw_pages/cat_about_book.Rmd",
-  "raw_pages/editorial_style.Rmd",
-  "raw_pages/data_used.Rmd",
 
-  "raw_pages/cat_data_management.Rmd",
+delete_merged_file: FALSE         
+rmd_files: [
+  "index.Rmd",                              # objectives, how to read, authors, acknowledgements
+  
+  "raw_pages/cat_about_book.Rmd",           # start of new section
+  "raw_pages/editorial_style.Rmd",          # editorial style
+  "raw_pages/data_used.Rmd",                # data used
+
+  "raw_pages/cat_data_management.Rmd",      # start of new section
   "raw_pages/cleaning.Rmd",
   "raw_pages/character_regex.Rmd",
   "raw_pages/deduplication.Rmd",
 
-  "raw_pages/cat_data_viz.Rmd",
+  "raw_pages/cat_data_viz.Rmd",             # start of new section
   "raw_pages/age_pyramid.Rmd",
   #"pages/age_pyramid.Rmd",
 
