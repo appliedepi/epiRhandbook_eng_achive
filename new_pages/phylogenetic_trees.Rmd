@@ -16,7 +16,7 @@ library(pacman)
 
 pacman::p_load(here, ggplot2, dplyr, ape, ggtree, treeio, ggnewscale)
 
-tree <- ape::read.tree(here::here("data", "Shigella_tree.nwk"))
+tree <- ape::read.tree(here::here("data", "Shigella_tree.txt"))
 
 sample_data <- read.csv(here::here("data","sample_data_Shigella_tree.csv"),sep=",", na.strings=c("NA"), head = TRUE, stringsAsFactors=F)
 
@@ -53,7 +53,7 @@ pacman::p_load(here, ggplot2, dplyr, ape, ggtree, treeio, ggnewscale)
 
 ```
 
-There are several different formats in which a phylogenetic tree can be stored (eg. Newick, NEXUS, Phylip). A common one, which we will also use here in this example is the Newick file format (.nwk), which is the standard for representing trees in computer-readable form. Which means, an entire tree can be expressed in a string format such as  "((t2:0.04,t1:0.34):0.89,(t5:0.37,(t4:0.03,t3:0.67):0.9):0.59); " listing all nodes and tips and their relationship (branch length) to each other. 
+There are several different formats in which a phylogenetic tree can be stored (eg. Newick, NEXUS, Phylip). A common one, which we will also use here in this example is the Newick file format (.nwk), which is the standard for representing trees in computer-readable form. Which means, an entire tree can be expressed in a string format such as  "((t2:0.04,t1:0.34):0.89,(t5:0.37,(t4:0.03,t3:0.67):0.9):0.59); " listing all nodes and tips and their relationship (branch length) to each other. For convenience the Newick file can also be saved and stored as a .txt file.
 
 It is important to understand that the phylogenetic tree file in itself does not contain sequencing data, but is merely the result of the genetic distances between the sequences. We therefore cannot extract sequencing data from a tree file.
 
@@ -61,8 +61,8 @@ We use the **ape()** package to import a phylogenetic tree file and store it in 
 
 ```{r, phylogenetic_trees_loading_treefile}
 
-# read in the tree: we use the here() package to specify the location of our R project and data files:
-tree <- ape::read.tree(here::here("data", "Shigella_tree.nwk"))
+# read in the tree: we use the here() package to specify the location of our R project and data files. In this case the newick tree is saved as a .txt file for easier handling and downloading.
+tree <- ape::read.tree(here::here("data", "Shigella_tree.txt"))
 
 # inspect the tree file:
 tree
@@ -226,10 +226,14 @@ ggtree(sub_tree2)+  geom_tiplab(size =3)  +
 
 ```
 
-You can also save your new tree as a Newick file:
+You can also save your new tree either as a Newick type or even a text file:
 ```{r,  phylogenetic_trees_write_tree}
 
+# to save in .nwk format
 ape::write.tree(sub_tree2, file='data/Shigella_subtree_2.nwk')
+
+# to save in .txt format
+ape::write.tree(sub_tree2, file='data/Shigella_subtree_2.txt')
 
 ```
 
