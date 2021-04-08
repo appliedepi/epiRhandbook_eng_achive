@@ -8,7 +8,7 @@
 
 <h2> Overview </h2> 
 
-**Phylogenetic trees** are used to visualize and describe the relatedness and evolution of organisms based on the sequence of their genetic code. They can be constructed from genetic sequences using distance-based methods (such as neighbor-joining method) or character-based methods (such as maximum likelihood and Bayesian Markov Chain Monte Carlo method). Next-generation sequencing (NGS) has become more affordable and is becoming more widely used in public health to describe pathogens causing infectious diseases. Portable devices decrease the turn around time and make data available for the support of outbreak investigation in real-time. NGS data can be used to identify the origin or source of an outbreak strain and its propagation, as well as determine presence of antimicrobial resistance genes. To visualize the genetic relatedness between samples a phylogenetic tree is constructed. In this page we will learn how to use the **ggtree()** package, which allows for combination of phylogenetic trees with additional sample data in form of a dataframe in order to help observe patterns and improve understanding of the outbreak dynamic.
+**Phylogenetic trees** are used to visualize and describe the relatedness and evolution of organisms based on the sequence of their genetic code. They can be constructed from genetic sequences using distance-based methods (such as neighbor-joining method) or character-based methods (such as maximum likelihood and Bayesian Markov Chain Monte Carlo method). Next-generation sequencing (NGS) has become more affordable and is becoming more widely used in public health to describe pathogens causing infectious diseases. Portable sequencing devices decrease the turn around time and hold promises to make data available for the support of outbreak investigation in real-time. NGS data can be used to identify the origin or source of an outbreak strain and its propagation, as well as determine presence of antimicrobial resistance genes. To visualize the genetic relatedness between samples a phylogenetic tree is constructed. In this page we will learn how to use the **ggtree()** package, which allows for combined visualization of phylogenetic trees with additional sample data in form of a dataframe in order to help observe patterns and improve understanding of the outbreak dynamic.
 
 ```{r, phylogenetic_trees_overview_graph, out.width=c('80%'), fig.align='center', fig.show='hold', echo = FALSE}
 
@@ -31,9 +31,9 @@ ggtree(tree, layout="circular", branch.length='none') %<+% sample_data + # the %
   new_scale_color()+ # allows to add an additional color scheme for another variable
      geom_tippoint(aes(color=Continent), size=1.5)+ # color the tip point by continent, you may change shape adding "shape = "
 scale_color_brewer(name = "Continent",  # name of your color scheme (will show up in the legend like this)
-                       palette="Set1", # we choose a premade set of colors coming with the brewer package
+                       palette="Set1", # we choose a set of colors coming with the brewer package
                    na.value="grey")+ # for the NA values we choose the color grey
-  theme(legend.position= "none")
+  theme(legend.position= "bottom")
 ```
 
 <!-- ======================================================= -->
@@ -48,19 +48,20 @@ This code chunk shows the loading of required packages:
 library(pacman)
 
 # This allows us to load multiple packages at the same time in one line of code:
+# Keep in mind that packages need to have been installed prior to loading, by the use of 'install.packages()' command
 pacman::p_load(here, ggplot2, dplyr, ape, ggtree, treeio, ggnewscale)
 
 ```
 
-There are several different formats in which a phylogenetic tree can be stored (eg. Newick, NEXUS, Phylip). A common one, which we will also use here in this example is the Newick file format (.nwk), which is the standard for representing trees in computer-readable form. Which means, an entire tree can be expressed in a string format such as  "((t2:0.04,t1:0.34):0.89,(t5:0.37,(t4:0.03,t3:0.67):0.9):0.59); " listing all nodes and tips and their relationship  (branch length) to each other. 
+There are several different formats in which a phylogenetic tree can be stored (eg. Newick, NEXUS, Phylip). A common one, which we will also use here in this example is the Newick file format (.nwk), which is the standard for representing trees in computer-readable form. Which means, an entire tree can be expressed in a string format such as  "((t2:0.04,t1:0.34):0.89,(t5:0.37,(t4:0.03,t3:0.67):0.9):0.59); " listing all nodes and tips and their relationship (branch length) to each other. 
 
-It is important to understand that the phylogenetic tree file in itself does not contain sequencing data, but is merely the result of the distances between the sequences. We therefore cannot extract sequencing data from a tree file.
+It is important to understand that the phylogenetic tree file in itself does not contain sequencing data, but is merely the result of the genetic distances between the sequences. We therefore cannot extract sequencing data from a tree file.
 
 We use the **ape()** package to import a phylogenetic tree file and store it in a list object of class "phylo". We inspect our tree object and see it contains 299 tips (or samples) and 236 nodes. 
 
 ```{r, phylogenetic_trees_loading_treefile}
 
-# read in the tree: we use the here package to specify the location of our R project and data files:
+# read in the tree: we use the here() package to specify the location of our R project and data files:
 tree <- ape::read.tree(here::here("data", "Shigella_tree.nwk"))
 
 # inspect the tree file:
@@ -68,19 +69,16 @@ tree
 
 ```
 
-Second we import a table with additional information for each sequenced sample such as gender, country of origine and attributes for antimicrobial resistance: 
+Second we import a table with additional information for each sequenced sample, such as gender, country of origin and attributes for antimicrobial resistance: 
 ```{r, phylogenetic_trees_loading_sampledata}
 
-# We read in a csv file into a dataframe format:
+# We read in a .csv file into a dataframe format:
 sample_data <- read.csv(here::here("data","sample_data_Shigella_tree.csv"),sep=",", na.strings=c("NA"), head = TRUE, stringsAsFactors=F)
 
 ```
 
-We clean and inspect our data: In order to assign the correct sample data to the phylogenetic tree, the Sample_IDs in the sample_data file need to match the tip.labels in the tree file: 
+We clean and inspect our data: In order to assign the correct sample data to the phylogenetic tree, the Sample_IDs in the sample_data file need to match the tip labels in the tree file: 
 ```{r, phylogenetic_trees_inspect_sampledata}
-
-# We clean the data: we select certain columns to be protected from cleaning in order to main tain their formating (eg. for the sample names, as they have to match the names in the phylogenetic tree file)
-#sample_data <- linelist::clean_data(sample_data, protect = c(1, 3:5)) 
 
 # We check the formatting of the tip labels in the tree file: 
 
@@ -89,12 +87,20 @@ head(tree$tip.label) # these are the sample names in the tree - we inspect the f
 # We make sure the first column in our dataframe are the Sample_IDs:
 colnames(sample_data)   
 
-# We look at the sample_IDs in the dataframe to make sure the formatting is the same than in the tip.labels (eg. letters are all capital, no extra _ between letters and numbers etc.)
+# We look at the Sample_IDs in the dataframe to make sure the formatting is the same than in the tip.labels (eg. letters are all capital, no extra _ between letters and numbers etc.)
 head(sample_data$Sample_ID) # we inspect only the first 6 using head()
+
+#We can also compare if all samples are present in the tree file and vice versa by generating a logical vector of TRUE or FALSE where they do or do not match:
+sample_data$Sample_ID %in% tree$tip.label
+
+tree$tip.label %in% sample_data$Sample_ID
+
+#This will tell you any sample IDs that are not on the tree:
+sample_data$Sample_ID[!tree$tip.label %in% sample_data$Sample_ID]
 
 ```
 
-Upon inspection we can see that the format of sample_ID in the dataframe corresponds to the format of sample names at the tree tips. These do not have to be sorted in the same order to be matched.
+Upon inspection we can see that the format of Sample_ID in the dataframe corresponds to the format of sample names at the tree tips. These do not have to be sorted in the same order to be matched.
 
 We are ready to go!
 
@@ -133,7 +139,7 @@ ggtree(tree, layout="circular", branch.length='none') %<+% sample_data + # the %
   new_scale_color()+ # allows to add an additional color scheme for another variable
      geom_tippoint(aes(color=Continent), size=1.5)+ # color the tip point by continent, you may change shape adding "shape = "
 scale_color_brewer(name = "Continent",  # name of your color scheme (will show up in the legend like this)
-                       palette="Set1", # we choose a premade set of colors coming with the brewer package
+                       palette="Set1", # we choose a set of colors coming with the brewer package
                    na.value="grey")+ # for the NA values we choose the color grey
   geom_tiplab(color='black', offset = 1, size = 1, geom = "text" , align=TRUE)+ # add the name of the sample to the tip of its branch (you can add as many text lines as you like with the + , you just need to change the offset value to place them next to each other)
   ggtitle("Phylogenetic tree of Shigella sonnei")+ # title of your graph
@@ -146,7 +152,7 @@ scale_color_brewer(name = "Continent",  # name of your color scheme (will show u
         legend.box="vertical", legend.margin=margin()) # defines placement of the legend
 
 # Export your tree graph:
-ggsave(here::here("example_tree_circular_1.png"), width = 12, height = 14)
+ggsave(here::here("images", "example_tree_circular_1.png"), width = 12, height = 14)
 
 ```
 
@@ -157,9 +163,9 @@ ggsave(here::here("example_tree_circular_1.png"), width = 12, height = 14)
 
 <h2> Manipulation of phylogenetic trees  </h2> 
 
-Sometimes you may have a very large phylogenetic tree and you are only interested in one part of the tree. For example if you produced a tree including historical or international samples to get a large overview of where your dataset might fit in in the bigger picture. But then to look closer at your data you want to inspect only that portion of the bigger tree.
+Sometimes you may have a very large phylogenetic tree and you are only interested in one part of the tree. For example if you produced a tree including historical or international samples to get a large overview of where your dataset might fit in the bigger picture. But then to look closer at your data you want to inspect only that portion of the bigger tree.
 
-Since the phylogenetic tree file is just the output of sequencing data analysis, we can not manipulate the order of the nodes and branches in the file itself. These have already been determined in previous analysis from the raw NGS data. We are able though to zoom into parts, hide parts and seven subset part of the tree. 
+Since the phylogenetic tree file is just the output of sequencing data analysis, we can not manipulate the order of the nodes and branches in the file itself. These have already been determined in previous analysis from the raw NGS data. We are able though to zoom into parts, hide parts and even subset part of the tree. 
 
 ### Zooming in on one part of the tree:
 If you don't want to "cut" your tree, but only inspect part of it more closely you can zoom in to view a specific part:
@@ -168,7 +174,7 @@ If you don't want to "cut" your tree, but only inspect part of it more closely y
 
 # First we plot the whole tree:
 p <- ggtree(tree,) %<+% sample_data +
-  geom_tiplab(size =1.5) + # labels the tips of all branche with the sample name in the tree file
+  geom_tiplab(size =1.5) + # labels the tips of all branches with the sample name in the tree file
   geom_text2(aes(subset=!isTip, label=node), size =5, color = "darkred", hjust=1, vjust =1) # labels all the nodes in the tree
 p
 
@@ -199,7 +205,7 @@ If we want to make a more permanent change and create a new tree to work with we
 
 # To do so you can add the node and tip labels to your tree to see which part you want to subset:
 ggtree(tree, branch.length='none', layout='circular') %<+% sample_data +
-  geom_tiplab(size =1) + # labels the tips of all branche with the sample name in the tree file
+  geom_tiplab(size =1) + # labels the tips of all branches with the sample name in the tree file
   geom_text2(aes(subset=!isTip, label=node), size =3, color = "darkred") +# labels all the nodes in the tree
  theme(legend.position = "none", # removes the legend all together
  axis.title.x=element_blank(),
@@ -212,7 +218,7 @@ sub_tree1 <- tree_subset(tree, node = 528) # we subset the tree at node 528
 ggtree(sub_tree1)+  geom_tiplab(size =3) +
   ggtitle("Subset tree 1")
 
-# B: Subset the same part of the tree based on a samplem in this case S17BD07692:
+# B: Subset the same part of the tree based on a sample, in this case S17BD07692:
 sub_tree2 <- tree_subset(tree,"S17BD07692", levels_back = 9) # levels back defines how many nodes backwards from the sample tip you want to go
 # lets have a look at the subset tree:
 ggtree(sub_tree2)+  geom_tiplab(size =3)  +
@@ -223,7 +229,7 @@ ggtree(sub_tree2)+  geom_tiplab(size =3)  +
 You can also save your new tree as a Newick file:
 ```{r,  phylogenetic_trees_write_tree}
 
-ape::write.tree(sub_tree2, file='Shigelle_subtree_2.nwk')
+ape::write.tree(sub_tree2, file='data/Shigella_subtree_2.nwk')
 
 ```
 
@@ -231,7 +237,7 @@ ape::write.tree(sub_tree2, file='Shigelle_subtree_2.nwk')
 
 As mentioned before we cannot change the order of tips or nodes in the tree, as this is based on their genetic relatedness and is not subject to visual manipulation. But we can rote branches around nodes if that eases our visualization.
 
-First we plot our new subsetted tree with nodelabels to choose the node we want to manipulate:
+First we plot our new subset tree with node labels to choose the node we want to manipulate:
 
 ```{r, phylogenetic_trees_rotating_1, out.width=c('50%'), fig.show='hold', fig.align='center'}
 
@@ -240,35 +246,38 @@ p <- ggtree(sub_tree2) +  geom_tiplab(size =4) +
 p
 ```
 
-We choose to manipulate node number 39: we do so by applying **ggtree::rotate()** or **ggtree::fluip()** indirectly to node 36 so node 39 moves to the bottom and nodes 37 and 38 move to the top:
+We can then manipulate nodes by applying **ggtree::rotate()** or **ggtree::flip()**:
 
 ```{r, phylogenetic_trees_rotating_2, out.width=c('50%'), fig.show='hold', fig.align='center'}
-# 
-# p1 <- p + geom_hilight(39, "steelblue", extend =0.0015)+ # highlights the node 39 in blue
-#    geom_hilight(37, "yellow", extend =0.0015)  + # highlights the node 37 in yellow
-#   ggtitle("Original tree")
-# 
-# # we want to rotate node 36 so node 39 is on the bottom and nodes 37 and 38 move to the top:
-# 
-# rotate(p1, 39) %>% rotate(37)+
-#   ggtitle("Rotated Node 36")
-# 
-# #or we can use the flip command to achieve the same thing:
-# flip(p1, 39, 37)
+
+# here we apply the geom_hilight() function to highlight the samples in the nodes we are interested in 
+p1 <- p + geom_hilight(39, "steelblue", extend =0.0015)+ # highlights the node 39 in blue
+geom_hilight(37, "yellow", extend =0.0015)  + # highlights the node 37 in yellow
+ggtitle("Original tree")
+p1
+
+# we can rotate node 37 so that the samples on node 38 move to the top:
+
+p2 <- rotate(p1, 37)+ggtitle("Rotated Node 37")
+p2
+
+# or we can use the flip command to rotate node 36 and switch node 37 to the top and node 39 to the bottom:
+p3 <-  flip(p1, 39, 37)+ggtitle("Rotated Node 36")
+p3
 
 ```
 
 ### Example subtree with sample data annotation:
 
-Lets say we are investigating the cluster of cases with clonal expansion which occured in 2017 and 2018 at node 39 in our sub-tree. We add the year of strain isolation as well as travel history and color by country to see origin of other closely related strains:
+Lets say we are investigating the cluster of cases with clonal expansion which occurred in 2017 and 2018 at node 39 in our sub-tree. We add the year of strain isolation as well as travel history and color by country to see origin of other closely related strains:
 
 ```{r, phylogenetic_trees_inspect_subset_example, out.width=c('80%'), fig.show='hold', fig.align='center'}
 
 # Add sample data:
 ggtree(sub_tree2) %<+% sample_data + 
-   geom_tiplab(size =2.5, offset = 0.001, align = TRUE) + # labels the tips of all branche with the sample name in the tree file
+   geom_tiplab(size =2.5, offset = 0.001, align = TRUE) + # labels the tips of all branches with the sample name in the tree file
   theme_tree2()+
-  xlab("genetic distance")+ # add a label to the x-azis
+  xlab("genetic distance")+ # add a label to the x-axis
   xlim(0, 0.015)+ # set the x-axis limits of our tree
   geom_tippoint(aes(color=Country), size=1.5)+ # color the tip point by continent
   scale_color_brewer(name = "Country", 
@@ -285,7 +294,7 @@ ggtree(sub_tree2) %<+% sample_data +
 
 ```
 
-Our observation points towards an import of strains from Asia, which then circulated in Belgium over the years and seem to have caused our latest outbreak.
+Our observation points towards an import event of strains from Asia, which then circulated in Belgium over the years and seem to have caused our latest outbreak.
 
 <!-- ======================================================= -->
 
@@ -295,7 +304,7 @@ Our observation points towards an import of strains from Asia, which then circul
 
 We can add more complex information, such as categorical presence of antimicrobial resistance genes and numeric values for actually  measured resistance to antimicrobials in form of a heatmap using the **ggtree::gheatmap()** function.
 
-First we need to plot our tree (this can be either linear or circular): We will use the sub_stree from part 3.)
+First we need to plot our tree (this can be either linear or circular): We will use the sub_tree from part 3.)
 ```{r, phylogenetic_trees_sampledata_heatmap, out.width=c('60%'), fig.align='center', fig.show='hold'}
 # A: Circular tree:
 p <- ggtree(sub_tree2, branch.length='none', layout='circular') %<+% sample_data +
@@ -310,7 +319,7 @@ p
 
 Second we prepare our data. To visualize different variables with new color schemes, we subset our dataframe to the desired variable.
 
-For example we want to look at gender and mutations that could confer resistance to ciprofloxacin:
+For example we want to look at gender and mutations that could confer resistance to Ciprofloxacin, an important first line antibiotic used to treat Shigella infections:
 
 ```{r, phylogenetic_trees_sampledata_heatmap_data}
 
@@ -319,11 +328,11 @@ gender <- data.frame("gender" = sample_data[,c("Gender")])
 # Its important to add the Sample_ID as rownames otherwise it cannot match the data to the tree tip.labels:
 rownames(gender) <- sample_data$Sample_ID
 
-# Create your ciprofloxacin dataframe based on mutations in the gyrA gene:
+# Create your Ciprofloxacin dataframe based on mutations in the gyrA gene:
 cipR <- data.frame("cipR" = sample_data[,c("gyrA_mutations")])
 rownames(cipR) <- sample_data$Sample_ID
 
-# Create your ciprofloxacin dataframe based on the measured minimum inhibitory concentration (MIC) from the laboratory:
+# Create your Ciprofloxacin dataframe based on the measured minimum inhibitory concentration (MIC) from the laboratory:
 MIC_Cip <- data.frame("mic_cip" = sample_data[,c("MIC_CIP")])
 rownames(MIC_Cip) <- sample_data$Sample_ID
 
@@ -333,7 +342,9 @@ We create a first plot adding a binary heatmap for gender to the phylogenetic tr
 ```{r, phylogenetic_trees_sampledata_heatmap_gender, out.width=c('70%'), fig.show='hold', fig.align='center'}
 
 # First we add gender:
-h1 <-  gheatmap(p, gender, offset = 10, width=0.10, color=NULL, # offset shifts the heatmap to the right, width defines the width of the heatmap column, color defines the boarder of the heatmap columns
+h1 <-  gheatmap(p, gender, offset = 10, # offset shifts the heatmap to the right,
+                width=0.10, #width defines the width of the heatmap column,
+                color=NULL, #  color defines the boarder of the heatmap columns
          colnames = FALSE)+ # hides column names for the heatmap
   scale_fill_manual(name = "Gender", # define the coloring scheme and legend for gender
                     values = c("#00d1b1", "purple"),
@@ -347,14 +358,16 @@ h1
 
 ```
 
-Then we add information on ciprofloxacin resistance genes:
+Then we add information on mutations in the gyrA gene, which confer resistance to Ciprofloxacin:
+
+Note: The presence of chromosomal point mutations in WGS data was prior determined using the PointFinder tool developed by Zankari et al. (see reference in the additional references section)
 ```{r, phylogenetic_trees_sampledata_heatmap_cip_genes, out.width=c('80%'), fig.show='hold', fig.align='center'}
 
-# First we assigng a new color scheme to our existing plot, this enables us to define and change the colors for our second variable
+# First we assign a new color scheme to our existing plot, this enables us to define and change the colors for our second variable
 h2 <- h1 + new_scale_fill() 
 
 # then we combine these into a new plot:
-h3 <- gheatmap(h2, cipR,  offset = 12, width=0.10, # adds the second row of heatmap describing ciprofloxacin resistance genes
+h3 <- gheatmap(h2, cipR,  offset = 12, width=0.10, # adds the second row of heatmap describing Ciprofloxacin resistance mutations
                 colnames = FALSE)+
   scale_fill_manual(name = "Ciprofloxacin resistance \n conferring mutation",
                     values = c("#fe9698","#ea0c92"),
@@ -368,8 +381,8 @@ h3 <- gheatmap(h2, cipR,  offset = 12, width=0.10, # adds the second row of heat
 h3
 ```
 
-Next we add continuous data on actual resistance determined by the laboratory 
-as the minimum inhibitory concentration (MIC) of ciprofloxacin :
+Next we add continuous data on actual measured resistance, as determined by the laboratory 
+through establishment of the minimum inhibitory concentration (MIC) of Ciprofloxacin for each strain in the sample set:
 ```{r, phylogenetic_trees_sampledata_heatmap_cip_MIC, out.width=c('90%'), fig.show='hold', fig.align='center'}
 # First we add the new coloring scheme:
 h4 <- h3 + new_scale_fill()
@@ -377,7 +390,7 @@ h4 <- h3 + new_scale_fill()
 # then we combine the two into a new plot:
 h5 <- gheatmap(h4, MIC_Cip,  offset = 14, width=0.10,
                 colnames = FALSE)+
-  scale_fill_continuous(name = "MIC for ciprofloxacin",
+  scale_fill_continuous(name = "MIC for Ciprofloxacin",
                       low = "yellow", high = "red",
                       breaks = c(0, 0.50, 1.00),
                       na.value = "white")+
@@ -391,8 +404,8 @@ h5
 ```
 
 We can do the same exercise for a linear tree:
-```{r, phylogenetic_trees_sampledata_heatmap_linear, out.width=c('80%'), fig.show='hold', fig.align='center'}
-# B: Lineartree:
+```{r, phylogenetic_trees_sampledata_heatmap_linear_1, out.width=c('80%'), fig.show='hold', fig.align='center'}
+# B: Linear tree:
 p <- ggtree(sub_tree2) %<+% sample_data +
   geom_tiplab(size =3) + # labels the tips
   theme_tree2()+
@@ -415,9 +428,10 @@ h1 <-  gheatmap(p, gender, offset = 0.003, width=0.1, color="black",
         legend.title = element_text(size=12),
         legend.text = element_text(size =10),
         legend.box="vertical", legend.margin=margin())
-# h1
-
-# Then we add ciprofloxacin after adding another colorscheme layer:
+h1
+```
+Then we add Ciprofloxacin resistnce mutations after adding another color scheme layer:
+```{r, phylogenetic_trees_sampledata_heatmap_linear_2, out.width=c('80%'), fig.show='hold', fig.align='center'}
 
 h2 <- h1 + new_scale_fill()
 h3 <- gheatmap(h2, cipR,  offset = 0.004, width=0.1,color="black",
@@ -431,13 +445,16 @@ h3 <- gheatmap(h2, cipR,  offset = 0.004, width=0.1,color="black",
         legend.text = element_text(size =10),
         legend.box="vertical", legend.margin=margin())+
   guides(fill=guide_legend(nrow=2,byrow=TRUE))
-# h3
+ h3
+```
 
-# Then we add the minimum inhibitory concentration determined by the lab (MIC):
+Then we add the minimum inhibitory concentration determined by the laboratory (MIC):
+```{r, phylogenetic_trees_sampledata_heatmap_linear_3, out.width=c('80%'), fig.show='hold', fig.align='center'}
+
 h4 <- h3 + new_scale_fill()
 h5 <- gheatmap(h4, MIC_Cip, offset = 0.005, width=0.1, color="black", 
                 colnames = FALSE)+
-  scale_fill_continuous(name = "MIC for ciprofloxacin",
+  scale_fill_continuous(name = "MIC for Ciprofloxacin",
                       low = "yellow", high = "red",
                       breaks = c(0,0.50,1.00),
                       na.value = "white")+
@@ -459,5 +476,7 @@ http://hydrodictyon.eeb.uconn.edu/eebedia/index.php/Ggtree# Clade_Colors
 https://bioconductor.riken.jp/packages/3.2/bioc/vignettes/ggtree/inst/doc/treeManipulation.html
 https://guangchuangyu.github.io/ggtree-book/chapter-ggtree.html
 https://bioconductor.riken.jp/packages/3.8/bioc/vignettes/ggtree/inst/doc/treeManipulation.html
+
+Ea Zankari, Rosa Allesøe, Katrine G Joensen, Lina M Cavaco, Ole Lund, Frank M Aarestrup, PointFinder: a novel web tool for WGS-based detection of antimicrobial resistance associated with chromosomal point mutations in bacterial pathogens, Journal of Antimicrobial Chemotherapy, Volume 72, Issue 10, October 2017, Pages 2764–2768, https://doi.org/10.1093/jac/dkx217
 
 
