@@ -1,18 +1,15 @@
 
-# Phylogenetic trees {.tabset .tabset-fade}  
+# Phylogenetic trees {}  
 
 
 <!-- ======================================================= -->
 
-## Overview {.tabset .tabset-fade .tabset-pills}
+## Overview {}
 
-<h2> Overview </h2> 
 
 **Phylogenetic trees** are used to visualize and describe the relatedness and evolution of organisms based on the sequence of their genetic code. They can be constructed from genetic sequences using distance-based methods (such as neighbor-joining method) or character-based methods (such as maximum likelihood and Bayesian Markov Chain Monte Carlo method). Next-generation sequencing (NGS) has become more affordable and is becoming more widely used in public health to describe pathogens causing infectious diseases. Portable sequencing devices decrease the turn around time and hold promises to make data available for the support of outbreak investigation in real-time. NGS data can be used to identify the origin or source of an outbreak strain and its propagation, as well as determine presence of antimicrobial resistance genes. To visualize the genetic relatedness between samples a phylogenetic tree is constructed. In this page we will learn how to use the **ggtree()** package, which allows for combined visualization of phylogenetic trees with additional sample data in form of a dataframe in order to help observe patterns and improve understanding of the outbreak dynamic.
 
 ```{r, phylogenetic_trees_overview_graph, out.width=c('80%'), fig.align='center', fig.show='hold', echo = FALSE}
-
-library(pacman)
 
 pacman::p_load(here, ggplot2, dplyr, ape, ggtree, treeio, ggnewscale)
 
@@ -38,9 +35,8 @@ scale_color_brewer(name = "Continent",  # name of your color scheme (will show u
 
 <!-- ======================================================= -->
 
-## Preparation {.tabset .tabset-fade .tabset-pills}
+## Preparation {}
 
-<h2> Preparation </h2> 
 
 This code chunk shows the loading of required packages:
 ```{r, phylogenetic_trees_loading_packages}
@@ -106,11 +102,11 @@ We are ready to go!
 
 <!-- ======================================================= -->
 
-## Simple tree visualization {.tabset .tabset-fade .tabset-pills}
+## Simple tree visualization {}
 
-<h2> Simple tree visualization </h2> 
 
-### Different tree layouts:
+### Different tree layouts {-}  
+
 **ggtree()** offers many different layout formats and some may be more suitable for your specific purpose than others:
 ```{r, phylogenetic_trees_example_formats, out.width=c('50%'), fig.show='hold'}
 # Examples:
@@ -123,7 +119,8 @@ ggtree(tree, layout="circular", branch.length = "none") # most simple circular t
 
 ```
 
-### Simple tree with addition of sample data:
+### Simple tree with addition of sample data {-}  
+
 The most easy annotation of your tree is the addition of the sample names at the tips, as well as coloring of tip points and if desired branches:
 
 ```{r, phylogenetic_trees_adding_sampledata, fig.align='center'}
@@ -159,15 +156,14 @@ ggsave(here::here("images", "example_tree_circular_1.png"), width = 12, height =
 
 <!-- ======================================================= -->
 
-## Manipulation of phylogenetic trees {.tabset .tabset-fade .tabset-pills}
-
-<h2> Manipulation of phylogenetic trees  </h2> 
+## Manipulation of phylogenetic trees {}
 
 Sometimes you may have a very large phylogenetic tree and you are only interested in one part of the tree. For example if you produced a tree including historical or international samples to get a large overview of where your dataset might fit in the bigger picture. But then to look closer at your data you want to inspect only that portion of the bigger tree.
 
 Since the phylogenetic tree file is just the output of sequencing data analysis, we can not manipulate the order of the nodes and branches in the file itself. These have already been determined in previous analysis from the raw NGS data. We are able though to zoom into parts, hide parts and even subset part of the tree. 
 
-### Zooming in on one part of the tree:
+### Zooming in on one part of the tree {-}  
+
 If you don't want to "cut" your tree, but only inspect part of it more closely you can zoom in to view a specific part:
 
 ```{r, phylogenetic_trees_zoom_in, out.width=c('50%'), fig.show='hold', fig.align='center'}
@@ -187,7 +183,8 @@ viewClade(p , node=452)
 
 ```
 
-### Collapsing one part of the tree:
+### Collapsing one part of the tree {-} 
+
 The other way around we may want to ignore this branch which is sticking out and can do so by collapsing it at the node (indicated here by the blue square):
 
 ```{r phylogenetic_trees_collapse_452, out.width=c('50%'), fig.show='hold', fig.align='center'}
@@ -199,7 +196,8 @@ p_collapsed + geom_point2(aes(subset=(node == 452)), size=5, shape=23, fill="ste
 
 ```
 
-### Subsetting a tree:
+### Subsetting a tree {-} 
+
 If we want to make a more permanent change and create a new tree to work with we can subset part of it and even save it as new newick tree file.  
 ```{r, phylogenetic_trees_subsetting, out.width=c('50%'), fig.show='hold', fig.align='center'}
 
@@ -237,7 +235,8 @@ ape::write.tree(sub_tree2, file='data/Shigella_subtree_2.txt')
 
 ```
 
-### Rotating nodes in a tree:
+### Rotating nodes in a tree {-} 
+
 
 As mentioned before we cannot change the order of tips or nodes in the tree, as this is based on their genetic relatedness and is not subject to visual manipulation. But we can rote branches around nodes if that eases our visualization.
 
@@ -271,7 +270,7 @@ p3
 
 ```
 
-### Example subtree with sample data annotation:
+### Example subtree with sample data annotation {-} 
 
 Lets say we are investigating the cluster of cases with clonal expansion which occurred in 2017 and 2018 at node 39 in our sub-tree. We add the year of strain isolation as well as travel history and color by country to see origin of other closely related strains:
 
@@ -302,9 +301,8 @@ Our observation points towards an import event of strains from Asia, which then 
 
 <!-- ======================================================= -->
 
-## More complex trees: adding heatmaps of sample data {.tabset .tabset-fade .tabset-pills}
+## More complex trees: adding heatmaps of sample data {}
 
-<h2> More complex trees </h2>
 
 We can add more complex information, such as categorical presence of antimicrobial resistance genes and numeric values for actually  measured resistance to antimicrobials in form of a heatmap using the **ggtree::gheatmap()** function.
 
@@ -474,7 +472,7 @@ h5
 
 
 <!-- ======================================================= -->
-## Resources {.tabset .tabset-fade .tabset-pills}
+## Resources {}
 
 http://hydrodictyon.eeb.uconn.edu/eebedia/index.php/Ggtree# Clade_Colors
 https://bioconductor.riken.jp/packages/3.2/bioc/vignettes/ggtree/inst/doc/treeManipulation.html
