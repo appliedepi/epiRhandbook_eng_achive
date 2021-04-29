@@ -1,3 +1,7 @@
 contact-tracing
 preparation
+descriptive-analyses
+contact-follow-up
+kpi-tables
+transmission-matrices
 resources
