@@ -55,7 +55,7 @@ knitr::include_graphics(here::here("images", "Epi R Handbook banner beige 1500x5
 * Serve as a quick R code reference manual  
 * Provide task-centered examples addressing common epidemiological problems  
 * Assist epidemiologists transitioning to R  
-* Be accessible in settings with low internet-connectivity via an **[offline version](Download handbook and data)**  
+* Be accessible in settings with low internet-connectivity via an **[offline version](https://epirhandbook.com/download-handbook-and-data.html)**  
 
 
 <!-- * Use practical epi examples - cleaning case linelists, making transmission chains and epidemic curves, automated reports and dashboards, modeling incidence and making projections, demographic pyramids and rate standardization, record matching, outbreak detection, survey analysis, survival analysis, GIS basics, contact tracing, phylogenetic trees...   -->
