@@ -5,7 +5,7 @@ In this page we describe the philosophical approach, style, and specific editori
 
 ## Approach and style
 
-The potential audience for this book is large. It will surely be used by people very new to R, and also by experienced R users looking for best practices and tips. So it must be both accessible and succinct. Therefore, our approach was to provide *just enough* text explanation that someone very new to R can apply the code and follow what is the code is doing.  
+The potential audience for this book is large. It will surely be used by people very new to R, and also by experienced R users looking for best practices and tips. So it must be both accessible and succinct. Therefore, our approach was to provide *just enough* text explanation that someone very new to R can apply the code and follow what the code is doing.  
 
 A few other points:  
 
