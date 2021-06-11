@@ -158,7 +158,9 @@ skimr::skim_without_charts(linelist_raw)
 
 In R, column *names* are the "header" or "top" value of a column. They are used to refer to columns in the code, and serve as a default label in figures.  
 
+
 Other statistical software such as SAS and STATA use *"labels"* that co-exist as longer printed versions of the shorter column names. While R does offer the possibility of adding column labels to the data, this is not emphasized in most practice. To make column names "printer-friendly" for figures, one typically adjusts their display within the plotting commands that create the outputs (e.g. axis or legend titles of a plot, or column headers in a printed table - see the [scales section of the ggplot tips page](#ggplot_tips_scales) and [Tables for presentation] pages). If you want to assign column labels in the data, read more online [here](https://cran.r-project.org/web/packages/expss/vignettes/labels-support.html) and [here](https://cran.r-project.org/web/packages/labelled/vignettes/intro_labelled.html).  
+
 
 As R column names are used very often, so they must have "clean" syntax. We suggest the following:  
 
@@ -178,11 +180,6 @@ names(linelist_raw)
 ```
 
 <span style="color: black;">**_NOTE:_** To reference a column name that includes spaces, surround the name with back-ticks, for example: linelist$`` ` '\x60infection date\x60'` ``. note that on your keyboard, the back-tick (`) is different from the single quotation mark (').</span>
-
-
-### Labels {.unnumbered}  
-
-Some other statistical software such as SAS have variable *labels*
 
 
 ### Automatic cleaning {.unnumbered}  
