@@ -245,7 +245,7 @@ This pane, by default in the upper-right, is most often used to see brief summar
 
 In Stata, this is most similar to the Variables Manager window.
 
-This pane also contains *History* where can see commands that you can previously. It also has a "Tutorial" tab where you can complete interactive R tutorials if you have the **learnr** package installed. It also has a "Connections" pane for external connections, and can have a "Git" pane if you choose to interface with Github.  
+This pane also contains *History* where you can see commands that you can previously. It also has a "Tutorial" tab where you can complete interactive R tutorials if you have the **learnr** package installed. It also has a "Connections" pane for external connections, and can have a "Git" pane if you choose to interface with Github.  
 
 
 **Plots, Viewer, Packages, and Help Pane**  
