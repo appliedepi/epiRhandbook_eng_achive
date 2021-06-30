@@ -791,7 +791,7 @@ export(linelist, "my_linelist.xlsx") # will save to working directory
 You could save the same data frame as a csv file by changing the extension. For example, we also save it to a file path constructed with `here()`:  
 
 ```{r, eval=F}
-export(linelist, here("data","clean", "my_linelist.csv")
+export(linelist, here("data", "clean", "my_linelist.csv"))
 ```
 
 
@@ -816,7 +816,7 @@ The classes of columns are stored, so you don't have do to cleaning again when i
 For example, if you work in an Epidemiology team and need to send files to a GIS team for mapping, and they use R as well, just send them the .rds file! Then all the column classes are retained and they have less work to do.  
 
 ```{r, eval=F}
-export(linelist, here("data","clean", "my_linelist.rds")
+export(linelist, here("data", "clean", "my_linelist.rds"))
 ```
 
 
