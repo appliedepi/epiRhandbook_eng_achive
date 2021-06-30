@@ -256,7 +256,7 @@ geoms
 ggplot_basics_mapping
 ggplot_basics_facet
 storing-plots
-labels-1
+labels
 ggplot_basics_themes
 colors
 piping-into-ggplot2
