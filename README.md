@@ -1,4 +1,8 @@
-# The Epidemiologist R Handbook 
+# ARCHIVED - The Epidemiologist R Handbook 
+
+THIS IS AN ARCHIVE OF THE OLD REPOSITORY OF THE EPI R HANDBOOK. 
+For the current repository, please see epiRhandbook_eng repo
+
 
 # About this handbook
 **The Epi R Handbook is a R reference manual for applied epidemiology and public health.**  
